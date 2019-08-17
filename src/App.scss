@@ -1,0 +1,57 @@
+.app{
+  #map{
+    height: 100%;
+    z-index: 9;
+  }
+}
+
+html, body, #root, .app {
+  height: 100%;
+}
+
+#zipInput{
+  width: 175px;
+  height: 30px;
+  font-size: 24px;
+  color: #232444;
+  margin: auto;
+  display: block;
+  background: none;
+  border: none;
+  border-bottom: 1px solid #232444;
+  z-index:10;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #232444;
+  opacity: 1; /* Firefox */
+}
+
+:-ms-input-placeholder { /* Internet Explorer 10-11 */
+  color: #232444;
+}
+
+::-ms-input-placeholder { /* Microsoft Edge */
+  color: #232444;
+}
+
+#zipForm{
+  padding: 2%;
+  background-color: #b7e4cf;
+  width: 200px;
+  position: fixed;
+  left: 2%;
+  top: 2%;
+  z-index:10;
+  box-shadow: 10px 10px 5px rgba(0, 0, 0, .3);
+}
+
+.eventCard{
+  a{
+    text-decoration: none;
+  }
+  h3{
+    color: #232444;
+    text-decoration: none;
+  }
+}
