@@ -9,8 +9,29 @@ html, body, #root, .app {
   height: 100%;
 }
 
+.searchBar{
+  padding-top: 2%;
+  padding-bottom: 2%;
+  background-color: #b7e4cf;
+  width: 200px;
+  position: fixed;
+  left: 2%;
+  top: 2%;
+  z-index:10;
+  box-shadow: 10px 10px 5px rgba(0, 0, 0, .3);
+}
+
+.activeList{
+  padding-bottom: 0px !important;
+}
+
+#zipForm{
+  padding-left: 10%;
+  padding-right: 10%;
+}
+
 #zipInput{
-  width: 175px;
+  width: 150px;
   height: 30px;
   font-size: 24px;
   color: #232444;
@@ -35,15 +56,13 @@ html, body, #root, .app {
   color: #232444;
 }
 
-#zipForm{
-  padding: 2%;
-  background-color: #b7e4cf;
-  width: 200px;
-  position: fixed;
-  left: 2%;
-  top: 2%;
-  z-index:10;
-  box-shadow: 10px 10px 5px rgba(0, 0, 0, .3);
+
+.eventList{
+  background-color: white;
+  height:200px;
+  overflow:hidden;
+  overflow-y:scroll;
+  margin-bottom: 0px;
 }
 
 .eventCard{

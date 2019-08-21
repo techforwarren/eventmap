@@ -7,13 +7,31 @@ function SearchBar(props){
   const[input, setInput] = useState(null);
 
   return(
-    <div className="searchBar">
+    <div className={props.events != null ? "searchBar activeList" : "searchBar"}>
       <form onSubmit= {(event) => {
         event.preventDefault();
         props.updateZip(input)}} id = "zipForm">
         <input type="text" id="zipInput" value={props.currentSearch} onChange={(event) => setInput(event.target.value)} placeholder="ZIP" required minLength="5" maxLength="5"></input>
       </form>
+      {props.events !== null &&
+        <EventList events={props.events} updatedHover={(item) => props.updatedHover(item)}/>
+      }
     </div>
+  );
+}
+
+function EventList(props){
+  const listEvents = props.events.map((event) => (
+    <a href={event['browser_url']} key={event['id']} coord={"" + event['location']['location']['latitude'] + "&" + event['location']['location']['longitude']} onMouseEnter={(event) => {props.updatedHover(event['currentTarget'].getAttribute('coord'))}} onMouseLeave={(event) => {props.updatedHover(null)}}>
+      <li>
+        {event['title']}
+      </li>
+    </a>
+
+  ));
+
+  return(
+    <ul className="eventList">{listEvents}</ul>
   );
 }
 
@@ -57,16 +75,35 @@ function Map(props){
     if(Object.keys(locations).length > 0){
       markers.current.clearLayers();
       map.current.setView(center, 8);
+      console.log("updated")
 
       for (var key in locations) {
+        let highlighted = false;
+        var greenIcon = new L.Icon({
+          iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
+          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+          shadowSize: [41, 41]
+        });
+        if(key === props.hoverMarker){
+          console.log("matching");
+          highlighted = true;
+        }
 
   			let cord = key.split("&");
 
-  			L.marker([parseFloat(cord[0]), parseFloat(cord[1])]).bindPopup(locations[key]).addTo(markers.current);
+        if(highlighted){
+          L.marker([parseFloat(cord[0]), parseFloat(cord[1])], {icon: greenIcon}).bindPopup(locations[key]).addTo(markers.current);
+        } else {
+          L.marker([parseFloat(cord[0]), parseFloat(cord[1])]).bindPopup(locations[key]).addTo(markers.current);
+        }
+
 
   		}
     }
-  }, [locations]);
+  }, [locations, props.hoverMarker]);
 
   //Iterates through new events
   useEffect(() => {
@@ -119,6 +156,7 @@ function Map(props){
 function App() {
   const [events, setEvents] = useState(null);
   const [currZip, setCurrZip] = useState(null);
+  const [hoverEvent, setHoverEvent] = useState(null);
 
   //Makes API call when zipcode entered
   useEffect(() => {
@@ -134,8 +172,8 @@ function App() {
 
   return (
     <div className="app">
-      <SearchBar currZip={currZip} updateZip={(newZip) => setCurrZip(newZip)}/>
-      <Map currZip={currZip} events={events}/>
+      <SearchBar currZip={currZip} updateZip={(newZip) => setCurrZip(newZip)} events={events} updatedHover={(newHover) => setHoverEvent(newHover)}/>
+      <Map currZip={currZip} events={events} hoverMarker={hoverEvent}/>
     </div>
   );
 }
