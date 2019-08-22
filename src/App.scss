@@ -12,8 +12,8 @@ html, body, #root, .app {
 .searchBar{
   padding-top: 2%;
   padding-bottom: 2%;
-  background-color: #b7e4cf;
-  width: 200px;
+  background-color: #232444;;
+  width: 300px;
   position: fixed;
   left: 2%;
   top: 2%;
@@ -31,46 +31,52 @@ html, body, #root, .app {
 }
 
 #zipInput{
-  width: 150px;
+  width: 225px;
   height: 30px;
   font-size: 24px;
-  color: #232444;
+  color: white;
   margin: auto;
   display: block;
   background: none;
   border: none;
-  border-bottom: 1px solid #232444;
+  border-bottom: 1px solid white;
   z-index:10;
+
 }
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: #232444;
+  color: white;
   opacity: 1; /* Firefox */
 }
 
 :-ms-input-placeholder { /* Internet Explorer 10-11 */
-  color: #232444;
+  color: white;
 }
 
 ::-ms-input-placeholder { /* Microsoft Edge */
-  color: #232444;
+  color: white;
 }
-
 
 .eventList{
   background-color: white;
-  height:200px;
+  height: 500px;
   overflow:hidden;
   overflow-y:scroll;
   margin-bottom: 0px;
+  padding-left: 0px;
 }
 
 .eventCard{
-  a{
-    text-decoration: none;
+  text-decoration: none;
+  color: #232444;
+
+  li{
+    list-style-type: none;
+    padding: 10%;
   }
-  h3{
-    color: #232444;
-    text-decoration: none;
+
+  li:hover{
+    background-color: #F5F5F5;
   }
+
 }

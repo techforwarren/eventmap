@@ -2,6 +2,20 @@ import React, {useState, useEffect, useRef} from 'react';
 import L from 'leaflet';
 import './App.scss';
 
+//Needs work
+function getTime(time){
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var date = new Date(time*1000);
+
+  var testTime = date.getTime();
+
+  testTime += (3600000*-7)
+
+  var newDate = new Date(testTime);
+
+  return newDate.toLocaleString();
+}
+
 function SearchBar(props){
 
   const[input, setInput] = useState(null);
@@ -22,9 +36,15 @@ function SearchBar(props){
 
 function EventList(props){
   const listEvents = props.events.map((event) => (
-    <a href={event['browser_url']} key={event['id']} coord={"" + event['location']['location']['latitude'] + "&" + event['location']['location']['longitude']} onMouseEnter={(event) => {props.updatedHover(event['currentTarget'].getAttribute('coord'))}} onMouseLeave={(event) => {props.updatedHover(null)}}>
+    <a href={event['browser_url']} className="eventCard" target="_blank" key={event['id']} coord={('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) ? "" + event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'] : ""} onMouseEnter={(event) => {props.updatedHover(event['currentTarget'].getAttribute('coord'))}} onMouseLeave={(event) => {props.updatedHover(null)}}>
       <li>
-        {event['title']}
+        <div>
+          <p>{/*getTime(event['timeslots'][0]['start_date'])*/}</p>
+          <h3>{event['title']}</h3>
+          <p>{event['location']['venue']}</p>
+          <p>{event['location']['locality']}</p>
+
+        </div>
       </li>
     </a>
 
@@ -85,7 +105,7 @@ function Map(props){
           iconSize: [25, 41],
           iconAnchor: [12, 41],
           popupAnchor: [1, -34],
-          shadowSize: [41, 41]
+          shadowSize: [41, 41],
         });
         if(key === props.hoverMarker){
           console.log("matching");
@@ -95,7 +115,7 @@ function Map(props){
   			let cord = key.split("&");
 
         if(highlighted){
-          L.marker([parseFloat(cord[0]), parseFloat(cord[1])], {icon: greenIcon}).bindPopup(locations[key]).addTo(markers.current);
+          L.marker([parseFloat(cord[0]), parseFloat(cord[1])], {icon: greenIcon, zIndexOffset: 1000}).bindPopup(locations[key]).addTo(markers.current);
         } else {
           L.marker([parseFloat(cord[0]), parseFloat(cord[1])]).bindPopup(locations[key]).addTo(markers.current);
         }
