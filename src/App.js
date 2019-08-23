@@ -43,7 +43,7 @@ function EventList(props){
           <h3>{event['title']}</h3>
           <p>{event['location']['venue']}</p>
           <p>{event['location']['locality']}</p>
-
+          <p className="eventRSVP">Click to RSVP</p>
         </div>
       </li>
     </a>
