@@ -8,7 +8,8 @@ require('twix');
 export function EventList(props) {
   const listEvents = props.events.map((event) => {
 
-    // Convert the raw time into a 
+    // Normalize Mobilize's time formatting into
+    // easy-to-use moments
     let rawTimes = event['timeslots'].map((timeslot) => {
       let start = moment(timeslot.start_date * 1000);
       let end = moment(timeslot.end_date * 1000);
@@ -19,11 +20,11 @@ export function EventList(props) {
     })
 
     let sortedTimes = groupBy(sortBy(rawTimes,
-      // Sort all of the ranges by when they start
+      // Sort all of the ranges by when they start;
       // Unix returns the millisecond time, so all
       // events will be different
       (item) => { return item.start.unix() }),
-      // Group the ranges by the day they happen on
+      // Group the ranges by the day they happen on;
       // date() returns the moment's day of the month,
       // so all options on the same day will come 
       // out the same

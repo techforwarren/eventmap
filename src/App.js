@@ -10,14 +10,11 @@ function App() {
 
   //Makes API call when zipcode entered
   useEffect(() => {
-
     if(currZip != null){
       fetch("https://api.mobilize.us/v1/organizations/1316/events?timeslot_start=gte_now&zipcode=" + currZip)
       .then((res)=>res.json())
       .then((data)=>setEvents(data['data']));
     }
-
-
   }, [currZip]);
 
   return (
