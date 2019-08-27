@@ -3,7 +3,7 @@ import SearchBar from './SearchBar';
 import Map from './Map';
 import './App.scss';
 
-export function App() {
+function App() {
   const [events, setEvents] = useState(null);
   const [currZip, setCurrZip] = useState(null);
   const [hoverEvent, setHoverEvent] = useState(null);
