@@ -1,3 +1,6 @@
+import React, { useState } from 'react';
+import EventList from './EventList';
+
 export function SearchBar(props){
 
   const[input, setInput] = useState(null);

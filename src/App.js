@@ -1,6 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
-import L from 'leaflet';
-import moment from 'moment';
+import React, {useState, useEffect } from 'react';
 import SearchBar from './SearchBar';
 import Map from './Map';
 import './App.scss';
