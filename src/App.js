@@ -4,9 +4,14 @@ import Map from './Map';
 import './App.scss';
 
 function App() {
+  //List of events
   const [events, setEvents] = useState(null);
+  //Current zip code search - input by user
   const [currZip, setCurrZip] = useState(null);
+  //Current event being hovered over
   const [hoverEvent, setHoverEvent] = useState(null);
+  //Current selected location location filter
+  const [locFilt, setLocFilt] = useState(null);
 
   //Makes API call when zipcode entered
   useEffect(() => {
@@ -19,8 +24,8 @@ function App() {
 
   return (
     <div className="app">
-      <SearchBar currZip={currZip} updateZip={(newZip) => setCurrZip(newZip)} events={events} updatedHover={(newHover) => setHoverEvent(newHover)}/>
-      <Map currZip={currZip} events={events} hoverMarker={hoverEvent}/>
+      <SearchBar currZip={currZip} updateZip={(newZip) => setCurrZip(newZip)} events={events} updatedHover={(newHover) => setHoverEvent(newHover)} locFilt={locFilt}/>
+      <Map currZip={currZip} events={events} hoverMarker={hoverEvent} selectLoc={(newLoc) => setLocFilt(newLoc)} locFilt={locFilt}/>
     </div>
   );
 }

@@ -23,7 +23,7 @@ export function SearchBar(props){
         <input type="text" id="zipInput" value={input} onChange={onlySetNumbers} placeholder="ZIP" required minLength="5" maxLength="5"></input>
       </form>
       {props.events !== null &&
-        <EventList events={props.events} updatedHover={(item) => props.updatedHover(item)}/>
+        <EventList events={props.events} locFilt={props.locFilt} updatedHover={(item) => props.updatedHover(item)}/>
       }
     </div>
   );

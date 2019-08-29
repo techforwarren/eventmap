@@ -8,8 +8,19 @@ export function Map(props){
   const map = useRef();
   const markers = useRef();
 
-  //App needs a "current highlighted event state that is a prop here" and this needs a "locations state"
+  //Called to set/unset location filter
+  function locationFilter(event, set){
+    console.log(event)
 
+    if(set){
+      props.selectLoc({
+        'lat': event['latlng']['lat'],
+        'lng': event['latlng']['lng']
+      });
+    } else {
+      props.selectLoc(null);
+    }
+  }
 
   //First render
   useEffect(() => {
@@ -19,7 +30,10 @@ export function Map(props){
 		}).setView(center, (props.events != null) ? 8 : 4);
 
     //Initializes layergroup
-    markers.current = L.layerGroup().addTo(map.current);
+    markers.current = L.featureGroup().addTo(map.current);
+    markers.current.on("click", (event) => locationFilter(event, true));
+    map.current.on("click", (event) => locationFilter(event, false));
+
 
 		// Set up the OSM layer
 		L.tileLayer(
@@ -53,7 +67,7 @@ export function Map(props){
           popupAnchor: [1, -34],
           shadowSize: [41, 41],
         });
-        if(key === props.hoverMarker){
+        if(key === props.hoverMarker || (props.locFilt !== null && key === props.locFilt['lat'] + "&" + props.locFilt['lng'])){
           console.log("matching");
           highlighted = true;
         }
@@ -61,15 +75,15 @@ export function Map(props){
   			let cord = key.split("&");
 
         if(highlighted){
-          L.marker([parseFloat(cord[0]), parseFloat(cord[1])], {icon: greenIcon, zIndexOffset: 1000}).bindPopup(locations[key]).addTo(markers.current);
+          L.marker([parseFloat(cord[0]), parseFloat(cord[1])], {icon: greenIcon, zIndexOffset: 1000}).addTo(markers.current);
         } else {
-          L.marker([parseFloat(cord[0]), parseFloat(cord[1])]).bindPopup(locations[key]).addTo(markers.current);
+          L.marker([parseFloat(cord[0]), parseFloat(cord[1])]).addTo(markers.current);
         }
 
 
   		}
     }
-  }, [locations, props.hoverMarker]);
+  }, [locations, props.hoverMarker, props.locFilt]);
 
   //Iterates through new events
   useEffect(() => {
@@ -101,9 +115,9 @@ export function Map(props){
   				let str = event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'];
   				//Creates or adds to a location - adds HTML code for event list for that location
   				if (str in places) {
-  					places[str] = places[str] + "\n<div class=\"eventCard\" id=" + event['id'] + "><a href=" + event['browser_url'] + "><div class=\"eventCard\">" + "<h3>" + event['title'] + "</h3></div></a></div>";
+  					places[str] = places[str] + 1;
   				} else {
-  					places[str] = "<div class=\"eventCard\" id=" + event['id'] + "><a href=" + event['browser_url'] + "><div>" + "<h3>" + event['title'] + "</h3></div></a></div>";
+  					places[str] = 1;
   				}
 
   			}

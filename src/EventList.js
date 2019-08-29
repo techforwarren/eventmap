@@ -26,7 +26,7 @@ export function EventList(props) {
       (item) => { return item.start.unix() }),
       // Group the ranges by the day they happen on;
       // date() returns the moment's day of the month,
-      // so all options on the same day will come 
+      // so all options on the same day will come
       // out the same
       (item) => { return item.start.date() }
     )
@@ -42,6 +42,17 @@ export function EventList(props) {
         </p>
       )
     })
+
+    //Location filter
+    if(props.locFilt != null){
+      if('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']){
+        if(event['location']['location']['latitude'] !== props.locFilt['lat'] || event['location']['location']['longitude'] != props.locFilt['lng']){
+          return(null);
+        }
+      } else {
+        return(null);
+      }
+    }
 
     return (
       <a href={event['browser_url']} className="eventCard" target="_blank" key={event['id']} coord={('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) ? "" + event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'] : ""} onMouseEnter={(event) => { props.updatedHover(event['currentTarget'].getAttribute('coord')) }} onMouseLeave={(event) => { props.updatedHover(null) }}>
