@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import L from 'leaflet';
+import gMark from './img/w-marker-icon-2x.png';
+import hMark from './img/w-marker-icon-2x-highlighted.png';
+import sMark from './img/marker-shadow.png';
 
 export function Map(props){
 
@@ -55,18 +58,27 @@ export function Map(props){
     if(Object.keys(locations).length > 0){
       markers.current.clearLayers();
       map.current.setView(center, 8);
-      console.log("updated")
+
+      var generalIcon = new L.Icon({
+        iconUrl: gMark,
+        shadowUrl: sMark,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41],
+      });
+      var highlightedIcon = new L.Icon({
+        iconUrl: hMark,
+        shadowUrl: sMark,
+        iconSize: [25, 41],
+        iconAnchor: [12, 41],
+        popupAnchor: [1, -34],
+        shadowSize: [41, 41],
+      });
 
       for (var key in locations) {
         let highlighted = false;
-        var greenIcon = new L.Icon({
-          iconUrl: 'https://cdn.rawgit.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png',
-          shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-          iconSize: [25, 41],
-          iconAnchor: [12, 41],
-          popupAnchor: [1, -34],
-          shadowSize: [41, 41],
-        });
+
         if(key === props.hoverMarker || (props.locFilt !== null && key === props.locFilt['lat'] + "&" + props.locFilt['lng'])){
           console.log("matching");
           highlighted = true;
@@ -75,9 +87,9 @@ export function Map(props){
   			let cord = key.split("&");
 
         if(highlighted){
-          L.marker([parseFloat(cord[0]), parseFloat(cord[1])], {icon: greenIcon, zIndexOffset: 1000}).addTo(markers.current);
+          L.marker([parseFloat(cord[0]), parseFloat(cord[1])], {icon: highlightedIcon, zIndexOffset: 1000}).addTo(markers.current);
         } else {
-          L.marker([parseFloat(cord[0]), parseFloat(cord[1])]).addTo(markers.current);
+          L.marker([parseFloat(cord[0]), parseFloat(cord[1])], {icon: generalIcon}).addTo(markers.current);
         }
 
 
