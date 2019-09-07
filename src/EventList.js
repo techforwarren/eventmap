@@ -4,6 +4,48 @@ import groupBy from 'lodash.groupby';
 import sortBy from 'lodash.sortby';
 require('twix');
 
+function EventTimes(props) {
+  const { rawTimes } = props;
+  let sortedTimesByDate = groupBy(sortBy(rawTimes,
+    // Sort all of the ranges by when they start;
+    // Unix returns the millisecond time, so all
+    // events will be different
+    (item) => { return item.start.unix() }),
+    // Group the ranges by the day they happen on;
+    // fully including the year, month, and day
+    // in that order guarantees that normal sorting
+    // will respect 9/31 v 10/1, and 2020/01 vs 2019/12
+    (item) => { return item.start.format('YYYY-MM-DD') }
+  )
+
+  let sortedDates = Object.keys(sortedTimesByDate).sort();
+  
+  const dateRowFactory = (date) => {
+    let times = sortedTimesByDate[date];
+    let dayStr = times[0].start.format('dddd MMM D')
+    let timeStrs = times.map((time) => time.range.format({ hideDate : true })).join(', ')
+    return (
+      <p key={`time-${date}`}>
+        { dayStr }{' | '}{ timeStrs }
+      </p>
+    )
+  }
+
+  if (sortedDates.length <= 3) {
+    return sortedDates.map(dateRowFactory)
+  } else {
+    let nextDay = sortedDates[2];
+    let lastDay = sortedDates[sortedDates.length - 1];
+    let nextStart = sortedTimesByDate[nextDay][0].start;
+    let lastStart = sortedTimesByDate[lastDay][0].start;
+    let format = 'MMM D';
+    return sortedDates.slice(0,2).map(dateRowFactory).concat(
+      <p>
+        More Times Available from {nextStart.format(format)} to {lastStart.format(format)}
+      </p>
+    )
+  }
+}
 
 export function EventList(props) {
   const listEvents = props.events.map((event) => {
@@ -19,30 +61,6 @@ export function EventList(props) {
       }
     })
 
-    let sortedTimes = groupBy(sortBy(rawTimes,
-      // Sort all of the ranges by when they start;
-      // Unix returns the millisecond time, so all
-      // events will be different
-      (item) => { return item.start.unix() }),
-      // Group the ranges by the day they happen on;
-      // date() returns the moment's day of the month,
-      // so all options on the same day will come
-      // out the same
-      (item) => { return item.start.date() }
-    )
-
-    // Build out times like "Monday Sep 16 | 6 - 8:30 PM"
-    let timeElts = Object.keys(sortedTimes).sort().map((day) => {
-      let times = sortedTimes[day];
-      let dayStr = times[0].start.format('dddd MMM D')
-      let timeStrs = times.map((time) => time.range.format({ hideDate : true })).join(', ')
-      return (
-        <p key={`time-${day}`}>
-          { dayStr }{' | '}{ timeStrs }
-        </p>
-      )
-    })
-
     //Location filter
     if(props.locFilt != null){
       if('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']){
@@ -53,15 +71,20 @@ export function EventList(props) {
         return(null);
       }
     }
-
+    
     return (
-      <a href={event['browser_url']} className="eventCard" target="_blank" key={event['id']} coord={('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) ? "" + event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'] : ""} onMouseEnter={(event) => { props.updatedHover(event['currentTarget'].getAttribute('coord')) }} onMouseLeave={(event) => { props.updatedHover(null) }}>
+      <a href={event['browser_url']} 
+        className="eventCard" 
+        target="_blank" 
+        key={event['id']} 
+        coord={('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) ? "" + event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'] : ""} 
+        onMouseEnter={(event) => { props.updatedHover(event['currentTarget'].getAttribute('coord')) }} 
+        onMouseLeave={(event) => { props.updatedHover(null) }}>
         <li>
           <div>
             <h3>{event['title']}</h3>
-            <p>{event['location']['venue']}</p>
-            <p>{event['location']['locality']}</p>
-            { timeElts }
+            <p><strong>{event['location']['venue']}</strong> in <strong>{event['location']['locality']}</strong></p>
+            <EventTimes rawTimes={rawTimes} />
             <p className="eventRSVP">Click to RSVP</p>
           </div>
         </li>
