@@ -4,6 +4,8 @@ import groupBy from 'lodash.groupby';
 import sortBy from 'lodash.sortby';
 require('twix');
 
+const MAX_DAYS_IN_LIST = 4;
+
 function EventTimes(props) {
   const { rawTimes } = props;
   let sortedTimesByDate = groupBy(sortBy(rawTimes,
@@ -22,7 +24,7 @@ function EventTimes(props) {
   
   const dateRowFactory = (date) => {
     let times = sortedTimesByDate[date];
-    let dayStr = times[0].start.format('dddd MMM D')
+    let dayStr = times[0].start.format('ddd M/D')
     let timeStrs = times.map((time) => time.range.format({ hideDate : true })).join(', ')
     return (
       <p key={`time-${date}`}>
@@ -31,17 +33,16 @@ function EventTimes(props) {
     )
   }
 
-  if (sortedDates.length <= 3) {
+  if (sortedDates.length <= MAX_DAYS_IN_LIST) {
     return sortedDates.map(dateRowFactory)
   } else {
-    let nextDay = sortedDates[2];
+    let nextDay = sortedDates[MAX_DAYS_IN_LIST - 1];
     let lastDay = sortedDates[sortedDates.length - 1];
     let nextStart = sortedTimesByDate[nextDay][0].start;
     let lastStart = sortedTimesByDate[lastDay][0].start;
-    let format = 'MMM D';
-    return sortedDates.slice(0,2).map(dateRowFactory).concat(
+    return sortedDates.slice(0,MAX_DAYS_IN_LIST - 1).map(dateRowFactory).concat(
       <p>
-        More Times Available from {nextStart.format(format)} to {lastStart.format(format)}
+        More Times from {nextStart.twix(lastStart, { allDay : true }).format()}
       </p>
     )
   }
@@ -71,7 +72,7 @@ export function EventList(props) {
         return(null);
       }
     }
-    
+
     return (
       <a href={event['browser_url']} 
         className="eventCard" 
