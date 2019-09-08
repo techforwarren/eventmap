@@ -14,7 +14,7 @@ html, body, #root, .app {
   padding-bottom: 2%;
   background-color: #232444;
   //width: 300px;
-  width: 25%;
+  width: 32%;
   position: fixed;
   left: 2%;
   top: 2%;
@@ -82,16 +82,17 @@ html, body, #root, .app {
 
   li{
     list-style-type: none;
-    padding: 10%;
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 5%;
+    padding-bottom: 5%;
     border-top: 1px solid #E8E8E8;
     border-bottom: 1px solid #E8E8E8;
     position: relative;
 
     .eventRSVP{
-      position: absolute;
-      bottom: 2%;
-      right: 6%;
       visibility: hidden;
+      text-align: right;
     }
 
   }

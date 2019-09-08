@@ -1,6 +1,6 @@
 # Warren Event Map
 
-The goal of this project is to build an Event Map that Warren supporters & volunteers can use to find events near their area!
+The goal of this project is to build an Event Map that Warren supporters & volunteers can use to find events near their area!  It loads the events via the Mobilize API ([docs for /events endpoint](https://github.com/mobilizeamerica/api#request-2)).
 
 ## Getting Started - Cloning & Installation
 
