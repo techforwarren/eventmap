@@ -8,6 +8,7 @@ export function Map(props){
 
   const [center, setCenter] = useState([39.8283, -98.5795]);
   const [locations, setLocations] = useState({});
+  const [newCenter, setNewCenter] = useState(false);
   const map = useRef();
   const markers = useRef();
 
@@ -57,7 +58,12 @@ export function Map(props){
 
     if(Object.keys(locations).length > 0){
       markers.current.clearLayers();
-      map.current.setView(center, 8);
+
+      if(newCenter){
+        map.current.setView(center, 8);
+        setNewCenter(false);
+      }
+
 
       var generalIcon = new L.Icon({
         iconUrl: gMark,
@@ -113,7 +119,7 @@ export function Map(props){
 
       if(center[0] !== lat || center[0] !== long){
         setCenter([lat, long]);
-
+        setNewCenter(true);
       }
 
       var places = {};

@@ -3,7 +3,7 @@ import EventList from './EventList';
 
 export function SearchBar(props){
 
-  const[input, setInput] = useState(null);
+  const[input, setInput] = useState("");
 
   function onlySetNumbers(event){
     let baseValue = event.target.value;

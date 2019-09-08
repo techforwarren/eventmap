@@ -19,6 +19,11 @@ function App() {
       fetch("https://api.mobilize.us/v1/organizations/1316/events?timeslot_start=gte_now&zipcode=" + currZip)
       .then((res)=>res.json())
       .then((data)=>setEvents(data['data']));
+
+      //Reset states on new zipcode
+      setHoverEvent(null);
+      setLocFilt(null);
+
     }
   }, [currZip]);
 
