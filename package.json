@@ -18,7 +18,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "jest --watchAll",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -35,5 +37,8 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {}
+  "homepage": "https://techforwarren.github.io/eventmap/",
+  "devDependencies": {
+    "gh-pages": "^2.1.1"
+  }
 }
