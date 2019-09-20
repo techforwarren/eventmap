@@ -15,17 +15,16 @@ function App() {
 
   //Makes API call when zipcode entered
   useEffect(() => {
-    if(currZip != null){
-      fetch("https://api.mobilize.us/v1/organizations/1316/events?timeslot_start=gte_now&zipcode=" + currZip)
+
+      fetch("https://gist.githubusercontent.com/mick/6c85985bbaee7419b6351501edd05de0/raw/f41482f485d3390516c390180c841c25b4213987/events.json")
       .then((res)=>res.json())
-      .then((data)=>setEvents(data['data']));
+      .then((data)=>setEvents(data));
 
       //Reset states on new zipcode
       setHoverEvent(null);
       setLocFilt(null);
 
-    }
-  }, [currZip]);
+  }, []);
 
   return (
     <div className="app">
