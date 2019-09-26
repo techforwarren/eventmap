@@ -41,7 +41,7 @@
       "last 1 safari version"
     ]
   },
-  "homepage": "https://techforwarren.github.io/eventmap/",
+  "homepage": "https://jlev.github.io/warren-eventmap/",
   "devDependencies": {
     "gh-pages": "^2.1.1"
   }
