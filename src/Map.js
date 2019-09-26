@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import L from 'leaflet';
+import 'mapbox-gl-leaflet';
 import gMark from './img/w-marker-icon-2x.png';
 import hMark from './img/w-marker-icon-2x-highlighted.png';
 import sMark from './img/marker-shadow.png';
@@ -39,12 +40,13 @@ export function Map(props){
     map.current.on("click", (event) => locationFilter(event, false));
 
 
-		// Set up the OSM layer
-		L.tileLayer(
-			'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-				maxZoom: 18
-			}).addTo(map.current);
+		// Set up the base layer
+    L.mapboxGL({
+      style: 'https://raw.githubusercontent.com/osm2vectortiles/mapbox-gl-styles/master/styles/bright-v9-cdn.json',
+      accessToken: 'no-token',
+      attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+      maxZoom: 18
+    }).addTo(map.current);
 
 		L.control.zoom({
 			position: 'topright'
