@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import {isMobile} from 'react-device-detect';
 import EventList from './EventList';
+import History from './History';
 
 export function SearchBar(props){
-
-  const[input, setInput] = useState("");
+  const[input, setInput] = useState(props.currZip);
 
   function onlySetNumbers(event){
     let baseValue = event.target.value;
@@ -15,7 +15,8 @@ export function SearchBar(props){
 
   function onSubmit(event){
     event.preventDefault();
-    props.updateZip(input)
+    props.updateZip(input);
+    History.push('/?zip='+input);
   }
 
 
