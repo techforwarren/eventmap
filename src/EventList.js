@@ -21,7 +21,7 @@ function EventTimes(props) {
   )
 
   let sortedDates = Object.keys(sortedTimesByDate).sort();
-  
+
   const dateRowFactory = (date) => {
     let times = sortedTimesByDate[date];
     let dayStr = times[0].start.format('ddd M/D')
@@ -49,7 +49,12 @@ function EventTimes(props) {
 }
 
 export function EventList(props) {
-  const listEvents = props.events.map((event) => {
+  if (!props.locFilt && !props.nearBy) {
+
+  }
+
+
+  const listEvents = props.events.map((event, i) => {
 
     // Normalize Mobilize's time formatting into
     // easy-to-use moments
@@ -63,23 +68,19 @@ export function EventList(props) {
     })
 
     //Location filter
-    if(props.locFilt != null){
-      if('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']){
-        if(event['location']['location']['latitude'] !== props.locFilt['lat'] || event['location']['location']['longitude'] != props.locFilt['lng']){
-          return(null);
-        }
-      } else {
-        return(null);
-      }
+    var locKey = event['location']['location']['longitude'] + '&' + event['location']['location']['latitude'];
+
+    if(props.locFilt && locKey !== props.locFilt) {
+      return(null);
     }
 
     return (
-      <a href={event['browser_url']} 
-        className="eventCard" 
-        target="_blank" 
-        key={event['id']} 
-        coord={('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) ? "" + event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'] : ""} 
-        onMouseEnter={(event) => { props.updatedHover(event['currentTarget'].getAttribute('coord')) }} 
+      <a href={event['browser_url']}
+        className="eventCard"
+        target="_blank"
+        key={event['id']}
+        coord={('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) ? "" + event['location']['location']['longitude'] + "&" + event['location']['location']['latitude'] : ""}
+        onMouseEnter={(event) => { props.updatedHover(event['currentTarget'].getAttribute('coord')) }}
         onMouseLeave={(event) => { props.updatedHover(null) }}>
         <li>
           <div>

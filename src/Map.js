@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import L from 'leaflet';
+import mapboxgl from 'mapbox-gl';
 import gMark from './img/w-marker-icon-2x.png';
 import hMark from './img/w-marker-icon-2x-highlighted.png';
 import sMark from './img/marker-shadow.png';
 
+require('mapbox-gl/dist/mapbox-gl.css');
 export function Map(props){
 
-  const [center, setCenter] = useState([39.8283, -98.5795]);
-  const [locations, setLocations] = useState({});
+  const [center, setCenter] = useState([-98.5795, 39.8283]);
+  const [locations, setLocations] = useState([]);
   const [newCenter, setNewCenter] = useState(false);
+  const [mapReady, setMapReady] = useState(false);
   const map = useRef();
   const markers = useRef();
 
@@ -28,120 +30,111 @@ export function Map(props){
   //First render
   useEffect(() => {
     // Create the map with US center
-		map.current = L.map('map', {
-			zoomControl: false
-		}).setView(center, (props.events != null) ? 8 : 4);
+    mapboxgl.accessToken = 'pk.eyJ1IjoibWlja3QiLCJhIjoiLXJIRS1NbyJ9.EfVT76g4A5dyuApW_zuIFQ';
+		map.current = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mickt/ck0rlk9834i721clibn70ajsa',
+      zoom: 3,
+      hash: true,
+      center: center
+		});
+    map.current.on('load', _ => {
 
-    //Initializes layergroup
-    markers.current = L.featureGroup().addTo(map.current);
-    markers.current.on("click", (event) => locationFilter(event, true));
-    map.current.on("click", (event) => locationFilter(event, false));
+      map.current.addSource('locations', {
+        "type": "geojson",
+        "data": {type: 'FeatureCollection', features: []}
+      });
 
 
-		// Set up the OSM layer
-		L.tileLayer(
-			'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-				maxZoom: 18
-			}).addTo(map.current);
+      map.current.addLayer({
+        "id": "event-locations",
+        "source": "locations",
+        "type": "symbol",
+        "layout": {
+          "icon-allow-overlap": true,
+          "icon-image": "w-marker-icon",
+          "icon-anchor": "bottom",
+          "icon-size": 0.5
+        },
+        "filter": ["!=", "highlight", true]
+      });
+      map.current.addLayer({
+        "id": "event-locations-highlight",
+        "source": "locations",
+        "type": "symbol",
+        "layout": {
+          "icon-allow-overlap": true,
+          "icon-image": "w-marker-icon-highlighted",
+          "icon-anchor": "bottom",
+          "icon-size": 0.6
+        },
+        "filter": ["==", "highlight", true]
+      });
 
-		L.control.zoom({
-			position: 'topright'
-		}).addTo(map.current);
+      // Center the map on the coordinates of any clicked symbol from the 'symbols' layer.
+      map.current.on('click', 'event-locations', function (e) {
+        console.log(e.features)
+        if (e.features && e.features.length > 0) {
+          props.selectLoc(e.features[0].properties.locKey);
+        }
+        map.current.flyTo({center: e.features[0].geometry.coordinates});
+      });
 
+      // Change the cursor to a pointer when the it enters a feature in the 'symbols' layer.
+      map.current.on('mouseenter', 'event-locations', function () {
+        map.current.getCanvas().style.cursor = 'pointer';
+      });
+
+      // Change it back to a pointer when it leaves.
+      map.current.on('mouseleave', 'event-locations', function () {
+        map.current.getCanvas().style.cursor = '';
+      });
+
+      setMapReady(true)
+    })
   }, []);
 
 
-  //When locations are updated, generate new markers
   useEffect(() => {
 
-    if(Object.keys(locations).length > 0){
-      markers.current.clearLayers();
+    console.log(props.hoverMarker, props.locFilt)
+    var key = props.hoverMarker ||  props.locFilt
+    var newlocs = locations.map(l => {
+      l.properties.highlight = (l.properties.locKey === key)
+      return l;
+    })
+    setLocations(newlocs);
 
-      if(newCenter){
-        map.current.setView(center, 8);
-        setNewCenter(false);
-      }
+  }, [props.hoverMarker, props.locFilt])
 
+  useEffect(() => {
+    if (mapReady === false) return;
 
-      var generalIcon = new L.Icon({
-        iconUrl: gMark,
-        shadowUrl: sMark,
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41],
-      });
-      var highlightedIcon = new L.Icon({
-        iconUrl: hMark,
-        shadowUrl: sMark,
-        iconSize: [25, 41],
-        iconAnchor: [12, 41],
-        popupAnchor: [1, -34],
-        shadowSize: [41, 41],
-      });
-
-      for (var key in locations) {
-        let highlighted = false;
-
-        if(key === props.hoverMarker || (props.locFilt !== null && key === props.locFilt['lat'] + "&" + props.locFilt['lng'])){
-          console.log("matching");
-          highlighted = true;
-        }
-
-  			let cord = key.split("&");
-
-        if(highlighted){
-          L.marker([parseFloat(cord[0]), parseFloat(cord[1])], {icon: highlightedIcon, zIndexOffset: 1000}).addTo(markers.current);
-        } else {
-          L.marker([parseFloat(cord[0]), parseFloat(cord[1])], {icon: generalIcon}).addTo(markers.current);
-        }
-
-
-  		}
-    }
-  }, [locations, props.hoverMarker, props.locFilt]);
+    var geojson = {type: 'FeatureCollection', features: locations};
+    map.current.getSource('locations').setData(geojson);
+  }, [locations, mapReady])
 
   //Iterates through new events
   useEffect(() => {
+    if (props.events === null) return;
 
-    if(props.events != null){
-
-      //Initiates map's focus at the first event (typically the closest to the provided zipcode) with a valid lat & long position
-      // let first = 0;
-  		// if (!('location' in props.events[first]) || !('location' in props.events[first]['location']) || !('latitude' in props.events[first]['location']['location'])) {
-  		// 	first++;
-  		// }
-
-      // var lat = props.events[first]['location']['location']['latitude'];
-      // var long = props.events[first]['location']['location']['longitude'];
-
-      // if(center[0] !== lat || center[0] !== long){
-      //   setCenter([lat, long]);
-      //   setNewCenter(true);
-      // }
-
-      var places = {};
-
-      props.events.forEach(function(event, index) {
-        if (index > 500) return;
-  			//If has longitude and latitute
-  			if ('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) {
-
-          //Creates string key for {places} dictionary
-  				let str = event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'];
-  				//Creates or adds to a location - adds HTML code for event list for that location
-  				if (str in places) {
-  					places[str] = places[str] + 1;
-  				} else {
-  					places[str] = 1;
-  				}
-
-  			}
-      });
-      setLocations(places);
-    }
-
+    var places = props.events.map(e => {
+      return {
+        type: 'Feature',
+        properties:{
+          "highlight": false,
+          "locKey": e.location.location.longitude + '&' + e.location.location.latitude
+        },
+        geometry: {
+          type: 'Point',
+          coordinates: [
+            parseFloat(e.location.location.longitude),
+            parseFloat(e.location.location.latitude)
+          ]
+        }
+      }
+    })
+    setLocations(places);
   }, [props.events]);
 
 
