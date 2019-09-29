@@ -1,5 +1,0 @@
-{
-    "name": "warren-events",
-    "description": "Bundles warren events to download in bulk",
-    "image": "heroku/python"
-  }
