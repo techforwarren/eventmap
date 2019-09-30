@@ -18,7 +18,7 @@ function App() {
   //Makes API call when zipcode entered
   useEffect(() => {
 
-      fetch("https://gist.githubusercontent.com/mick/6c85985bbaee7419b6351501edd05de0/raw/f41482f485d3390516c390180c841c25b4213987/events.json")
+      fetch("https://warren-events.s3.amazonaws.com/data/events.json")
       .then((res)=>res.json())
       .then((data)=>setEvents(data));
 
