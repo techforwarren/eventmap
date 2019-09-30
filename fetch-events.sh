@@ -8,5 +8,5 @@ python3 events/filter.py all-events.json events.json
 
 gzip events.json
 
-aws s3 cp events.json.gz $S3_PATH/events.json --acl public-read --metadata "Content-Encoding=gzip,Content-Type=application/json"
+aws s3 cp events.json.gz $S3_PATH/events.json --acl public-read --content-encoding gzip --content-type "application/json"
 
