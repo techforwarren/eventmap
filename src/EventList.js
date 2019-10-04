@@ -52,9 +52,13 @@ export function EventList(props) {
   if (!props.locFilt && !props.nearBy) {
 
   }
+  // Filter based on the events that are currently in view.
+  var inViewEvents = props.events.filter(event => {
+    var locKey = event['location']['location']['longitude'] + '&' + event['location']['location']['latitude'];
+    return props.inViewEvents.indexOf(locKey) >= 0
+  })
 
-
-  const listEvents = props.events.map((event, i) => {
+  const listEvents = inViewEvents.map((event, i) => {
 
     // Normalize Mobilize's time formatting into
     // easy-to-use moments
@@ -67,13 +71,6 @@ export function EventList(props) {
       }
     })
 
-    //Location filter
-    var locKey = event['location']['location']['longitude'] + '&' + event['location']['location']['latitude'];
-
-    if(props.locFilt && locKey !== props.locFilt) {
-      return(null);
-    }
-
     return (
       <a href={event['browser_url']}
         className="eventCard"
@@ -82,7 +79,7 @@ export function EventList(props) {
         coord={('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) ? "" + event['location']['location']['longitude'] + "&" + event['location']['location']['latitude'] : ""}
         onMouseEnter={(event) => { props.updatedHover(event['currentTarget'].getAttribute('coord')) }}
         onMouseLeave={(event) => { props.updatedHover(null) }}>
-        <li>
+        <li className="event">
           <div>
             <h3>{event['title']}</h3>
             <p><strong>{event['location']['venue']}</strong> in <strong>{event['location']['locality']}</strong></p>
@@ -91,9 +88,14 @@ export function EventList(props) {
           </div>
         </li>
       </a>
-
     )
   });
+
+  listEvents.push((<div className="eventCard" key="noevent"><li>
+    <div>
+      <p><strong>Don't see an event near you? </strong><br /><a href="https://events.elizabethwarren.com/?is_virtual=true">Join a virtual event</a> or <a href="https://events.elizabethwarren.com/event/create/">host your own event!</a></p>
+    </div>
+  </li></div>))
 
   return (
     <ul className="eventList">{listEvents}</ul>

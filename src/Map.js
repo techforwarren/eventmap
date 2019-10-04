@@ -1,31 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import mapboxgl from 'mapbox-gl';
-import gMark from './img/w-marker-icon-2x.png';
-import hMark from './img/w-marker-icon-2x-highlighted.png';
-import sMark from './img/marker-shadow.png';
 
 require('mapbox-gl/dist/mapbox-gl.css');
 export function Map(props){
 
-  const [center, setCenter] = useState([-98.5795, 39.8283]);
   const [locations, setLocations] = useState([]);
-  const [newCenter, setNewCenter] = useState(false);
   const [mapReady, setMapReady] = useState(false);
   const map = useRef();
-  const markers = useRef();
-
-  //Called to set/unset location filter
-  function locationFilter(event, set){
-
-    if(set){
-      props.selectLoc({
-        'lat': event['latlng']['lat'],
-        'lng': event['latlng']['lng']
-      });
-    } else {
-      props.selectLoc(null);
-    }
-  }
 
   //First render
   useEffect(() => {
@@ -36,7 +17,7 @@ export function Map(props){
       style: 'mapbox://styles/mickt/ck0rlk9834i721clibn70ajsa',
       zoom: 3,
       hash: true,
-      center: center
+      center: [-98.5795, 39.8283]
 		});
     map.current.on('load', _ => {
 
@@ -73,11 +54,9 @@ export function Map(props){
 
       // Center the map on the coordinates of any clicked symbol from the 'symbols' layer.
       map.current.on('click', 'event-locations', function (e) {
-        console.log(e.features)
         if (e.features && e.features.length > 0) {
           props.selectLoc(e.features[0].properties.locKey);
         }
-        map.current.flyTo({center: e.features[0].geometry.coordinates});
       });
 
       // Change the cursor to a pointer when the it enters a feature in the 'symbols' layer.
@@ -90,22 +69,41 @@ export function Map(props){
         map.current.getCanvas().style.cursor = '';
       });
 
+      function inViewFeatures() {
+        var features = map.current.queryRenderedFeatures({ layers: ['event-locations', 'event-locations-highlight'] });
+        var keys = features.map(f => {
+          return f.properties.locKey;
+        });
+        props.inViewEvents(keys);
+      }
+
+      // if the map moves, update the list of features in view.
+      map.current.on('moveend', inViewFeatures);
+      map.current.on('idle', inViewFeatures);
+
+
       setMapReady(true)
     })
   }, []);
 
-
-  useEffect(() => {
-
-    console.log(props.hoverMarker, props.locFilt)
-    var key = props.hoverMarker ||  props.locFilt
+  function highlight(key, flyto) {
     var newlocs = locations.map(l => {
       l.properties.highlight = (l.properties.locKey === key)
+      if (flyto && l.properties.locKey === key)
+        map.current.flyTo({center: l.geometry.coordinates, zoom: 10});
       return l;
     })
     setLocations(newlocs);
+  }
 
-  }, [props.hoverMarker, props.locFilt])
+  useEffect(() => {
+    highlight(props.locFilt, true);
+  }, [ props.locFilt])
+
+  useEffect(() => {
+    highlight(props.hoverMarker, false);
+  }, [props.hoverMarker])
+
 
   useEffect(() => {
     if (mapReady === false) return;

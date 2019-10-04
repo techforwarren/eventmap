@@ -76,10 +76,6 @@ html, body, #root, .app {
     text-transform: uppercase;
   }
 
-  :hover{
-    color: white;
-  }
-
   li{
     list-style-type: none;
     padding-left: 10%;
@@ -97,8 +93,9 @@ html, body, #root, .app {
 
   }
 
-  li:hover{
+  li.event:hover{
     background-color: #232444;
+    color: white;
 
     .eventRSVP{
       visibility: visible;

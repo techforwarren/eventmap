@@ -8,7 +8,6 @@ export function SearchBar(props){
   function onlySetNumbers(event){
     let baseValue = event.target.value;
     let replacedVal = baseValue.replace(/\D*/g, '')
-    console.log(`baseValue: ${baseValue}, replacedVal: ${replacedVal}`);
     setInput(replacedVal)
   }
 
@@ -18,9 +17,8 @@ export function SearchBar(props){
   }
 
   var eventlist = [];
-  console.log(props)
   if (props.locFilt !== null || props.nearby !== null) {
-    eventlist = (<EventList events={props.events} locFilt={props.locFilt} updatedHover={(item) => props.updatedHover(item)}/>)
+    eventlist = (<EventList events={props.events} inViewEvents={props.inViewEvents} locFilt={props.locFilt} updatedHover={(item) => props.updatedHover(item)}/>)
   }
 
   return(
