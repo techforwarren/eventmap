@@ -24,6 +24,7 @@ for e in events:
     del e['location']['state_senate_district']
 
     slim_events.append({
+        'id': e['id'],
         'browser_url': e['browser_url'],
         'location': e['location'],
         'title': e['title'],
