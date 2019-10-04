@@ -101,6 +101,16 @@ html, body, #root, .app {
       visibility: visible;
     }
   }
+  li.highlighted{
+    background-color: #232444;
+    color: white;
+
+    .eventRSVP{
+      visibility: visible;
+    }
+  }
+
+
 
 }
 
@@ -112,12 +122,4 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 input[type="number"] {
     -moz-appearance: textfield;
-}
-
-.marker {
-  background-image: url('img/w-marker-icon-2x.png');
-  background-size: cover;
-  width: 25px;
-  height: 41px;
-  cursor: pointer;
 }

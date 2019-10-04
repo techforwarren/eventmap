@@ -7,6 +7,7 @@ export function Map(props){
   const [locations, setLocations] = useState([]);
   const [mapReady, setMapReady] = useState(false);
   const map = useRef();
+  const prevHighlightId = useRef()
 
   //First render
   useEffect(() => {
@@ -33,12 +34,19 @@ export function Map(props){
         "type": "symbol",
         "layout": {
           "icon-allow-overlap": true,
-          "icon-image": "w-marker-icon",
           "icon-anchor": "bottom",
-          "icon-size": 0.5
+          "icon-size": 0.5,
+          "icon-image": "w-marker-icon"
         },
-        "filter": ["!=", "highlight", true]
+        "paint": {
+          "icon-opacity": [
+            "match", ["feature-state", "highlight"],
+            1, 0,
+            1
+          ]
+        }
       });
+
       map.current.addLayer({
         "id": "event-locations-highlight",
         "source": "locations",
@@ -49,13 +57,20 @@ export function Map(props){
           "icon-anchor": "bottom",
           "icon-size": 0.6
         },
-        "filter": ["==", "highlight", true]
+        "paint": {
+          "icon-opacity": [
+            "match", ["feature-state", "highlight"],
+            1, 1,
+            0
+          ]
+        }
       });
 
       // Center the map on the coordinates of any clicked symbol from the 'symbols' layer.
       map.current.on('click', 'event-locations', function (e) {
         if (e.features && e.features.length > 0) {
-          props.selectLoc(e.features[0].properties.locKey);
+          console.log(e.features[0])
+          props.selectEvent({id: e.features[0].id, center: e.features[0].geometry.coordinates});
         }
       });
 
@@ -71,10 +86,11 @@ export function Map(props){
 
       function inViewFeatures() {
         var features = map.current.queryRenderedFeatures({ layers: ['event-locations', 'event-locations-highlight'] });
-        var keys = features.map(f => {
-          return f.properties.locKey;
+        var inView = {};
+        features.forEach(f => {
+          inView[f.id] = true;
         });
-        props.inViewEvents(keys);
+        props.inViewEvents(inView);
       }
 
       // if the map moves, update the list of features in view.
@@ -86,23 +102,22 @@ export function Map(props){
     })
   }, []);
 
-  function highlight(key, flyto) {
-    var newlocs = locations.map(l => {
-      l.properties.highlight = (l.properties.locKey === key)
-      if (flyto && l.properties.locKey === key)
-        map.current.flyTo({center: l.geometry.coordinates, zoom: 10});
-      return l;
-    })
-    setLocations(newlocs);
+  function highlight(currentId, center) {
+    console.log('highlight', prevHighlightId.current, currentId)
+    if (prevHighlightId.current) map.current.setFeatureState({source: 'locations', id: prevHighlightId.current}, { highlight: 0});
+
+    if (currentId) map.current.setFeatureState({source: 'locations', id: currentId}, { highlight: 1});
+
+    prevHighlightId.current = currentId;
+    if (center)
+    map.current.flyTo({center: center, zoom: 10});
   }
 
   useEffect(() => {
-    highlight(props.locFilt, true);
-  }, [ props.locFilt])
-
-  useEffect(() => {
-    highlight(props.hoverMarker, false);
-  }, [props.hoverMarker])
+    if (mapReady === false) return;
+    console.log(props.highlightedEvent)
+    highlight(props.highlightedEvent.id, props.highlightedEvent.center);
+  }, [ props.highlightedEvent, mapReady])
 
 
   useEffect(() => {
@@ -119,10 +134,8 @@ export function Map(props){
     var places = props.events.map(e => {
       return {
         type: 'Feature',
-        properties:{
-          "highlight": false,
-          "locKey": e.location.location.longitude + '&' + e.location.location.latitude
-        },
+        id: e.id,
+        properties:{},
         geometry: {
           type: 'Point',
           coordinates: [

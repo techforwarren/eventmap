@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import moment from 'moment';
 import groupBy from 'lodash.groupby';
 import sortBy from 'lodash.sortby';
@@ -49,13 +49,28 @@ function EventTimes(props) {
 }
 
 export function EventList(props) {
-  if (!props.locFilt && !props.nearBy) {
 
-  }
+  // if we have a event selected on the map, and highlighted in the list
+  // lets scroll to see it.
+  useLayoutEffect(() => {
+    if (!props.highlightedEvent.id) return;
+    var card = document.querySelector(`a.eventCard[eventid='${props.highlightedEvent.id}']`);
+    if (card){
+      card.scrollIntoView(true);
+    }
+  }, [props.highlightedEvent, props.inViewEvents])
+
+
   // Filter based on the events that are currently in view.
+  var eventCount = 0;
   var inViewEvents = props.events.filter(event => {
-    var locKey = event['location']['location']['longitude'] + '&' + event['location']['location']['latitude'];
-    return props.inViewEvents.indexOf(locKey) >= 0
+    // limit to top matching events. to avoid list updating perf issues.
+    if (eventCount > 30) return false;
+    if (props.inViewEvents[event.id]) {
+      eventCount +=1;
+      return true;
+    }
+    return false;
   })
 
   const listEvents = inViewEvents.map((event, i) => {
@@ -70,16 +85,18 @@ export function EventList(props) {
         range: start.twix(end)
       }
     })
+    var liClass = 'event';
+    if (props.highlightedEvent.id === event.id) liClass = 'event highlighted';
 
     return (
       <a href={event['browser_url']}
         className="eventCard"
         target="_blank"
         key={event['id']}
-        coord={('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) ? "" + event['location']['location']['longitude'] + "&" + event['location']['location']['latitude'] : ""}
-        onMouseEnter={(event) => { props.updatedHover(event['currentTarget'].getAttribute('coord')) }}
-        onMouseLeave={(event) => { props.updatedHover(null) }}>
-        <li className="event">
+        eventid={event['id']}
+        onMouseEnter={(event) => { props.updatedHover({id: event['currentTarget'].getAttribute('eventid'), center:false}) }}
+        onMouseLeave={(event) => { props.updatedHover({}) }}>
+        <li className={liClass}>
           <div>
             <h3>{event['title']}</h3>
             <p><strong>{event['location']['venue']}</strong> in <strong>{event['location']['locality']}</strong></p>
@@ -93,7 +110,11 @@ export function EventList(props) {
 
   listEvents.push((<div className="eventCard" key="noevent"><li>
     <div>
-      <p><strong>Don't see an event near you? </strong><br /><a href="https://events.elizabethwarren.com/?is_virtual=true">Join a virtual event</a> or <a href="https://events.elizabethwarren.com/event/create/">host your own event!</a></p>
+      <p>
+        <strong>Don't see an event near you? </strong><br />
+        <a href="https://events.elizabethwarren.com/?is_virtual=true" target="_blank">Join a virtual event</a> or
+        <a href="https://events.elizabethwarren.com/event/create/" target="_blank">host your own event!</a>
+      </p>
     </div>
   </li></div>))
 
