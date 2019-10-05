@@ -30,7 +30,7 @@ function App() {
     .then(res => {
       if (res.data && res.data.length > 0){
         let event = res.data[0]
-        setHighlightedEvent({id: event.id, center:true})
+        setHighlightedEvent({id: event.id, center:[event.location.location.longitude, event.location.location.latitude]})
       }
 
     })
