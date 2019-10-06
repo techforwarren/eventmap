@@ -21,7 +21,7 @@ function EventTimes(props) {
   )
 
   let sortedDates = Object.keys(sortedTimesByDate).sort();
-  
+
   const dateRowFactory = (date) => {
     let times = sortedTimesByDate[date];
     let dayStr = times[0].start.format('ddd M/D')
@@ -65,7 +65,7 @@ export function EventList(props) {
     //Location filter
     if(props.locFilt != null){
       if('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']){
-        if(event['location']['location']['latitude'] !== props.locFilt['lat'] || event['location']['location']['longitude'] != props.locFilt['lng']){
+        if(event['location']['location']['latitude'] !== props.locFilt['lat'] || event['location']['location']['longitude'] !== props.locFilt['lng']){
           return(null);
         }
       } else {
@@ -74,12 +74,13 @@ export function EventList(props) {
     }
 
     return (
-      <a href={event['browser_url']} 
-        className="eventCard" 
-        target="_blank" 
-        key={event['id']} 
-        coord={('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) ? "" + event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'] : ""} 
-        onMouseEnter={(event) => { props.updatedHover(event['currentTarget'].getAttribute('coord')) }} 
+      <a href={event['browser_url']}
+        className="eventCard"
+        target="_blank"
+        rel="noopener noreferrer"
+        key={event['id']}
+        coord={('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) ? "" + event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'] : ""}
+        onMouseEnter={(event) => { props.updatedHover(event['currentTarget'].getAttribute('coord')) }}
         onMouseLeave={(event) => { props.updatedHover(null) }}>
         <li>
           <div>

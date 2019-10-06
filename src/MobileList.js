@@ -61,8 +61,6 @@ export function MobileList(props){
         if(!('location' in props.events[props.cardIndex]) || !('location' in event['location']) || props.events[props.cardIndex]['location']['location']['latitude'] !== props.locFilt['lat'] || props.events[props.cardIndex]['location']['location']['longitude'] !== props.locFilt['lng']){
           if('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']){
             if(event['location']['location']['latitude'] === props.locFilt['lat'] && event['location']['location']['longitude'] === props.locFilt['lng']){
-              console.log(x);
-              console.log(props.cardIndex);
               props.updateCardIndex(x);
               x = props.events.length;
             }
@@ -91,6 +89,7 @@ export function MobileList(props){
       <a href={event['browser_url']}
         className="eventCard"
         target="_blank"
+        rel="noopener noreferrer"
         key={event['id']}
         coord={('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) ? "" + event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'] : ""}
         onMouseEnter={(event) => { props.updatedHover(event['currentTarget'].getAttribute('coord')) }}
@@ -117,7 +116,7 @@ export function MobileList(props){
         props.cardIndex > 0 &&
         <button id="leftIndex" onClick={() => props.updateCardIndex(props.cardIndex-1)}>← </button>
       }
-      <button id="mobileRSVP"><a href={props.events[props.cardIndex]['browser_url']} target="_blank">RSVP</a></button>
+      <button id="mobileRSVP"><a href={props.events[props.cardIndex]['browser_url']} target="_blank" rel="noopener noreferrer">RSVP</a></button>
       {
         props.cardIndex < listEvents.length-1 &&
         <button id="rightIndex" onClick={() => props.updateCardIndex(props.cardIndex+1)}> →</button>
