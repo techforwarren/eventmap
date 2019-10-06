@@ -139,12 +139,15 @@ html, body, #root, .app {
     color: #232444;
     position: fixed;
     z-index: 10;
-    bottom: 5%;
+    bottom: 13%;
     background-color: white;
     width: 90%;
     left: 5%;
     max-height: 30vh;
     min-height: 20vh;
+    box-shadow: 1px 2px 5px rgba(0, 0, 0, .3);
+    border: 1px solid #232444;
+
 
 
 
@@ -170,8 +173,29 @@ html, body, #root, .app {
 
   button{
     position: fixed;
-    bottom: 2%;
+    bottom: 5%;
     z-index: 10;
+    background-color: #232444;
+    border: none;
+    color: white;
+    font-size: 24px;
+    height: 40px;
+    box-shadow: 1px 2px 5px rgba(0, 0, 0, .3);
+
+  }
+  #mobileRSVP{
+    left: 35%;
+    width: 30vw;
+    a{
+      text-decoration: none;
+      color:white;
+    }
+  }
+  #leftIndex{
+    left: 25px;
+  }
+  #rightIndex{
+    right: 25px;
   }
 }
 

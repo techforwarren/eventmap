@@ -50,6 +50,7 @@ function EventTimes(props) {
 
 export function MobileList(props){
 
+  //Mobile's location filter doesn't filter but moves the currentIndex to the location's first event
   useEffect(() => {
 
     //Location filter
@@ -66,13 +67,9 @@ export function MobileList(props){
               x = props.events.length;
             }
           }
-
-
         }
       }
-
     }
-
   }, [props.locFilt])
 
 
@@ -112,11 +109,20 @@ export function MobileList(props){
     return arrItem != null;
   });
 
+  //Conditional rendering for buttons, depending on position in list
   return (
     <div className="mobileList">
       {listEvents[props.cardIndex]}
-      {console.log(listEvents)}
-      <button onClick={() => props.updateCardIndex(props.cardIndex+1)}>Click me</button>
+      {
+        props.cardIndex > 0 &&
+        <button id="leftIndex" onClick={() => props.updateCardIndex(props.cardIndex-1)}>← </button>
+      }
+      <button id="mobileRSVP"><a href={props.events[props.cardIndex]['browser_url']} target="_blank">RSVP</a></button>
+      {
+        props.cardIndex < listEvents.length-1 &&
+        <button id="rightIndex" onClick={() => props.updateCardIndex(props.cardIndex+1)}> →</button>
+      }
+
     </div>
   );
 }

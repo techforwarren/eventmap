@@ -32,14 +32,11 @@ function App() {
     }
   }, [currZip]);
 
+  //Card index utilizes the hoverEvent to highlight the card's respective marker
   useEffect(() => {
-    console.log("CARDINDEX UPDATED");
     if(isMobile && events != null){
       setHoverEvent((('location' in events[cardIndex] && 'location' in events[cardIndex]['location'] && 'latitude' in events[cardIndex]['location']['location']) ? "" + events[cardIndex]['location']['location']['latitude'] + "&" + events[cardIndex]['location']['location']['longitude'] : null));
-
-
     }
-
   }, [cardIndex]);
 
 
