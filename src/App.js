@@ -40,9 +40,17 @@ function App() {
   }, [cardIndex]);
 
 
+
+
   return (
     <div className="app">
       <SearchBar currZip={currZip} updateZip={(newZip) => setCurrZip(newZip)} events={events} updatedHover={(newHover) => setHoverEvent(newHover)} locFilt={locFilt}/>
+      {events === null && currZip === null &&
+        <div id="startLoad">
+          <h1 id="firstLine">SHE HAS</h1><h1 id="secondLine">EVENTS</h1><h1 id="thirdLine">FOR THAT</h1>
+          <h3 id="searchCTA">Enter your zipcode or city to find events near you!</h3>
+        </div>
+      }
       {events !== null && isMobile &&
         <MobileList events={events} updatedHover={(newHover) => setHoverEvent(newHover)} locFilt={locFilt} cardIndex={cardIndex} updateCardIndex={(update) => setCardIndex(update)}/>
       }
