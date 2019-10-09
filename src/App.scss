@@ -72,6 +72,9 @@ html, body, #root, .app {
   position: relative;
   left: calc(100% - 35px);
   top: -25px;
+  color: white;
+  border: 1px solid white;
+  background-color: #232444;
 }
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
