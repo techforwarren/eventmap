@@ -50,30 +50,28 @@ function EventTimes(props) {
 
 export function EventList(props) {
 
-  // if we have a event selected on the map, and highlighted in the list
-  // lets scroll to see it.
-  useLayoutEffect(() => {
-    if (!props.highlightedEvent.id) return;
-    var card = document.querySelector(`a.eventCard[eventid='${props.highlightedEvent.id}']`);
-    if (card){
-      card.scrollIntoView(true);
-    }
-  }, [props.highlightedEvent, props.inViewEvents])
+  var visableEvents = [];
+  if (props.locationFilter) {
+    visableEvents = props.events.filter(event => {
+        event.locationKey = event.location.location.longitude + '&' + event.location.location.latitude;
+        return (props.locationFilter == event.locationKey);
+    })
+  } else {
+    // Filter based on the events that are currently in view.
+    var eventCount = 0;
+    visableEvents = props.events.filter(event => {
+      // limit to top matching events. to avoid list updating perf issues.
+      if (eventCount > 30) return false;
+      event.locationKey = event.location.location.longitude + '&' + event.location.location.latitude;
+      if (props.inViewEvents[event.locationKey]) {
+        eventCount +=1;
+        return true;
+      }
+      return false;
+    })
+  }
 
-
-  // Filter based on the events that are currently in view.
-  var eventCount = 0;
-  var inViewEvents = props.events.filter(event => {
-    // limit to top matching events. to avoid list updating perf issues.
-    if (eventCount > 30) return false;
-    if (props.inViewEvents[event.id]) {
-      eventCount +=1;
-      return true;
-    }
-    return false;
-  })
-
-  const listEvents = inViewEvents.map((event, i) => {
+  const listEvents = visableEvents.map((event, i) => {
 
     // Normalize Mobilize's time formatting into
     // easy-to-use moments
@@ -85,18 +83,16 @@ export function EventList(props) {
         range: start.twix(end)
       }
     })
-    var liClass = 'event';
-    if (props.highlightedEvent.id === event.id) liClass = 'event highlighted';
 
     return (
       <a href={event['browser_url']}
         className="eventCard"
         target="_blank"
         key={event['id']}
-        eventid={event['id']}
-        onMouseEnter={(event) => { props.updatedHover({id: event['currentTarget'].getAttribute('eventid'), center:false}) }}
+        eventlocation={event['locationKey']}
+        onMouseEnter={(event) => { props.updatedHover({locationKey: event['currentTarget'].getAttribute('eventlocation'), center:false}) }}
         onMouseLeave={(event) => { props.updatedHover({}) }}>
-        <li className={liClass}>
+        <li className="event">
           <div>
             <h3>{event['title']}</h3>
             <p><strong>{event['location']['venue']}</strong> in <strong>{event['location']['locality']}</strong></p>

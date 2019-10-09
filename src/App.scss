@@ -61,7 +61,8 @@ html, body, #root, .app {
 
 .eventList{
   background-color: white;
-  height: 500px;
+  max-height: 500px;
+  min-height: 250px;
   overflow:hidden;
   overflow-y:scroll;
   margin-bottom: 0px;

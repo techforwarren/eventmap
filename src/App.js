@@ -8,9 +8,13 @@ function App() {
   const [events, setEvents] = useState([]);
   //Current zip code search - input by user
   const [currZip, setCurrZip] = useState(null);
-  //Current selected event
+  //Current highlighted event (hovered in the list)
   const [highlightedEvent, setHighlightedEvent] = useState({});
-  //Events that are within the map viewport.  These should be shown in the list
+  //Used to filter by location, since there may be more than 1 event at a location.
+  //It's a string in the format lng+'&'+lat
+  const [locationFilter, setLocationFilter] = useState(null)
+  //Events that are within the map viewport.  These should be shown in the list.
+  // This is a object keyed by eventid and used to filter the `events` object.
   const [inViewEvents, setInViewEvents] = useState({});
 
   // Load all of the events
@@ -30,19 +34,22 @@ function App() {
     .then(res => {
       if (res.data && res.data.length > 0){
         let event = res.data[0]
+
         setHighlightedEvent({id: event.id, center:[event.location.location.longitude, event.location.location.latitude]})
       }
-
-    })
+    });
 
     // Reset states on new zipcode
+    setInViewEvents({});
     setHighlightedEvent({});
+    setLocationFilter(null);
+
   }, [currZip])
 
   return (
     <div className="app">
-      <SearchBar currZip={currZip} updateZip={(newZip) => setCurrZip(newZip)} events={events} inViewEvents={inViewEvents} updatedHover={(newHover) => setHighlightedEvent(newHover)} highlightedEvent={highlightedEvent}/>
-      <Map events={events} selectEvent={(newLoc) => setHighlightedEvent(newLoc)} highlightedEvent={highlightedEvent} inViewEvents={(keys) => setInViewEvents(keys)}/>
+      <SearchBar currZip={currZip} updateZip={(newZip) => setCurrZip(newZip)} events={events} inViewEvents={inViewEvents} updatedHover={(newHover) => setHighlightedEvent(newHover)} locationFilter={locationFilter}/>
+      <Map events={events} setLocationFilter={(locKey) => setLocationFilter(locKey)} highlightedEvent={highlightedEvent} inViewEvents={(keys) => setInViewEvents(keys)} locationFilter={locationFilter}/>
     </div>
   );
 }

@@ -4,7 +4,7 @@ import mapboxgl from 'mapbox-gl';
 require('mapbox-gl/dist/mapbox-gl.css');
 export function Map(props){
 
-  const [locations, setLocations] = useState([]);
+  const [locations, setLocations] = useState({});
   const [mapReady, setMapReady] = useState(false);
   const map = useRef();
   const prevHighlightId = useRef()
@@ -12,7 +12,7 @@ export function Map(props){
   //First render
   useEffect(() => {
     // Create the map with US center
-    mapboxgl.accessToken = 'pk.eyJ1IjoibWlja3QiLCJhIjoiLXJIRS1NbyJ9.EfVT76g4A5dyuApW_zuIFQ';
+    mapboxgl.accessToken = 'pk.eyJ1IjoibWlja3QiLCJhIjoiY2sxam1xNmtsMHU5aTNob2N4YndlYXV0byJ9.LWG413QaYVY9bN4kAFu9eg';
 		map.current = new mapboxgl.Map({
       container: 'map',
       style: 'mapbox://styles/mickt/ck0rlk9834i721clibn70ajsa',
@@ -67,12 +67,20 @@ export function Map(props){
       });
 
       // Center the map on the coordinates of any clicked symbol from the 'symbols' layer.
-      map.current.on('click', 'event-locations', function (e) {
-        if (e.features && e.features.length > 0) {
-          console.log(e.features[0])
-          props.selectEvent({id: e.features[0].id, center: e.features[0].geometry.coordinates});
-        }
+      map.current.on('click', function (e) {
+          props.setLocationFilter(null);
       });
+
+      map.current.on('click', 'event-locations', function (e) {
+          props.setLocationFilter(e.features[0].properties.locationKey);
+          if (map.current.getZoom() < 8) {
+            map.current.jumpTo({center: e.features[0].geometry.coordinates, zoom: 10});
+          } else {
+            map.current.jumpTo({center: e.features[0].geometry.coordinates});
+          }
+
+      });
+
 
       // Change the cursor to a pointer when the it enters a feature in the 'symbols' layer.
       map.current.on('mouseenter', 'event-locations', function () {
@@ -84,46 +92,46 @@ export function Map(props){
         map.current.getCanvas().style.cursor = '';
       });
 
-      function inViewFeatures() {
+      function inViewFeatures(e) {
         var features = map.current.queryRenderedFeatures({ layers: ['event-locations', 'event-locations-highlight'] });
         var inView = {};
         features.forEach(f => {
-          inView[f.id] = true;
+          inView[f.properties.locationKey] = true;
         });
         props.inViewEvents(inView);
       }
 
-      // if the map moves, update the list of features in view.
-      map.current.on('moveend', inViewFeatures);
+      // once the map settles in a location, then reset the features in view
       map.current.on('idle', inViewFeatures);
 
-
-      setMapReady(true)
+      setMapReady(true);
     })
   }, []);
 
   function highlight(currentId, center) {
-    console.log('highlight', prevHighlightId.current, currentId)
     if (prevHighlightId.current) map.current.setFeatureState({source: 'locations', id: prevHighlightId.current}, { highlight: 0});
 
     if (currentId) map.current.setFeatureState({source: 'locations', id: currentId}, { highlight: 1});
 
     prevHighlightId.current = currentId;
     if (center)
-    map.current.flyTo({center: center, zoom: 10});
+    map.current.jumpTo({center: center, zoom: 10});
   }
 
   useEffect(() => {
     if (mapReady === false) return;
-    console.log(props.highlightedEvent)
-    highlight(props.highlightedEvent.id, props.highlightedEvent.center);
-  }, [ props.highlightedEvent, mapReady])
+    // if list is fitlered to a location that marker is highlighted,
+    // otherwise if an event is hovered in the list.
+    var locKey = props.locationFilter || props.highlightedEvent.locationKey;
+    var id = (locations[locKey] && locations[locKey].id) || null;
+    highlight(id, props.highlightedEvent.center);
+  }, [ props.highlightedEvent, props.locationFilter, mapReady])
 
 
   useEffect(() => {
     if (mapReady === false) return;
 
-    var geojson = {type: 'FeatureCollection', features: locations};
+    var geojson = {type: 'FeatureCollection', features: Object.values(locations)};
     map.current.getSource('locations').setData(geojson);
   }, [locations, mapReady])
 
@@ -131,11 +139,20 @@ export function Map(props){
   useEffect(() => {
     if (props.events === null) return;
 
-    var places = props.events.map(e => {
-      return {
+    //deduped locations, so we dont need to render multiple pins for the same location.
+    var locations = {};
+
+    props.events.forEach((e, i) => {
+
+      var locationKey = e.location.location.longitude + '&' + e.location.location.latitude;
+
+      locations[locationKey] = {
         type: 'Feature',
-        id: e.id,
-        properties:{},
+        id: i+1, // id based on iterator used for feature state lookups to highlight markers.
+        // 0 id doesnt work (bug)
+        properties:{
+          locationKey: locationKey
+        },
         geometry: {
           type: 'Point',
           coordinates: [
@@ -143,9 +160,9 @@ export function Map(props){
             parseFloat(e.location.location.latitude)
           ]
         }
-      }
-    })
-    setLocations(places);
+      };
+    });
+    setLocations(locations);
   }, [props.events]);
 
 

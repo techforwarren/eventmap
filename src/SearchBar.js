@@ -18,7 +18,7 @@ export function SearchBar(props){
 
   var eventlist = [];
   if (props.locFilt !== null || props.nearby !== null) {
-    eventlist = (<EventList events={props.events} inViewEvents={props.inViewEvents} highlightedEvent={props.highlightedEvent} updatedHover={(item) => props.updatedHover(item)}/>)
+    eventlist = (<EventList events={props.events} inViewEvents={props.inViewEvents} locationFilter={props.locationFilter} updatedHover={(item) => props.updatedHover(item)}/>)
   }
 
   return(
