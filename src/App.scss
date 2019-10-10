@@ -3,6 +3,51 @@
     height: 100%;
     z-index: 9;
   }
+
+  #startLoad{
+    position: fixed;
+    width: 100%;
+    z-index: 10;
+    text-align: center;
+    padding-top: 20vh;
+    background-color: rgba(183, 228, 207,0.85);
+    height: 100%;
+    color: #232444;
+    margin-top: 0px;
+
+    @media only screen and (max-width: 425px) {
+      padding-top: 25vh;
+    }
+
+
+    #firstLine, #secondLine, #thirdLine{
+      display: block;
+      margin-top: 0px;
+      margin-bottom: 0px;
+
+    }
+
+    #firstLine, #thirdLine{
+      font-size: 10vw;
+      img{
+        height: 10vw;
+      }
+    }
+    #secondLine{
+      font-size: 20vw;
+      color: white;
+      font-style: italic;
+      text-shadow: -1px -1px 0 #232444, 1px -1px 0 #232444, -1px 1px 0 #232444, 1px 1px 0 #232444;
+    }
+
+    #searchCTA{
+      color: #b61b28;
+      font-style: italic;
+    }
+
+
+  }
+
 }
 
 html, body, #root, .app {
@@ -18,7 +63,7 @@ html, body, #root, .app {
   position: fixed;
   left: 2%;
   top: 2%;
-  z-index:10;
+  z-index:11;
   box-shadow: 10px 10px 5px rgba(0, 0, 0, .3);
 
 }
@@ -30,6 +75,7 @@ html, body, #root, .app {
   box-shadow: 0px 5px 5px rgba(0, 0, 0, .3);
   padding-top: 4%;
   padding-bottom: 4% !important;
+  touch-action: manipulation;
 
   #zipForm{
     padding-left: 4%;
@@ -133,6 +179,7 @@ html, body, #root, .app {
 .mobileList{
   margin: none;
   font-size:calc(12px + 1vw);
+  touch-action: manipulation;
   .eventCard{
 
     text-decoration: none;
