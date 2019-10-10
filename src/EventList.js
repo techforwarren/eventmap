@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React from 'react';
 import moment from 'moment';
 import groupBy from 'lodash.groupby';
 import sortBy from 'lodash.sortby';
@@ -54,7 +54,7 @@ export function EventList(props) {
   if (props.locationFilter) {
     visableEvents = props.events.filter(event => {
         event.locationKey = event.location.location.longitude + '&' + event.location.location.latitude;
-        return (props.locationFilter == event.locationKey);
+        return (props.locationFilter === event.locationKey);
     })
   } else {
     // Filter based on the events that are currently in view.
