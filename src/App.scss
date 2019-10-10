@@ -20,10 +20,33 @@ html, body, #root, .app {
   top: 2%;
   z-index:10;
   box-shadow: 10px 10px 5px rgba(0, 0, 0, .3);
+
+}
+
+.mobileSearch {
+  width: 100%;
+  top: 0;
+  left: 0;
+  box-shadow: 0px 5px 5px rgba(0, 0, 0, .3);
+  padding-top: 4%;
+  padding-bottom: 4% !important;
+
+  #zipForm{
+    padding-left: 4%;
+    padding-right: 4%;
+  }
+
+  #zipInput {
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    width: 80%;
+  }
 }
 
 .activeList{
-  padding-bottom: 0px !important;
+  padding-bottom: 0px;
 }
 
 #zipForm{
@@ -49,6 +72,9 @@ html, body, #root, .app {
   position: relative;
   left: calc(100% - 35px);
   top: -25px;
+  color: white;
+  border: 1px solid white;
+  background-color: #232444;
 }
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
@@ -71,46 +97,117 @@ html, body, #root, .app {
   overflow-y:scroll;
   margin-bottom: 0px;
   padding-left: 0px;
-}
 
-.eventCard{
-  text-decoration: none;
-  color: #232444;
+  .eventCard{
+    text-decoration: none;
+    color: #232444;
 
-  h3{
-    text-transform: uppercase;
-  }
+    h3{
+      text-transform: uppercase;
+    }
 
-  :hover{
-    color: white;
-  }
+    :hover{
+      color: white;
+    }
 
-  li{
-    list-style-type: none;
-    padding-left: 10%;
-    padding-right: 10%;
-    padding-top: 5%;
-    padding-bottom: 5%;
-    border-top: 1px solid #E8E8E8;
-    border-bottom: 1px solid #E8E8E8;
-    position: relative;
+    li{
+      list-style-type: none;
+      padding-left: 10%;
+      padding-right: 10%;
+      padding-top: 5%;
+      padding-bottom: 5%;
+      border-top: 1px solid #E8E8E8;
+      border-bottom: 1px solid #E8E8E8;
+      position: relative;
 
-    .eventRSVP{
-      visibility: hidden;
-      text-align: right;
+      .eventRSVP{
+        visibility: hidden;
+        text-align: right;
+      }
+
+    }
+
+    li:hover{
+      background-color: #232444;
+
+      .eventRSVP{
+        visibility: visible;
+      }
     }
 
   }
+}
 
-  li:hover{
+.mobileList{
+  margin: none;
+  font-size:calc(12px + 1vw);
+  .eventCard{
+
+    text-decoration: none;
+    color: #232444;
+    position: fixed;
+    z-index: 10;
+    bottom: 13%;
+    background-color: white;
+    width: 90%;
+    left: 5%;
+    max-height: 30vh;
+    min-height: 20vh;
+    box-shadow: 1px 2px 5px rgba(0, 0, 0, .3);
+    border: 1px solid #232444;
+
+
+
+
+
+    h3{
+      text-transform: uppercase;
+    }
+
+    .mobileInfo{
+
+      padding-left: 5%;
+      padding-right: 5%;
+
+      .eventRSVP{
+        visibility: hidden;
+        text-align: right;
+      }
+
+    }
+
+
+  }
+
+  button{
+    position: fixed;
+    bottom: 5%;
+    z-index: 10;
     background-color: #232444;
+    border: none;
+    color: white;
+    font-size: 24px;
+    height: 40px;
+    box-shadow: 1px 2px 5px rgba(0, 0, 0, .3);
 
-    .eventRSVP{
-      visibility: visible;
+  }
+  #mobileRSVP{
+    left: 35%;
+    width: 30vw;
+    a{
+      text-decoration: none;
+      color:white;
     }
   }
-
+  #leftIndex{
+    left: 25px;
+  }
+  #rightIndex{
+    right: 25px;
+  }
 }
+
+
 
 // Disables the up/down arrows on the number input
 input[type="number"]::-webkit-outer-spin-button,
