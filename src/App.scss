@@ -66,15 +66,7 @@ html, body, #root, .app {
   border: none;
   border-bottom: 1px solid white;
   z-index:10;
-}
 
-#locateMe {
-  position: relative;
-  left: calc(100% - 35px);
-  top: -25px;
-  color: white;
-  border: 1px solid white;
-  background-color: #232444;
 }
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
