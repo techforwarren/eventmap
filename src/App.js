@@ -4,6 +4,7 @@ import SearchBar from './SearchBar';
 import Map from './Map';
 import MobileList from './MobileList';
 import './App.scss';
+import gMark from './img/w-marker-icon-2x.png';
 
 function App() {
   //List of events
@@ -47,8 +48,8 @@ function App() {
       <SearchBar currZip={currZip} updateZip={(newZip) => setCurrZip(newZip)} events={events} updatedHover={(newHover) => setHoverEvent(newHover)} locFilt={locFilt}/>
       {events === null && currZip === null &&
         <div id="startLoad">
-          <h1 id="firstLine">SHE HAS</h1><h1 id="secondLine">EVENTS</h1><h1 id="thirdLine">FOR THAT</h1>
-          <h3 id="searchCTA">Enter your zipcode or city to find events near you!</h3>
+          <h1 id="firstLine">SHE HAS</h1><h1 id="secondLine">EVENTS</h1><h1 id="thirdLine">FOR THAT <img src={gMark}></img></h1>
+          <h3 id="searchCTA">Enter your zipcode to find events near you!</h3>
         </div>
       }
       {events !== null && isMobile &&

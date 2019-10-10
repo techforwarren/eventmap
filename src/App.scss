@@ -16,7 +16,7 @@
     margin-top: 0px;
 
     @media only screen and (max-width: 425px) {
-      padding-top: 35vh;
+      padding-top: 25vh;
     }
 
 
@@ -29,12 +29,15 @@
 
     #firstLine, #thirdLine{
       font-size: 10vw;
+      img{
+        height: 10vw;
+      }
     }
     #secondLine{
       font-size: 20vw;
       color: white;
       font-style: italic;
-
+      text-shadow: -1px -1px 0 #232444, 1px -1px 0 #232444, -1px 1px 0 #232444, 1px 1px 0 #232444;
     }
 
     #searchCTA{
@@ -72,6 +75,7 @@ html, body, #root, .app {
   box-shadow: 0px 5px 5px rgba(0, 0, 0, .3);
   padding-top: 4%;
   padding-bottom: 4% !important;
+  touch-action: manipulation;
 
   #zipForm{
     padding-left: 4%;
@@ -175,6 +179,7 @@ html, body, #root, .app {
 .mobileList{
   margin: none;
   font-size:calc(12px + 1vw);
+  touch-action: manipulation;
   .eventCard{
 
     text-decoration: none;
