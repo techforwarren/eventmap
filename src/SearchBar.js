@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {isMobile} from 'react-device-detect';
 import EventList from './EventList';
 
 export function SearchBar(props){
@@ -17,12 +18,13 @@ export function SearchBar(props){
     props.updateZip(input)
   }
 
+
   return(
-    <div className={props.events != null ? "searchBar activeList" : "searchBar"}>
+    <div className={(props.events != null ? "searchBar activeList" : "searchBar") + (isMobile ? " mobileSearch" : "")}>
       <form onSubmit= {onSubmit} id = "zipForm">
         <input type="text" id="zipInput" value={input} onChange={onlySetNumbers} placeholder="ZIP" required minLength="5" maxLength="5"></input>
       </form>
-      {props.events !== null &&
+      {props.events !== null && !isMobile &&
         <EventList events={props.events} locFilt={props.locFilt} updatedHover={(item) => props.updatedHover(item)}/>
       }
     </div>

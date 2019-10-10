@@ -14,7 +14,6 @@ export function Map(props){
 
   //Called to set/unset location filter
   function locationFilter(event, set){
-    console.log(event)
 
     if(set){
       props.selectLoc({
