@@ -43,7 +43,7 @@ export function SearchBar(props){
   function setZip(input) {
     setInput(input);
     props.updateZip(input);
-    History.push('/?zip='+input);
+    History.push(window.location.pathname+'?zip='+input);
   }
 
 
