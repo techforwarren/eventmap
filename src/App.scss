@@ -61,7 +61,8 @@ html, body, #root, .app {
 
 .eventList{
   background-color: white;
-  height: 500px;
+  max-height: 500px;
+  min-height: 250px;
   overflow:hidden;
   overflow-y:scroll;
   margin-bottom: 0px;
@@ -74,10 +75,6 @@ html, body, #root, .app {
 
   h3{
     text-transform: uppercase;
-  }
-
-  :hover{
-    color: white;
   }
 
   li{
@@ -97,13 +94,24 @@ html, body, #root, .app {
 
   }
 
-  li:hover{
+  li.event:hover{
     background-color: #232444;
+    color: white;
 
     .eventRSVP{
       visibility: visible;
     }
   }
+  li.highlighted{
+    background-color: #232444;
+    color: white;
+
+    .eventRSVP{
+      visibility: visible;
+    }
+  }
+
+
 
 }
 

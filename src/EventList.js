@@ -21,7 +21,7 @@ function EventTimes(props) {
   )
 
   let sortedDates = Object.keys(sortedTimesByDate).sort();
-  
+
   const dateRowFactory = (date) => {
     let times = sortedTimesByDate[date];
     let dayStr = times[0].start.format('ddd M/D')
@@ -49,7 +49,29 @@ function EventTimes(props) {
 }
 
 export function EventList(props) {
-  const listEvents = props.events.map((event) => {
+
+  var visableEvents = [];
+  if (props.locationFilter) {
+    visableEvents = props.events.filter(event => {
+        event.locationKey = event.location.location.longitude + '&' + event.location.location.latitude;
+        return (props.locationFilter === event.locationKey);
+    })
+  } else {
+    // Filter based on the events that are currently in view.
+    var eventCount = 0;
+    visableEvents = props.events.filter(event => {
+      // limit to top matching events. to avoid list updating perf issues.
+      if (eventCount > 30) return false;
+      event.locationKey = event.location.location.longitude + '&' + event.location.location.latitude;
+      if (props.inViewEvents[event.locationKey]) {
+        eventCount +=1;
+        return true;
+      }
+      return false;
+    })
+  }
+
+  const listEvents = visableEvents.map((event, i) => {
 
     // Normalize Mobilize's time formatting into
     // easy-to-use moments
@@ -62,26 +84,15 @@ export function EventList(props) {
       }
     })
 
-    //Location filter
-    if(props.locFilt != null){
-      if('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']){
-        if(event['location']['location']['latitude'] !== props.locFilt['lat'] || event['location']['location']['longitude'] != props.locFilt['lng']){
-          return(null);
-        }
-      } else {
-        return(null);
-      }
-    }
-
     return (
-      <a href={event['browser_url']} 
-        className="eventCard" 
-        target="_blank" 
-        key={event['id']} 
-        coord={('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) ? "" + event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'] : ""} 
-        onMouseEnter={(event) => { props.updatedHover(event['currentTarget'].getAttribute('coord')) }} 
-        onMouseLeave={(event) => { props.updatedHover(null) }}>
-        <li>
+      <a href={event['browser_url']}
+        className="eventCard"
+        target="_blank"
+        key={event['id']}
+        eventlocation={event['locationKey']}
+        onMouseEnter={(event) => { props.updatedHover({locationKey: event['currentTarget'].getAttribute('eventlocation'), center:false}) }}
+        onMouseLeave={(event) => { props.updatedHover({}) }}>
+        <li className="event">
           <div>
             <h3>{event['title']}</h3>
             <p><strong>{event['location']['venue']}</strong> in <strong>{event['location']['locality']}</strong></p>
@@ -90,9 +101,18 @@ export function EventList(props) {
           </div>
         </li>
       </a>
-
     )
   });
+
+  listEvents.push((<div className="eventCard" key="noevent"><li>
+    <div>
+      <p>
+        <strong>Don't see an event near you? </strong><br />
+        <a href="https://events.elizabethwarren.com/?is_virtual=true" target="_blank">Join a virtual event</a> or
+        <a href="https://events.elizabethwarren.com/event/create/" target="_blank">host your own event!</a>
+      </p>
+    </div>
+  </li></div>))
 
   return (
     <ul className="eventList">{listEvents}</ul>
