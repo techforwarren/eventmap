@@ -40,7 +40,7 @@ export function Map(props){
 
 		// Set up the OSM layer
 		L.tileLayer(
-			'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+			'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
 				maxZoom: 18
 			}).addTo(map.current);
