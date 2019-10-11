@@ -1,16 +1,24 @@
 import React, {useState, useEffect } from 'react';
 import {isMobile} from 'react-device-detect';
+import History from './History';
 import SearchBar from './SearchBar';
 import Map from './Map';
 import MobileList from './MobileList';
 import './App.scss';
 import gMark from './img/w-marker-icon-2x.png';
 
+const queryString = require('query-string');
+
 function App() {
   //List of events
   const [events, setEvents] = useState(null);
-  //Current zip code search - input by user
-  const [currZip, setCurrZip] = useState(null);
+  //Current zip code search
+  const [currZip, setCurrZip] = useState(() => {
+    // check URL parameter on initialization
+    const qs = queryString.parse(History.location.search);
+    return qs.zip;
+  });
+
   //Current event being hovered over
   const [hoverEvent, setHoverEvent] = useState(null);
   //Current selected location location filter
@@ -46,7 +54,7 @@ function App() {
   return (
     <div className="app">
       <SearchBar currZip={currZip} updateZip={(newZip) => setCurrZip(newZip)} events={events} updatedHover={(newHover) => setHoverEvent(newHover)} locFilt={locFilt}/>
-      {events === null && currZip === null &&
+      {events === null && currZip == null &&
         <div id="startLoad">
           <h1 id="firstLine">SHE HAS</h1><h1 id="secondLine">EVENTS</h1><h1 id="thirdLine">FOR THAT <img src={gMark}></img></h1>
           <h3 id="searchCTA">Enter your zipcode to find events near you!</h3>
