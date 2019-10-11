@@ -3,6 +3,65 @@
     height: 100%;
     z-index: 9;
   }
+
+  #startLoad{
+    position: fixed;
+    width: 100%;
+    z-index: 10;
+    text-align: center;
+    padding-top: 20vh;
+    background-color: rgba(183, 228, 207,0.85);
+    height: 100%;
+    color: #232444;
+    margin-top: 0px;
+
+    @media only screen and (max-width: 425px) {
+      padding-top: 25vh;
+    }
+
+
+    #firstLine, #secondLine, #thirdLine{
+      display: block;
+      margin-top: 0px;
+      margin-bottom: 0px;
+
+    }
+
+    #firstLine, #thirdLine{
+      font-size: 10vh;
+      img{
+        height: 10vh;
+      }
+
+      @media only screen and (max-width: 768px) {
+        font-size: 10vw;
+        img{
+          height: 10vw;
+        }
+      }
+    }
+    #secondLine{
+      font-size: 20vh;
+      color: white;
+      font-style: italic;
+      text-shadow: -1px -1px 0 #232444, 1px -1px 0 #232444, -1px 1px 0 #232444, 1px 1px 0 #232444;
+      @media only screen and (max-width: 768px) {
+        font-size: 20vw;
+      }
+    }
+
+    #searchCTA{
+      color: #b61b28;
+      font-style: italic;
+      font-size: 3vh;
+      @media only screen and (max-width: 768px) {
+        font-size: 3vw;
+      }
+    }
+
+
+  }
+
 }
 
 html, body, #root, .app {
@@ -18,33 +77,79 @@ html, body, #root, .app {
   position: fixed;
   left: 2%;
   top: 2%;
-  z-index:10;
+  z-index:11;
   box-shadow: 10px 10px 5px rgba(0, 0, 0, .3);
+
+}
+
+.mobileSearch {
+  width: 100%;
+  top: 0;
+  left: 0;
+  box-shadow: 0px 5px 5px rgba(0, 0, 0, .3);
+  padding-top: 4%;
+  padding-bottom: 4% !important;
+  touch-action: manipulation;
+
+  #zipForm{
+    padding-left: 4%;
+    padding-right: 4%;
+  }
+
+  #zipInput {
+    -webkit-border-radius: 0;
+    border-radius: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    width: 80%;
+  }
 }
 
 .activeList{
-  padding-bottom: 0px !important;
+  padding-bottom: 0px;
 }
 
-#zipForm{
-  padding-left: 10%;
-  padding-right: 10%;
+.userInput{
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-evenly;
+  padding-left: 5%;
+  padding-right: 5%;
+
+  #zipForm{
+    width: 70%;
+  }
+
+  #zipInput{
+    width: 100%;
+    //height: 30px;
+    height: 30%;
+    font-size: 24px;
+    color: white;
+    margin: auto;
+    display: block;
+    background: none;
+    border: none;
+    border-bottom: 1px solid white;
+    z-index:10;
+  }
+
+  #locateMe {
+    /*position: relative;
+    left: calc(100% - 35px);
+    top: -25px;*/
+    border-radius: 50%;
+    height: 35px;
+    width: 35px;
+    color: white;
+    border: 1px solid white;
+    background-color: #232444;
+  }
+
 }
 
-#zipInput{
-  width: 100%;
-  //height: 30px;
-  height: 30%;
-  font-size: 24px;
-  color: white;
-  margin: auto;
-  display: block;
-  background: none;
-  border: none;
-  border-bottom: 1px solid white;
-  z-index:10;
 
-}
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
   color: white;
@@ -66,46 +171,118 @@ html, body, #root, .app {
   overflow-y:scroll;
   margin-bottom: 0px;
   padding-left: 0px;
-}
 
-.eventCard{
-  text-decoration: none;
-  color: #232444;
+  .eventCard{
+    text-decoration: none;
+    color: #232444;
 
-  h3{
-    text-transform: uppercase;
-  }
+    h3{
+      text-transform: uppercase;
+    }
 
-  :hover{
-    color: white;
-  }
+    :hover{
+      color: white;
+    }
 
-  li{
-    list-style-type: none;
-    padding-left: 10%;
-    padding-right: 10%;
-    padding-top: 5%;
-    padding-bottom: 5%;
-    border-top: 1px solid #E8E8E8;
-    border-bottom: 1px solid #E8E8E8;
-    position: relative;
+    li{
+      list-style-type: none;
+      padding-left: 10%;
+      padding-right: 10%;
+      padding-top: 5%;
+      padding-bottom: 5%;
+      border-top: 1px solid #E8E8E8;
+      border-bottom: 1px solid #E8E8E8;
+      position: relative;
 
-    .eventRSVP{
-      visibility: hidden;
-      text-align: right;
+      .eventRSVP{
+        visibility: hidden;
+        text-align: right;
+      }
+
+    }
+
+    li:hover{
+      background-color: #232444;
+
+      .eventRSVP{
+        visibility: visible;
+      }
     }
 
   }
+}
 
-  li:hover{
+.mobileList{
+  margin: none;
+  font-size:calc(12px + 1vw);
+  touch-action: manipulation;
+  .eventCard{
+
+    text-decoration: none;
+    color: #232444;
+    position: fixed;
+    z-index: 10;
+    bottom: 13%;
+    background-color: white;
+    width: 90%;
+    left: 5%;
+    max-height: 30vh;
+    min-height: 20vh;
+    box-shadow: 1px 2px 5px rgba(0, 0, 0, .3);
+    border: 1px solid #232444;
+
+
+
+
+
+    h3{
+      text-transform: uppercase;
+    }
+
+    .mobileInfo{
+
+      padding-left: 5%;
+      padding-right: 5%;
+
+      .eventRSVP{
+        visibility: hidden;
+        text-align: right;
+      }
+
+    }
+
+
+  }
+
+  button{
+    position: fixed;
+    bottom: 5%;
+    z-index: 10;
     background-color: #232444;
+    border: none;
+    color: white;
+    font-size: 24px;
+    height: 40px;
+    box-shadow: 1px 2px 5px rgba(0, 0, 0, .3);
 
-    .eventRSVP{
-      visibility: visible;
+  }
+  #mobileRSVP{
+    left: 35%;
+    width: 30vw;
+    a{
+      text-decoration: none;
+      color:white;
     }
   }
-
+  #leftIndex{
+    left: 25px;
+  }
+  #rightIndex{
+    right: 25px;
+  }
 }
+
+
 
 // Disables the up/down arrows on the number input
 input[type="number"]::-webkit-outer-spin-button,

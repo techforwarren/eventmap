@@ -1,10 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import moment from 'moment';
 import groupBy from 'lodash.groupby';
 import sortBy from 'lodash.sortby';
 require('twix');
 
-const MAX_DAYS_IN_LIST = 4;
+const MAX_DAYS_IN_LIST = 1;
 
 function EventTimes(props) {
   const { rawTimes } = props;
@@ -48,8 +48,31 @@ function EventTimes(props) {
   }
 }
 
-export function EventList(props) {
-  const listEvents = props.events.map((event) => {
+export function MobileList(props){
+
+  //Mobile's location filter doesn't filter but moves the currentIndex to the location's first event
+  useEffect(() => {
+
+    //Location filter
+    if(props.locFilt != null){
+
+      for(let x = 0; x < props.events.length; x++) {
+        let event = props.events[x];
+        if(!('location' in props.events[props.cardIndex]) || !('location' in event['location']) || props.events[props.cardIndex]['location']['location']['latitude'] !== props.locFilt['lat'] || props.events[props.cardIndex]['location']['location']['longitude'] !== props.locFilt['lng']){
+          if('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']){
+            if(event['location']['location']['latitude'] === props.locFilt['lat'] && event['location']['location']['longitude'] === props.locFilt['lng']){
+              props.updateCardIndex(x);
+              x = props.events.length;
+            }
+          }
+        }
+      }
+    }
+  }, [props.locFilt])
+
+
+
+  const listEvents = props.events.map((event, index) => {
 
     // Normalize Mobilize's time formatting into
     // easy-to-use moments
@@ -62,17 +85,6 @@ export function EventList(props) {
       }
     })
 
-    //Location filter
-    if(props.locFilt != null){
-      if('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']){
-        if(event['location']['location']['latitude'] !== props.locFilt['lat'] || event['location']['location']['longitude'] !== props.locFilt['lng']){
-          return(null);
-        }
-      } else {
-        return(null);
-      }
-    }
-
     return (
       <a href={event['browser_url']}
         className="eventCard"
@@ -82,22 +94,36 @@ export function EventList(props) {
         coord={('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) ? "" + event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'] : ""}
         onMouseEnter={(event) => { props.updatedHover(event['currentTarget'].getAttribute('coord')) }}
         onMouseLeave={(event) => { props.updatedHover(null) }}>
-        <li>
-          <div>
-            <h3>{event['title']}</h3>
-            <p><strong>{event['location']['venue']}</strong> in <strong>{event['location']['locality']}</strong></p>
-            <EventTimes rawTimes={rawTimes} />
-            <p className="eventRSVP">Click to RSVP</p>
-          </div>
-        </li>
+        <div className="mobileInfo">
+          <h3>{event['title']}</h3>
+          <p><strong>{event['location']['venue']}</strong> in <strong>{event['location']['locality']}</strong></p>
+          <EventTimes rawTimes={rawTimes} />
+          <p className="eventRSVP">Click to RSVP</p>
+        </div>
+
       </a>
 
     )
+  }).filter((arrItem) => {
+    return arrItem != null;
   });
 
+  //Conditional rendering for buttons, depending on position in list
   return (
-    <ul className="eventList">{listEvents}</ul>
+    <div className="mobileList">
+      {listEvents[props.cardIndex]}
+      {
+        props.cardIndex > 0 &&
+        <button id="leftIndex" onClick={() => props.updateCardIndex(props.cardIndex-1)}>← </button>
+      }
+      <button id="mobileRSVP"><a href={props.events[props.cardIndex]['browser_url']} target="_blank" rel="noopener noreferrer">RSVP</a></button>
+      {
+        props.cardIndex < listEvents.length-1 &&
+        <button id="rightIndex" onClick={() => props.updateCardIndex(props.cardIndex+1)}> →</button>
+      }
+
+    </div>
   );
 }
 
-export default EventList;
+export default MobileList;
