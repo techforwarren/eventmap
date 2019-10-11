@@ -28,21 +28,35 @@
     }
 
     #firstLine, #thirdLine{
-      font-size: 10vw;
+      font-size: 10vh;
       img{
-        height: 10vw;
+        height: 10vh;
+      }
+
+      @media only screen and (max-width: 768px) {
+        font-size: 10vw;
+        img{
+          height: 10vw;
+        }
       }
     }
     #secondLine{
-      font-size: 20vw;
+      font-size: 20vh;
       color: white;
       font-style: italic;
       text-shadow: -1px -1px 0 #232444, 1px -1px 0 #232444, -1px 1px 0 #232444, 1px 1px 0 #232444;
+      @media only screen and (max-width: 768px) {
+        font-size: 20vw;
+      }
     }
 
     #searchCTA{
       color: #b61b28;
       font-style: italic;
+      font-size: 3vh;
+      @media only screen and (max-width: 768px) {
+        font-size: 3vw;
+      }
     }
 
 
@@ -95,33 +109,47 @@ html, body, #root, .app {
   padding-bottom: 0px;
 }
 
-#zipForm{
-  padding-left: 10%;
-  padding-right: 10%;
+.userInput{
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-evenly;
+  padding-left: 5%;
+  padding-right: 5%;
+
+  #zipForm{
+    width: 70%;
+  }
+
+  #zipInput{
+    width: 100%;
+    //height: 30px;
+    height: 30%;
+    font-size: 24px;
+    color: white;
+    margin: auto;
+    display: block;
+    background: none;
+    border: none;
+    border-bottom: 1px solid white;
+    z-index:10;
+  }
+
+  #locateMe {
+    /*position: relative;
+    left: calc(100% - 35px);
+    top: -25px;*/
+    border-radius: 50%;
+    height: 35px;
+    width: 35px;
+    color: white;
+    border: 1px solid white;
+    background-color: #232444;
+  }
+
 }
 
-#zipInput{
-  width: 100%;
-  //height: 30px;
-  height: 30%;
-  font-size: 24px;
-  color: white;
-  margin: auto;
-  display: block;
-  background: none;
-  border: none;
-  border-bottom: 1px solid white;
-  z-index:10;
-}
 
-#locateMe {
-  position: relative;
-  left: calc(100% - 35px);
-  top: -25px;
-  color: white;
-  border: 1px solid white;
-  background-color: #232444;
-}
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
   color: white;

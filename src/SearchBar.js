@@ -49,10 +49,12 @@ export function SearchBar(props){
 
   return(
     <div className={(props.events != null ? "searchBar activeList" : "searchBar") + (isMobile ? " mobileSearch" : "")}>
-      <form onSubmit= {onSubmit} id = "zipForm">
-        <input type="text" id="zipInput" value={input} onChange={onlySetNumbers} placeholder="ZIP" required minLength="5" maxLength="5"></input>
-      </form>
-      <button id="locateMe" onClick={geolocate}>{'\u25CE'}</button>
+      <div className="userInput">
+        <form onSubmit= {onSubmit} id = "zipForm">
+          <input type="text" id="zipInput" value={input} onChange={onlySetNumbers} placeholder="ZIP" required minLength="5" maxLength="5"></input>
+        </form>
+        <button id="locateMe" onClick={geolocate}>{'\u25CE'}</button>
+      </div>
       {props.events !== null && !isMobile &&
         <EventList events={props.events} locFilt={props.locFilt} updatedHover={(item) => props.updatedHover(item)}/>
       }

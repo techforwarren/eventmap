@@ -54,7 +54,7 @@ function App() {
   return (
     <div className="app">
       <SearchBar currZip={currZip} updateZip={(newZip) => setCurrZip(newZip)} events={events} updatedHover={(newHover) => setHoverEvent(newHover)} locFilt={locFilt}/>
-      {events === null && currZip === null &&
+      {events === null && currZip == null &&
         <div id="startLoad">
           <h1 id="firstLine">SHE HAS</h1><h1 id="secondLine">EVENTS</h1><h1 id="thirdLine">FOR THAT <img src={gMark}></img></h1>
           <h3 id="searchCTA">Enter your zipcode to find events near you!</h3>
