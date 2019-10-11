@@ -7,6 +7,10 @@ import MobileList from './MobileList';
 import './App.scss';
 import gMark from './img/w-marker-icon-2x.png';
 
+import ReactGA from 'react-ga';
+ReactGA.initialize('UA-149839620-1');
+ReactGA.pageview(window.location.pathname + window.location.search);
+
 const queryString = require('query-string');
 
 function App() {
@@ -37,6 +41,14 @@ function App() {
       setHoverEvent(null);
       setLocFilt(null);
       setCardIndex(0);
+
+      //Tracks zip input
+
+      ReactGA.event({
+        category: 'Search',
+        action: 'User Searched',
+        label: `${currZip}`
+      });
 
     }
   }, [currZip]);
