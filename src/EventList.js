@@ -77,7 +77,7 @@ export function EventList(props) {
       <a href={event['browser_url']}
         className="eventCard"
         target="_blank"
-        rel="noopener noreferrer"
+        rel="noopener"
         key={event['id']}
         coord={('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) ? "" + event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'] : ""}
         onMouseEnter={(event) => { props.updatedHover(event['currentTarget'].getAttribute('coord')) }}
