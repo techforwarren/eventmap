@@ -91,6 +91,8 @@ html, body, #root, .app {
   padding-bottom: 4% !important;
   touch-action: manipulation;
 
+
+
   #zipForm{
     padding-left: 4%;
     padding-right: 4%;
@@ -102,6 +104,9 @@ html, body, #root, .app {
     -webkit-box-shadow: none;
     box-shadow: none;
     width: 80%;
+  }
+  #locateMe {
+    width: 40px !important;
   }
 }
 
@@ -123,7 +128,6 @@ html, body, #root, .app {
 
   #zipInput{
     width: 100%;
-    //height: 30px;
     height: 30%;
     font-size: 24px;
     color: white;
@@ -136,15 +140,15 @@ html, body, #root, .app {
   }
 
   #locateMe {
-    /*position: relative;
-    left: calc(100% - 35px);
-    top: -25px;*/
-    border-radius: 50%;
     height: 35px;
     width: 35px;
     color: white;
-    border: 1px solid white;
     background-color: #232444;
+    border: none;
+    img {
+      width: 35px;
+      z-index: 12;
+    }
   }
 
 }
