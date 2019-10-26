@@ -36,7 +36,7 @@ function App() {
   //Makes API call when zipcode entered
   useEffect(() => {
     if(currZip != null){
-      fetch("https://api.mobilize.us/v1/organizations/1316/events?timeslot_start=gte_now&zipcode=" + currZip)
+      fetch("https://api.mobilize.us/v1/organizations/1316/events?timeslot_start=gte_now&zipcode=" + currZip + "&max_dist=" + currRange)
       .then((res)=>res.json())
       .then((data)=>setEvents(data['data']));
 
@@ -54,7 +54,7 @@ function App() {
       });
 
     }
-  }, [currZip]);
+  }, [currZip, currRange]);
 
   //Card index utilizes the hoverEvent to highlight the card's respective marker
   useEffect(() => {
@@ -68,7 +68,7 @@ function App() {
 
   return (
     <div className="app">
-      <SearchBar currZip={currZip} updateZip={(newZip) => setCurrZip(newZip)} events={events} updatedHover={(newHover) => setHoverEvent(newHover)} locFilt={locFilt}/>
+      <SearchBar currZip={currZip} currRange={currRange} updateZip={(newZip) => setCurrZip(newZip)} updateRange={(newRange) => setCurrRange(newRange)} events={events} updatedHover={(newHover) => setHoverEvent(newHover)} locFilt={locFilt}/>
       {events === null && currZip == null &&
         <div id="startLoad">
           <h1 id="firstLine">SHE HAS</h1><h1 id="secondLine">EVENTS</h1><h1 id="thirdLine">FOR THAT <img src={gMark}></img></h1>

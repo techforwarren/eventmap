@@ -49,7 +49,9 @@ function EventTimes(props) {
 }
 
 export function EventList(props) {
-  const listEvents = props.events.map((event) => {
+  let listEvents;
+  if(props.events.length > 0){
+  listEvents = props.events.map((event) => {
 
     // Normalize Mobilize's time formatting into
     // easy-to-use moments
@@ -94,9 +96,21 @@ export function EventList(props) {
 
     )
   });
+} else {
+  listEvents = null;
+}
 
   return (
-    <ul className="eventList">{listEvents}</ul>
+    <ul className="eventList">{listEvents}
+    <div className="eventList">
+      <div className="kicker">
+      <li>
+        <h4>Don't see an event near you?</h4>
+        <p><a href="https://events.elizabethwarren.com/?is_virtual=true">Join a virtual event</a> or <a href="https://events.elizabethwarren.com/event/create/">Host your own</a></p>
+      </li>
+      </div>
+    </div>
+    </ul>
   );
 }
 

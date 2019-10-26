@@ -7,6 +7,7 @@ import locateImage from './img/icon_512x512.png';
 
 export function SearchBar(props){
   const[input, setInput] = useState(props.currZip);
+  const[rangeInput, setRangeInput] = useState(props.currRange);
 
   function onlySetNumbers(event){
     let baseValue = event.target.value;
@@ -39,13 +40,14 @@ export function SearchBar(props){
 
   function onSubmit(event){
     event.preventDefault();
+    props.updateRange(rangeInput);
     setZip(input);
   }
 
   function setZip(input) {
     setInput(input);
     props.updateZip(input);
-    History.push(window.location.pathname+'?zip='+input);
+    History.push(window.location.pathname+'?zip='+ input);
   }
 
 
@@ -54,6 +56,14 @@ export function SearchBar(props){
       <div className="userInput">
         <form onSubmit= {onSubmit} id = "zipForm">
           <input type="text" id="zipInput" value={input} onChange={onlySetNumbers} placeholder="ZIP" required minLength="5" maxLength="5"></input>
+          <select value={rangeInput} onChange={(event) => setRangeInput(event.target.value)}>
+            <option value="5">5 mi</option>
+            <option value="25">25 mi</option>
+            <option value="50">50 mi</option>
+            <option value="75">75 mi</option>
+            <option value="150">150 mi</option>
+          </select>
+          <button id="submitZip" onClick={onSubmit}>GO</button>
         </form>
         <button id="locateMe" onClick={geolocate}><img src={locateImage}></img></button>
       </div>
