@@ -16,6 +16,9 @@ const queryString = require('query-string');
 function App() {
   //List of events
   const [events, setEvents] = useState(null);
+  // Current range 
+  const [currRange, setCurrRange] = useState(75);
+
   //Current zip code search
   const [currZip, setCurrZip] = useState(() => {
     // check URL parameter on initialization
