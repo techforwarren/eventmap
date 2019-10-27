@@ -56,7 +56,7 @@ export function SearchBar(props){
       <div className="userInput">
         <form onSubmit= {onSubmit} id = "zipForm">
           <input type="text" id="zipInput" value={input} onChange={onlySetNumbers} placeholder="ZIP" required minLength="5" maxLength="5"></input>
-          <select value={rangeInput} onChange={(event) => setRangeInput(event.target.value)}>
+          <select id="rangeInput" value={rangeInput} onChange={(event) => setRangeInput(event.target.value)}>
             <option value="5">5 mi</option>
             <option value="25">25 mi</option>
             <option value="50">50 mi</option>

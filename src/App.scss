@@ -123,11 +123,16 @@ html, body, #root, .app {
   padding-right: 5%;
 
   #zipForm{
+    display: flex;
+    justify-content:space-between;
+    padding-right: 10%;
+    align-items: flex-start;
+    border-right: 1px solid white;
     width: 70%;
   }
 
   #zipInput{
-    width: 100%;
+    min-width:80px;
     height: 30%;
     font-size: 24px;
     color: white;
@@ -137,6 +142,24 @@ html, body, #root, .app {
     border: none;
     border-bottom: 1px solid white;
     z-index:10;
+  }
+  
+  #rangeInput{
+    height: 30%;
+    min-width:105px;
+    font-size: 24px;
+    border: none;
+    color: white;
+    background: none;
+  }
+
+  #submitZip{
+    height: 35px;
+    width: 35px;
+    font-size: 24px;
+    color: white;
+    background-color: #232444;
+    border: none;
   }
 
   #locateMe {
