@@ -52,8 +52,9 @@ export function SearchBar(props){
   return(
     <div className={(props.events != null ? "searchBar activeList" : "searchBar") + (isMobile ? " mobileSearch" : "")}>
       <div className="userInput">
-        <form onSubmit= {onSubmit} id = "zipForm">
+        <form onSubmit={onSubmit} id="zipForm">
           <input type="text" id="zipInput" value={input} onChange={onlySetNumbers} placeholder="ZIP" required minLength="5" maxLength="5"></input>
+          <button id="submitZip" onClick={onSubmit}>GO</button>
         </form>
         <button id="locateMe" onClick={geolocate}><img src={locateImage}></img></button>
       </div>
