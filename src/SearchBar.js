@@ -44,10 +44,15 @@ export function SearchBar(props){
     setZip(input);
   }
 
+  function setRange(input){
+    setRangeInput(input);
+    props.updateRange(input);
+  }
+
   function setZip(input) {
     setInput(input);
     props.updateZip(input);
-    History.push(window.location.pathname+'?zip='+ input);
+    History.push(window.location.pathname+'?zip='+input);
   }
 
 
@@ -56,17 +61,28 @@ export function SearchBar(props){
       <div className="userInput">
         <form onSubmit= {onSubmit} id = "zipForm">
           <input type="text" id="zipInput" value={input} onChange={onlySetNumbers} placeholder="ZIP" required minLength="5" maxLength="5"></input>
-          <select id="rangeInput" value={rangeInput} onChange={(event) => setRangeInput(event.target.value)}>
-            <option value="5">5 mi</option>
-            <option value="25">25 mi</option>
-            <option value="50">50 mi</option>
-            <option value="75">75 mi</option>
-            <option value="150">150 mi</option>
-          </select>
           <button id="submitZip" onClick={onSubmit}>GO</button>
         </form>
         <button id="locateMe" onClick={geolocate}><img src={locateImage}></img></button>
       </div>
+      
+      { props.events !== null &&
+            <div className="searchRange">
+            <p>Showing events within
+              <select id="selectRange" value={rangeInput} onChange={(event) => setRange(event.target.value)}>
+                <option value='5'>5 mi</option>
+                <option value='10'>10 mi</option>
+                <option value='20'>20 mi</option>
+                <option value='50'>50 mi</option>
+                <option value='75'>75 mi</option>
+                <option value='120'>120 mi</option>
+              </select>
+            </p>
+        </div>
+
+      }
+
+     
       {props.events !== null && !isMobile &&
         <EventList events={props.events} locFilt={props.locFilt} updatedHover={(item) => props.updatedHover(item)}/>
       }
