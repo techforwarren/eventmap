@@ -125,7 +125,7 @@ html, body, #root, .app {
   #zipForm{
     display: flex;
     justify-content:space-between;
-    padding-right: 10%;
+    padding-right: 4%;
     align-items: flex-start;
     border-right: 1px solid white;
     width: 70%;
@@ -155,7 +155,6 @@ html, body, #root, .app {
 
   #submitZip{
     height: 35px;
-    width: 35px;
     font-size: 24px;
     color: white;
     background-color: #232444;
@@ -164,7 +163,6 @@ html, body, #root, .app {
 
   #locateMe {
     height: 35px;
-    width: 35px;
     color: white;
     background-color: #232444;
     border: none;
