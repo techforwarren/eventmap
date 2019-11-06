@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import L from 'leaflet';
-import 'mapbox-gl-leaflet';
 import gMark from './img/w-marker-icon-2x.png';
 import hMark from './img/w-marker-icon-2x-highlighted.png';
 import sMark from './img/marker-shadow.png';
