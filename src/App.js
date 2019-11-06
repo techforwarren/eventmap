@@ -5,6 +5,11 @@ import SearchBar from './SearchBar';
 import Map from './Map';
 import MobileList from './MobileList';
 import './App.scss';
+import gMark from './img/w-marker-icon-2x.png';
+
+import ReactGA from 'react-ga';
+ReactGA.initialize('UA-149839620-1');
+ReactGA.pageview(window.location.pathname + window.location.search);
 
 const queryString = require('query-string');
 
@@ -37,6 +42,14 @@ function App() {
       setLocFilt(null);
       setCardIndex(0);
 
+      //Tracks zip input
+
+      ReactGA.event({
+        category: 'Search',
+        action: 'User Searched',
+        label: `${currZip}`
+      });
+
     }
   }, [currZip]);
 
@@ -48,9 +61,17 @@ function App() {
   }, [cardIndex]);
 
 
+
+
   return (
     <div className="app">
       <SearchBar currZip={currZip} updateZip={(newZip) => setCurrZip(newZip)} events={events} updatedHover={(newHover) => setHoverEvent(newHover)} locFilt={locFilt}/>
+      {events === null && currZip == null &&
+        <div id="startLoad">
+          <h1 id="firstLine">SHE HAS</h1><h1 id="secondLine">EVENTS</h1><h1 id="thirdLine">FOR THAT <img src={gMark}></img></h1>
+          <h3 id="searchCTA">Enter your zipcode to find events near you!</h3>
+        </div>
+      }
       {events !== null && isMobile &&
         <MobileList events={events} updatedHover={(newHover) => setHoverEvent(newHover)} locFilt={locFilt} cardIndex={cardIndex} updateCardIndex={(update) => setCardIndex(update)}/>
       }

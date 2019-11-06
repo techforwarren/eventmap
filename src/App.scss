@@ -3,6 +3,65 @@
     height: 100%;
     z-index: 9;
   }
+
+  #startLoad{
+    position: fixed;
+    width: 100%;
+    z-index: 10;
+    text-align: center;
+    padding-top: 20vh;
+    background-color: rgba(183, 228, 207,0.85);
+    height: 100%;
+    color: #232444;
+    margin-top: 0px;
+
+    @media only screen and (max-width: 425px) {
+      padding-top: 25vh;
+    }
+
+
+    #firstLine, #secondLine, #thirdLine{
+      display: block;
+      margin-top: 0px;
+      margin-bottom: 0px;
+
+    }
+
+    #firstLine, #thirdLine{
+      font-size: 10vh;
+      img{
+        height: 10vh;
+      }
+
+      @media only screen and (max-width: 768px) {
+        font-size: 10vw;
+        img{
+          height: 10vw;
+        }
+      }
+    }
+    #secondLine{
+      font-size: 20vh;
+      color: white;
+      font-style: italic;
+      text-shadow: -1px -1px 0 #232444, 1px -1px 0 #232444, -1px 1px 0 #232444, 1px 1px 0 #232444;
+      @media only screen and (max-width: 768px) {
+        font-size: 20vw;
+      }
+    }
+
+    #searchCTA{
+      color: #b61b28;
+      font-style: italic;
+      font-size: 3vh;
+      @media only screen and (max-width: 768px) {
+        font-size: 3vw;
+      }
+    }
+
+
+  }
+
 }
 
 html, body, #root, .app {
@@ -18,7 +77,7 @@ html, body, #root, .app {
   position: fixed;
   left: 2%;
   top: 2%;
-  z-index:10;
+  z-index:11;
   box-shadow: 10px 10px 5px rgba(0, 0, 0, .3);
 
 }
@@ -30,6 +89,9 @@ html, body, #root, .app {
   box-shadow: 0px 5px 5px rgba(0, 0, 0, .3);
   padding-top: 4%;
   padding-bottom: 4% !important;
+  touch-action: manipulation;
+
+
 
   #zipForm{
     padding-left: 4%;
@@ -43,39 +105,55 @@ html, body, #root, .app {
     box-shadow: none;
     width: 80%;
   }
+  #locateMe {
+    width: 40px !important;
+  }
 }
 
 .activeList{
   padding-bottom: 0px;
 }
 
-#zipForm{
-  padding-left: 10%;
-  padding-right: 10%;
+.userInput{
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-evenly;
+  padding-left: 5%;
+  padding-right: 5%;
+
+  #zipForm{
+    width: 70%;
+  }
+
+  #zipInput{
+    width: 100%;
+    height: 30%;
+    font-size: 24px;
+    color: white;
+    margin: auto;
+    display: block;
+    background: none;
+    border: none;
+    border-bottom: 1px solid white;
+    z-index:10;
+  }
+
+  #locateMe {
+    height: 35px;
+    width: 35px;
+    color: white;
+    background-color: #232444;
+    border: none;
+    img {
+      width: 35px;
+      z-index: 12;
+    }
+  }
+
 }
 
-#zipInput{
-  width: 100%;
-  //height: 30px;
-  height: 30%;
-  font-size: 24px;
-  color: white;
-  margin: auto;
-  display: block;
-  background: none;
-  border: none;
-  border-bottom: 1px solid white;
-  z-index:10;
-}
 
-#locateMe {
-  position: relative;
-  left: calc(100% - 35px);
-  top: -25px;
-  color: white;
-  border: 1px solid white;
-  background-color: #232444;
-}
 
 ::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
   color: white;
@@ -141,6 +219,7 @@ html, body, #root, .app {
 .mobileList{
   margin: none;
   font-size:calc(12px + 1vw);
+  touch-action: manipulation;
   .eventCard{
 
     text-decoration: none;

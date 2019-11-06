@@ -39,12 +39,12 @@ export function Map(props){
     map.current.on("click", (event) => locationFilter(event, false));
 
 
-		// Set up the base layer
-    L.tileLayer(
-      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
-        maxZoom: 18
-      }).addTo(map.current);
+		// Set up the OSM layer
+		L.tileLayer(
+			'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+				attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors',
+				maxZoom: 18
+			}).addTo(map.current);
 
 		L.control.zoom({
 			position: 'topright'
