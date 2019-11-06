@@ -12,7 +12,7 @@ export function SearchBar(props){
   function onlySetNumbers(event){
     let baseValue = event.target.value;
     let replacedVal = baseValue.replace(/\D*/g, '')
-    console.log(`baseValue: ${baseValue}, replacedVal: ${replacedVal}`);
+    //console.log(`baseValue: ${baseValue}, replacedVal: ${replacedVal}`);
     setInput(replacedVal)
   }
 
@@ -26,7 +26,6 @@ export function SearchBar(props){
           '&format=jsonv2')
       .then((res)=>res.json())
       .then((data)=>{
-          console.log(data);
           if(data.address && data.address.postcode) {
             setZip(data.address.postcode);
           }
