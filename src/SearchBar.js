@@ -69,7 +69,7 @@ export function SearchBar(props){
       { props.events !== null &&
             <div className="searchRange">
             <p>Showing events within
-              <select id="selectRange" value={rangeInput} onChange={(event) => setRange(event.target.value)}>
+              <select value={rangeInput} onChange={(event) => setRange(event.target.value)}>
                 <option value='5'>5 mi</option>
                 <option value='10'>10 mi</option>
                 <option value='20'>20 mi</option>
