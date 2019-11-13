@@ -7,6 +7,7 @@ import locateImage from './img/icon_512x512.png';
 
 export function SearchBar(props){
   const [input, setInput] = useState(props.currZip || '');
+  const[rangeInput, setRangeInput] = useState(props.currRange);
 
   function onlySetNumbers(event){
     let baseValue = event.target.value;
@@ -24,7 +25,6 @@ export function SearchBar(props){
           '&format=jsonv2')
       .then((res)=>res.json())
       .then((data)=>{
-          console.log(data);
           if(data.address && data.address.postcode) {
             setZip(data.address.postcode);
           }
@@ -38,7 +38,13 @@ export function SearchBar(props){
 
   function onSubmit(event){
     event.preventDefault();
+    props.updateRange(rangeInput);
     setZip(input);
+  }
+
+  function setRange(input){
+    setRangeInput(input);
+    props.updateRange(input);
   }
 
   function setZip(input) {
@@ -57,6 +63,24 @@ export function SearchBar(props){
         </form>
         <button id="locateMe" onClick={geolocate}><img src={locateImage} alt="Use my location"></img></button>
       </div>
+      
+      { props.events !== null &&
+            <div className="searchRange">
+            <p>Showing events within
+              <select value={rangeInput} onChange={(event) => setRange(event.target.value)}>
+                <option value='5'>5 mi</option>
+                <option value='10'>10 mi</option>
+                <option value='20'>20 mi</option>
+                <option value='50'>50 mi</option>
+                <option value='75'>75 mi</option>
+                <option value='120'>120 mi</option>
+              </select>
+            </p>
+        </div>
+
+      }
+
+     
       {props.events !== null && !isMobile &&
         <EventList events={props.events} locFilt={props.locFilt} updatedHover={(item) => props.updatedHover(item)}/>
       }

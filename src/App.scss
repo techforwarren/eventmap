@@ -88,7 +88,7 @@ html, body, #root, .app {
   left: 0;
   box-shadow: 0px 5px 5px rgba(0, 0, 0, .3);
   padding-top: 4%;
-  padding-bottom: 4% !important;
+  padding-bottom: 4%;
   touch-action: manipulation;
 
   #zipForm{
@@ -152,6 +152,24 @@ html, body, #root, .app {
     border-bottom: 1px solid white;
     z-index:10;
   }
+  
+  #rangeInput{
+    height: 30%;
+    min-width:105px;
+    font-size: 24px;
+    border: none;
+    background: none;
+
+  }
+
+  #submitZip{
+    height: 35px;
+    padding: 0;
+    font-size: 24px;
+    color: white;
+    background-color: #232444;
+    border: none;
+  }
 
   #submitZip{
     height: 35px;
@@ -176,6 +194,32 @@ html, body, #root, .app {
     }
   }
 
+
+}
+
+.searchRange{
+  font-size: 16px;
+  background-color: #f5f5f5;
+  height:30px;
+  line-height:30px;
+  text-align: center;
+  border-bottom: 1px solid #ccc;
+}
+
+.searchRange select{
+  background: none;
+  font-size: 16px;
+  background-color: #f5f5f5;
+  border: none;
+  padding: 0px 20px 0px 5px;
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background-image: url(./downArrow.svg);
+  background-position: calc(100% - 8px) 85%;
+  background-size: 12px 12px;
+  background-repeat: no-repeat;
+    
 }
 
 .eventList{
@@ -185,6 +229,7 @@ html, body, #root, .app {
   overflow-y:scroll;
   margin-bottom: 0px;
   padding-left: 0px;
+  margin-top: 0px;
 
   .eventCard{
     text-decoration: none;
@@ -224,6 +269,18 @@ html, body, #root, .app {
     }
 
   }
+
+  .kicker{
+    list-style-type: none;
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 5%;
+    padding-bottom: 5%;
+    border-top: 1px solid #E8E8E8;
+    border-bottom: 1px solid #E8E8E8;
+    position: relative;
+  }
+
 }
 
 .mobileList{
@@ -245,10 +302,6 @@ html, body, #root, .app {
     box-shadow: 1px 2px 5px rgba(0, 0, 0, .3);
     border: 1px solid #232444;
 
-
-
-
-
     h3{
       text-transform: uppercase;
     }
@@ -264,8 +317,6 @@ html, body, #root, .app {
       }
 
     }
-
-
   }
 
   button{
