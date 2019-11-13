@@ -99,6 +99,9 @@ export function Map(props){
 
 
   		}
+
+      // zoom to marker bounds, plus padding (percentage)
+      map.current.fitBounds(markers.current.getBounds().pad(0.5));
     }
   }, [locations, props.hoverMarker, props.locFilt]);
 
