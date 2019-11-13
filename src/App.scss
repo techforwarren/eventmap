@@ -130,6 +130,16 @@ html, body, #root, .app {
     padding-right: 9%;
   }
 
+  label[for=zipInput] {
+    color: white;
+    position: fixed;
+    font-size: 24px;
+  }
+
+  [data-has-input=true] label[for=zipInput] {
+    color: transparent;
+  }
+
   #zipInput{
     height: 30%;
     width: 80%;
@@ -210,22 +220,6 @@ html, body, #root, .app {
   background-size: 12px 12px;
   background-repeat: no-repeat;
     
-}
-
-
-
-
-::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
-  color: white;
-  opacity: 1; /* Firefox */
-}
-
-:-ms-input-placeholder { /* Internet Explorer 10-11 */
-  color: white;
-}
-
-::-ms-input-placeholder { /* Microsoft Edge */
-  color: white;
 }
 
 .eventList{

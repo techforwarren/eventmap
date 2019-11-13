@@ -6,13 +6,12 @@ import locateImage from './img/icon_512x512.png';
 
 
 export function SearchBar(props){
-  const[input, setInput] = useState(props.currZip);
+  const [input, setInput] = useState(props.currZip || '');
   const[rangeInput, setRangeInput] = useState(props.currRange);
 
   function onlySetNumbers(event){
     let baseValue = event.target.value;
     let replacedVal = baseValue.replace(/\D*/g, '')
-    //console.log(`baseValue: ${baseValue}, replacedVal: ${replacedVal}`);
     setInput(replacedVal)
   }
 
@@ -54,15 +53,15 @@ export function SearchBar(props){
     History.push(window.location.pathname+'?zip='+input);
   }
 
-
   return(
     <div className={(props.events != null ? "searchBar activeList" : "searchBar") + (isMobile ? " mobileSearch" : "")}>
       <div className="userInput">
-        <form onSubmit={onSubmit} id="zipForm">
-          <input type="text" id="zipInput" value={input} onChange={onlySetNumbers} placeholder="ZIP" required minLength="5" maxLength="5"></input>
+        <form onSubmit={onSubmit} id="zipForm" data-has-input={!!input.length}>
+          <label for="zipInput">ZIP</label>
+          <input type="text" id="zipInput" value={input} onInput={onlySetNumbers} required minLength="5" maxLength="5"></input>
           <button id="submitZip" onClick={onSubmit}>GO</button>
         </form>
-        <button id="locateMe" onClick={geolocate}><img src={locateImage}></img></button>
+        <button id="locateMe" onClick={geolocate}><img src={locateImage} alt="Use my location"></img></button>
       </div>
       
       { props.events !== null &&
