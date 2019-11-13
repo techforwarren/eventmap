@@ -110,41 +110,45 @@ export function Map(props){
 
     if(props.events != null){
 
-      //Initiates map's focus at the first event (typically the closest to the provided zipcode) with a valid lat & long position
-      let first = 0;
-  		if (!('location' in props.events[first]) || !('location' in props.events[first]['location']) || !('latitude' in props.events[first]['location']['location'])) {
-  			first++;
-  		}
+      if(props.events.length > 0){
+        //Initiates map's focus at the first event (typically the closest to the provided zipcode) with a valid lat & long position
+        let first = 0;
+        if (!('location' in props.events[first]) || !('location' in props.events[first]['location']) || !('latitude' in props.events[first]['location']['location'])) {
+          first++;
+        }
 
-      var lat = props.events[first]['location']['location']['latitude'];
-      var long = props.events[first]['location']['location']['longitude'];
+        var lat = props.events[first]['location']['location']['latitude'];
+        var long = props.events[first]['location']['location']['longitude'];
 
-      if(center[0] !== lat || center[0] !== long){
-        setCenter([lat, long]);
-        setNewCenter(true);
+        if(center[0] !== lat || center[0] !== long){
+          setCenter([lat, long]);
+          setNewCenter(true);
+        }
+
+        var places = {};
+
+        props.events.forEach(function(event, index) {
+
+          //If has longitude and latitute
+          if ('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) {
+
+            //Creates string key for {places} dictionary
+            let str = event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'];
+            //Creates or adds to a location - adds HTML code for event list for that location
+            if (str in places) {
+              places[str] = places[str] + 1;
+            } else {
+              places[str] = 1;
+            }
+
+          }
+        });
+        setLocations(places);
+      } else {
+        markers.current.clearLayers();
+        map.current.setView([39.739, -104.9903], 4);
       }
-
-      var places = {};
-
-      props.events.forEach(function(event, index) {
-
-  			//If has longitude and latitute
-  			if ('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) {
-
-  				//Creates string key for {places} dictionary
-  				let str = event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'];
-  				//Creates or adds to a location - adds HTML code for event list for that location
-  				if (str in places) {
-  					places[str] = places[str] + 1;
-  				} else {
-  					places[str] = 1;
-  				}
-
-  			}
-  		});
-      setLocations(places);
-    }
-
+    } 
   }, [props.events]);
 
 

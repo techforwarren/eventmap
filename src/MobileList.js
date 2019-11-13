@@ -71,59 +71,74 @@ export function MobileList(props){
   }, [props.locFilt])
 
 
+  let listEvents = {};
+  if(props.events.length > 0){
+    listEvents = props.events.map((event, index) => {
 
-  const listEvents = props.events.map((event, index) => {
+      // Normalize Mobilize's time formatting into
+      // easy-to-use moments
+      let rawTimes = event['timeslots'].map((timeslot) => {
+        let start = moment(timeslot.start_date * 1000);
+        let end = moment(timeslot.end_date * 1000);
+        return {
+          start, end,
+          range: start.twix(end)
+        }
+      })
 
-    // Normalize Mobilize's time formatting into
-    // easy-to-use moments
-    let rawTimes = event['timeslots'].map((timeslot) => {
-      let start = moment(timeslot.start_date * 1000);
-      let end = moment(timeslot.end_date * 1000);
-      return {
-        start, end,
-        range: start.twix(end)
-      }
-    })
+      return (
+        <a href={event['browser_url']}
+          className="eventCard"
+          target="_blank"
+          rel="noopener"
+          key={event['id']}
+          coord={('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) ? "" + event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'] : ""}
+          onMouseEnter={(event) => { props.updatedHover(event['currentTarget'].getAttribute('coord')) }}
+          onMouseLeave={(event) => { props.updatedHover(null) }}>
+          <div className="mobileInfo">
+            <h3>{event['title']}</h3>
+            <p><strong>{event['location']['venue']}</strong> in <strong>{event['location']['locality']}</strong></p>
+            <EventTimes rawTimes={rawTimes} />
+            <p className="eventRSVP">Click to RSVP</p>
+          </div>
 
-    return (
-      <a href={event['browser_url']}
-        className="eventCard"
-        target="_blank"
-        rel="noopener"
-        key={event['id']}
-        coord={('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) ? "" + event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'] : ""}
-        onMouseEnter={(event) => { props.updatedHover(event['currentTarget'].getAttribute('coord')) }}
-        onMouseLeave={(event) => { props.updatedHover(null) }}>
+        </a>
+
+      )
+    }).filter((arrItem) => {
+      return arrItem != null;
+    });
+  } else {
+      return <div className="mobileList">
+      <div className="eventCard">
         <div className="mobileInfo">
-          <h3>{event['title']}</h3>
-          <p><strong>{event['location']['venue']}</strong> in <strong>{event['location']['locality']}</strong></p>
-          <EventTimes rawTimes={rawTimes} />
-          <p className="eventRSVP">Click to RSVP</p>
+          <h3>Don't see an event near you?</h3>
+          <p><a href="https://events.elizabethwarren.com/?is_virtual=true">Join a virtual event</a></p> 
+          <p><a href="https://events.elizabethwarren.com/event/create/">Host your own event</a></p>
         </div>
-
-      </a>
-
-    )
-  }).filter((arrItem) => {
-    return arrItem != null;
-  });
+      </div>
+    </div>
+      
+  }
 
   //Conditional rendering for buttons, depending on position in list
-  return (
-    <div className="mobileList">
-      {listEvents[props.cardIndex]}
-      {
-        props.cardIndex > 0 &&
-        <button id="leftIndex" onClick={() => props.updateCardIndex(props.cardIndex-1)}>← </button>
-      }
-      <button id="mobileRSVP"><a href={props.events[props.cardIndex]['browser_url']} target="_blank" rel="noopener">RSVP</a></button>
-      {
-        props.cardIndex < listEvents.length-1 &&
-        <button id="rightIndex" onClick={() => props.updateCardIndex(props.cardIndex+1)}> →</button>
-      }
+  if(props.events.length > 0){
+    return (
+      <div className="mobileList">
+        {listEvents[props.cardIndex]}
+        {
+          props.cardIndex > 0 &&
+          <button id="leftIndex" onClick={() => props.updateCardIndex(props.cardIndex-1)}>← </button>
+        }
+        <button id="mobileRSVP"><a href={props.events[props.cardIndex]['browser_url']} target="_blank" rel="noopener">RSVP</a></button>
+        {
+          props.cardIndex < listEvents.length-1 &&
+          <button id="rightIndex" onClick={() => props.updateCardIndex(props.cardIndex+1)}> →</button>
+        }
 
-    </div>
-  );
+      </div>
+    );
+  }
 }
 
 export default MobileList;
