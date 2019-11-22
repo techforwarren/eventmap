@@ -73,10 +73,8 @@ export function Map(props){
     		  if(deltaTime < 1000 && ((average+standardDeviation) >= Math.abs(delta))){
     			  return;
     		  } else if (map.options.scrollWheelZoom === 'center') {
-    			  console.log("zoom: " + zoom + " , delta: " + normalizedDelta);
     			  map.setZoom(zoom + normalizedDelta);
     		  } else {
-    			  console.log("zoom: " + zoom + " , delta: " + normalizedDelta);
     			  map.setZoomAround(this._lastMousePos, zoom + normalizedDelta);
     		  }
     		  wheelDeltaList = [];
@@ -87,7 +85,7 @@ export function Map(props){
         
         // Create the map with US center
         map.current = L.map('map', {
-            zoomControl: false
+            zoomControl: false,
             scrollWheelZoom: false,
             scrollWheelZoomExtended: true
         }).setView(center, (props.events != null) ? 8 : 4);
