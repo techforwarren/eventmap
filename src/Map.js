@@ -27,15 +27,73 @@ export function Map(props){
 
   //First render
   useEffect(() => {
-    // Create the map with US center
-		map.current = L.map('map', {
-			zoomControl: false
-		}).setView(center, (props.events != null) ? 8 : 4);
+      var lastScroll = new Date().getTime();
+      var wheelDeltaList = [];
 
-    //Initializes layergroup
-    markers.current = L.featureGroup().addTo(map.current);
-    markers.current.on("click", (event) => locationFilter(event, true));
-    map.current.on("click", (event) => locationFilter(event, false));
+      // override the scrollwheelzoom
+      L.Map.ScrollWheelZoomExtended = L.Map.ScrollWheelZoom.extend({
+    	  _performZoom: function() {
+    		  var currentScrollTime = new Date().getTime();
+    		  var map = this._map,
+              	zoom = map.getZoom(),
+              	delta = this._delta,
+              	normalizedDelta = 0,
+              	snap = this._map.options.zoomSnap || 0;
+            
+    		  wheelDeltaList.push(Math.abs(delta));
+    		  var average = 0;
+    		  for(var i = 0; i< wheelDeltaList.length; i++){
+    			  average += wheelDeltaList[i];
+    		  }
+    		  average = average / wheelDeltaList.length;
+
+    		  var diffSquaredTotal= 0;
+    		  for(var i = 0; i < wheelDeltaList.length; i++){
+    			  var diff = wheelDeltaList[i] - average;
+    			  diffSquaredTotal += Math.pow(diff,2);
+    		  }
+            
+    		  var standardDeviation = Math.sqrt(diffSquaredTotal/wheelDeltaList.length);
+    		  map.stop(); // stop panning and fly animations if any
+            
+    		  var deltaTime = currentScrollTime - lastScroll;
+            
+    		  var d2 = this._delta / (this._map.options.wheelPxPerZoomLevel * 4),
+    		  d3 = 4 * Math.log(2 / (1 + Math.exp(-Math.abs(d2)))) / Math.LN2,
+    		  d4 = snap ? Math.ceil(d3 / snap) * snap : d3,
+                    normalizedDelta = map._limitZoom(zoom + (this._delta > 0 ? d4 : -d4)) - zoom;
+
+    		  this._delta = 0;
+    		  this._startTime = null;
+    		  lastScroll = currentScrollTime;
+    		  if (!normalizedDelta) {
+    			  return;
+    		  }
+            
+    		  if(deltaTime < 1000 && ((average+standardDeviation) >= Math.abs(delta))){
+    			  return;
+    		  } else if (map.options.scrollWheelZoom === 'center') {
+    			  map.setZoom(zoom + normalizedDelta);
+    		  } else {
+    			  map.setZoomAround(this._lastMousePos, zoom + normalizedDelta);
+    		  }
+    		  wheelDeltaList = [];
+    	  }
+        });
+       
+        L.Map.addInitHook('addHandler', 'scrollWheelZoomExtended', L.Map.ScrollWheelZoomExtended);
+        
+        // Create the map with US center
+        map.current = L.map('map', {
+            zoomControl: false,
+            scrollWheelZoom: false,
+            scrollWheelZoomExtended: true
+        }).setView(center, (props.events != null) ? 8 : 4);
+
+	    //Initializes layergroup
+	    markers.current = L.featureGroup().addTo(map.current);
+	    markers.current.on("click", (event) => locationFilter(event, true));
+	    map.current.on("click", (event) => locationFilter(event, false));
 
 
 		// Set up the OSM layer
