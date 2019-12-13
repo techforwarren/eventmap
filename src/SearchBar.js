@@ -9,6 +9,13 @@ export function SearchBar(props){
   const [input, setInput] = useState(props.currZip || '');
   const[rangeInput, setRangeInput] = useState(props.currRange);
 
+  // frm: filters what events are displayed according to the kind of event
+  const [eventKindInput, setEventKindInput] = useState(props.currEventKind || 'ALLEVENTS');      
+   
+  // frm: filters what events are displayed according to the date ranges for the events
+  // frm: NYI
+  const [dateRange, setDateRange] = useState({start: "now", end: "now+14"});
+
   function onlySetNumbers(event){
     let baseValue = event.target.value;
     let replacedVal = baseValue.replace(/\D*/g, '')
@@ -38,20 +45,45 @@ export function SearchBar(props){
 
   function onSubmit(event){
     event.preventDefault();
-    props.updateRange(rangeInput);
+    props.updateRange(rangeInput);  // frm: calls setCurrRange() in App.js triggering a Mobilize API call and  a re-render
     setZip(input);
+    // ??? frm: Should I add a call to setEventKind() here?
+    /*
+     * ??? frm: There is a general question here: is React smart 
+     *          enough to avoid making a separate Mobilize API
+     *          call for each of these update...() calls?
+     *
+     *          The other question is when we want the app
+     *          to immediately respond and re-render vs. waiting
+     *          for the user to "submit" their changes.  If the
+     *          API is blindingly fast, and we don't need to
+     *          worry about hitting it too much, then there is
+     *          no harm in hitting for every user change, but
+     *          maybe we should not make an API call for every
+     *          user change...
+     */
   }
 
   function setRange(input){
-    setRangeInput(input);
-    props.updateRange(input);
+    setRangeInput(input);       // frm: updates local global state
+    props.updateRange(input);   // frm: calls setCurrRange() in App.js triggering a Mobilize API call and a re-render
+  }
+
+  function setEventKind(input) {
+    setEventKindInput(input);       // frm: update local global
+    props.updateEventKind(input);   // frm: update App.js global - triggering re-render of list of events
   }
 
   function setZip(input) {
-    setInput(input);
-    props.updateZip(input);
+    setInput(input);            // frm: updates local state
+    props.updateZip(input);     // frm: calls setCurrZip() in App.js - triggering a Mobilize API call and a re-render
     History.push(window.location.pathname+'?zip='+input);
   }
+
+      // ??? frm: BUG: For some reason the label for the kindOfEvent select below is not appearing.
+      //               Probably something to do with how much space there is and what has to give
+      //               but I don't grok CSS well enough to know off the top of my head what is 
+      //               going on...
 
   return(
     <div className={(props.events != null ? "searchBar activeList" : "searchBar") + (isMobile ? " mobileSearch" : "")}>
@@ -64,6 +96,27 @@ export function SearchBar(props){
         <button id="locateMe" onClick={geolocate}><img src={locateImage} alt="Use my location"></img></button>
       </div>
       
+         <div className="kindOfEvent">
+           <p> Kind of Event:
+             <select value={eventKindInput} onChange={(e) => setEventKind(e.target.value)}>
+               <option value='ALLEVENTS'>All Events</option>
+               <option value='CANVASS'>Canvass</option>
+               <option value='PHONE_BANK'>Phone Bank</option>
+               <option value='TEXT_BANK'>Text Bank</option>
+               <option value='FUNDRAISER'>Fundraiser</option>
+               <option value='MEET_GREET'>Meet and Greet</option>
+               <option value='HOUSE_PARTY'>House Party</option>
+               <option value='TRAINING'>Training</option>
+               <option value='FRIEND_TO_FRIEND_OUTREACH'>Friend to Friend</option>
+               <option value='DEBATE_WATCH_PARTY'>Watch Party</option>
+               <option value='RALLY'>Rally</option>
+               <option value='TOWN_HALL'>Town Hall</option>
+               <option value='COMMUNITY_CANVASS'>Community Canvass</option>
+               <option value='CARPOOL'>Car Pool</option>
+             </select>
+           </p>
+         </div>
+
       { props.events !== null &&
             <div className="searchRange">
             <p>Showing events within
@@ -78,11 +131,13 @@ export function SearchBar(props){
             </p>
         </div>
 
+
       }
+           `
 
      
       {props.events !== null && !isMobile &&
-        <EventList events={props.events} locFilt={props.locFilt} updatedHover={(item) => props.updatedHover(item)}/>
+        <EventList events={props.events} locFilt={props.locFilt} eventKind={eventKindInput} updatedHover={(item) => props.updatedHover(item)}/>
       }
     </div>
   );

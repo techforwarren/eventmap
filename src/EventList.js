@@ -75,6 +75,23 @@ export function EventList(props) {
       }
     }
 
+    /*
+     * ??? frm: This code should not be needed anymore now that we filter events in App.js
+     *
+    // frm: Event Kind filter
+    if (props.eventKind !== 'ALLEVENTS') {       // ??? frm: nasty global constant - think about how to avoid this...
+      if ('event_type' in event && event['event_type'] !== props.eventKind) {
+        return null;    // frm: get rid of all events that do not match current event type
+      }
+    }
+     *
+     */
+
+    // ??? frm: React is complaining about there not being a unique key.  Here is the warning:
+    //              Each child in a list should have a unique "key" prop
+    //          I am assuming that it is the <li> list below that should have a key...
+    //          However, the issue seems benign - not seeing any crashes or other odd behavior because of it...
+
     return (
       <a href={event['browser_url']}
         className="eventCard"
@@ -87,6 +104,7 @@ export function EventList(props) {
         <li>
           <div>
             <h3>{event['title']}</h3>
+            <p> FRM: Kind of Event: {event['event_type']} </p>
             <p><strong>{event['location']['venue']}</strong> in <strong>{event['location']['locality']}</strong></p>
             <EventTimes rawTimes={rawTimes} />
             <p className="eventRSVP">Click to RSVP</p>
@@ -100,12 +118,40 @@ export function EventList(props) {
   listEvents = null;
 }
 
+  // frm: At this point listEvents is either null or the HTML for a list of each of the events
+
+  /*
+   * ??? frm: This is the original code that tacked the kicker on as a separate div outside the list of events
+   *
   return (
     <ul className="eventList">{listEvents}
     <div className="kicker">
         <h4>Don't see an event near you?</h4>
         <p><a href="https://events.elizabethwarren.com/?is_virtual=true">Join a virtual event</a> or <a href="https://events.elizabethwarren.com/event/create/">Host your own</a></p>
     </div>
+    </ul>
+  );
+   *
+   */
+
+  // ??? frm: This is a modified version that attempts to put the kicker in as one of the list elements
+  return (
+    <ul className="eventList">
+      {listEvents}
+      <a href="https://events.elizabethwarren.com/?is_virtual=true" className="eventCard">
+        <li>
+          <div>
+            <p><b>Join a virtual event</b> (click here)</p>
+          </div>
+        </li>
+      </a> 
+      <a href="https://events.elizabethwarren.com/event/create/" className="eventCard">
+        <li>
+          <div>
+            <p><b>Or host your own event</b> (click here)</p>
+          </div>
+        </li>
+      </a> 
     </ul>
   );
 }

@@ -6,7 +6,7 @@ import sMark from './img/marker-shadow.png';
 
 export function Map(props){
 
-  const [center, setCenter] = useState([39.8283, -98.5795]);
+  const [center, setCenter] = useState([39.8283, -98.5795]);  // frm: center of the USA
   const [locations, setLocations] = useState({});
   const [newCenter, setNewCenter] = useState(false);
   const map = useRef();
@@ -42,13 +42,13 @@ export function Map(props){
             
     		  wheelDeltaList.push(Math.abs(delta));
     		  var average = 0;
-    		  for(var i = 0; i< wheelDeltaList.length; i++){
+    		  for(let i = 0; i< wheelDeltaList.length; i++){  // frm: changed var to let to avoid duplicate def warning
     			  average += wheelDeltaList[i];
     		  }
     		  average = average / wheelDeltaList.length;
 
     		  var diffSquaredTotal= 0;
-    		  for(var i = 0; i < wheelDeltaList.length; i++){
+    		  for(let i = 0; i < wheelDeltaList.length; i++){  // frm: changed var to let to avoid duplicate def warning
     			  var diff = wheelDeltaList[i] - average;
     			  diffSquaredTotal += Math.pow(diff,2);
     		  }
@@ -159,7 +159,7 @@ export function Map(props){
   		}
 
       // zoom to marker bounds, plus padding (percentage)
-      map.current.fitBounds(markers.current.getBounds().pad(0.5));
+      map.current.fitBounds(markers.current.getBounds().pad(0.1));  // frm: the original pad amount was 0.5
     }
   }, [locations, props.hoverMarker, props.locFilt]);
 
@@ -169,39 +169,101 @@ export function Map(props){
     if(props.events != null){
 
       if(props.events.length > 0){
+
         //Initiates map's focus at the first event (typically the closest to the provided zipcode) with a valid lat & long position
+        /*
+         * frm: BUG FIX: The original code (December 12, 2019) did not account for the possibility that 
+         *               all of the events might be private (and hence none of them would have a location).
+         *               The original code assumed that there was at least one event with a location, and
+         *               so there was no protection around the line that assigned a value to "lat".
+         *               But if all of the events are private, then there is no "location" on any of them
+         *               and hence dereferencing "location" on any of them will blow up.
+         *               
+         *               There is another bug too - namely that the code to set a value for the "first"
+         *               event with a valid location is an if statment rather than a loop over all of the
+         *               events.  I have replaced the if-stmt with a for loop.
+         *               
+         */
+        /*
+         * frm: original code:
+         *
         let first = 0;
         if (!('location' in props.events[first]) || !('location' in props.events[first]['location']) || !('latitude' in props.events[first]['location']['location'])) {
           first++;
         }
+         *
+         */
 
-        var lat = props.events[first]['location']['location']['latitude'];
-        var long = props.events[first]['location']['location']['longitude'];
-
-        if(center[0] !== lat || center[0] !== long){
-          setCenter([lat, long]);
-          setNewCenter(true);
+        // Find out whether there are any events in the list that are not private
+        let first = -1;  
+        for (let i=0; i<props.events.length; i++) {
+            if (
+              ('location' in props.events[i]) && 
+              ('location' in props.events[i]['location']) && 
+              ('latitude' in props.events[i]['location']['location'])
+            ) 
+            {
+              first = i;
+              break;
+            }
         }
 
-        var places = {};
+        if (first !== -1) {  // There is at least one event that is not private (hence visible on map)
 
-        props.events.forEach(function(event, index) {
+            var lat = props.events[first]['location']['location']['latitude'];
+            var long = props.events[first]['location']['location']['longitude'];
 
-          //If has longitude and latitute
-          if ('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) {
-
-            //Creates string key for {places} dictionary
-            let str = event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'];
-            //Creates or adds to a location - adds HTML code for event list for that location
-            if (str in places) {
-              places[str] = places[str] + 1;
-            } else {
-              places[str] = 1;
+            if(center[0] !== lat || center[0] !== long){
+              setCenter([lat, long]);
+              setNewCenter(true);
             }
 
-          }
-        });
-        setLocations(places);
+            var places = {};
+
+            props.events.forEach(function(event, index) {
+
+              //If has longitude and latitute
+              if ('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) {
+
+                //Creates string key for {places} dictionary
+                let str = event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'];
+                //Creates or adds to a location - adds HTML code for event list for that location
+                if (str in places) {
+                  places[str] = places[str] + 1;
+                } else {
+                  places[str] = 1;
+                }
+
+              }
+            });
+            setLocations(places);
+        }
+        else {
+            /* 
+             * frm: TODO: After everyone is OK with the changes to account for 
+             *            a list of events that are all private, this code
+             *            should be refactored so that it first checks to 
+             *            see if there are any visible events (which involves 
+             *            two tests: 1. that the events list is not empty and
+             *            2. that at least one of the events is not private.
+             *            If there is at least one event that is not private
+             *            then the code should create the "places" array.
+             *
+             *            So the code should look like:
+             *
+             *                ...check to see if there is at least one event that is not private
+             *                if (...at least one event is not private) {
+             *                    ...compute the places variable's value
+             *                    setLocations(places);
+             *                }
+             *                else {
+             *                    ...clear all markers from the map
+             *                }
+             *                
+             */
+            markers.current.clearLayers();
+            map.current.setView([39.739, -104.9903], 4);
+        }
       } else {
         markers.current.clearLayers();
         map.current.setView([39.739, -104.9903], 4);
