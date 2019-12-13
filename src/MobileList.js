@@ -71,6 +71,11 @@ export function MobileList(props){
   }, [props.locFilt])
 
 
+  // ??? frm: BUG: Although the code in App.js that invokes this component has a guard in it for
+  //               (events !== null), there should be some defensive code here to make sure that
+  //               in fact (props.events !== null).  Not sure what the right thing to do is if
+  //               that happens, but I tripped over it once, so ...
+
   let listEvents = {};
   if(props.events.length > 0){
     listEvents = props.events.map((event, index) => {

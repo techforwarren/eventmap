@@ -159,12 +159,7 @@ export function Map(props){
   		}
 
       // zoom to marker bounds, plus padding (percentage)
-      map.current.fitBounds(markers.current.getBounds().pad(0.1));  // frm: the original pad amount was 0.5
-                                                                    //      Given my change to make the map
-                                                                    //      not be beneath the SearchBar
-                                                                    //      there was no longer a need for
-                                                                    //      a large pad => better use of 
-                                                                    //      map screen real estate...
+      map.current.fitBounds(markers.current.getBounds().pad(0.5));  
     }
   }, [locations, props.hoverMarker, props.locFilt]);
 

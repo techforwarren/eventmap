@@ -1,8 +1,6 @@
 .app{
   #map{
     height: 100%;
-    width: 68%;         // frm: I added this line to make entire map be to the right of the SearchBar
-    float: right;       // frm: I added this line to make entire map be to the right of the SearchBar
     z-index: 9;
   }
 
@@ -71,15 +69,14 @@ html, body, #root, .app {
 }
 
 .searchBar{
-  // padding-top: 2%;           // frm: I commented this out - because map is no longer behind SearchBar
-  // padding-bottom: 2%;        // frm: I commented this out - because map is no longer behind SearchBar
+  padding-top: 2%;           
+  padding-bottom: 2%;        
   background-color: #232444;
   //width: 300px;
   width: 32%;
-  height: 100%;         // frm: I added this - to make SearchBar use entire height of window
   position: fixed;
-  // left: 2%;          // frm: I commented this out - because map is no longer behind SearchBar
-  // top: 2%;           // frm: I commented this out - because map is no longer behind SearchBar
+  left: 2%;          
+  top: 2%;           
   z-index:11;
   // box-shadow: 10px 10px 5px rgba(0, 0, 0, .3);
 
@@ -254,22 +251,7 @@ html, body, #root, .app {
 
 .eventList{
   background-color: white;
-  // height: 500px;    // frm: I commented this out
-  height: 80%;         // frm: I added this
-                        // frm: With height = 100% it looks pretty good, except
-                        //      that the kicker doesn't appear (that is the
-                        //      thing that says that if you didn't find what
-                        //      you wanted you could host your own event.
-                        //      Not quite sure how to have that automatigically
-                        //      appear at the end of the scrolling...
-                        // ??? frm: At 100% the last two "kicker" cards (after
-                        //          my changes) did not appear.  I changed
-                        //          the height to be 80% and then the kickers
-                        //          appeared when I scrolled to the end.  I
-                        //          think that for some reason 100% makes
-                        //          the event list even longer than the window
-                        //          which is odd.  I need to grok this before 
-                        //          I show this to anyone...
+  height: 500px;    
   overflow:hidden;
   overflow-y:scroll;
   margin-bottom: 0px;
@@ -335,7 +317,7 @@ html, body, #root, .app {
   .eventCard{
 
     text-decoration: none;
-    color: #232444;
+    color: #232444;          
     position: fixed;
     z-index: 10;
     bottom: 13%;

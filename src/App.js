@@ -106,8 +106,8 @@ function App() {
 
   //Card index utilizes the hoverEvent to highlight the card's respective marker
   useEffect(() => {
-    if(isMobile && events != null){
-      setHoverEvent((('location' in events[cardIndex] && 'location' in events[cardIndex]['location'] && 'latitude' in events[cardIndex]['location']['location']) ? "" + events[cardIndex]['location']['location']['latitude'] + "&" + events[cardIndex]['location']['location']['longitude'] : null));
+    if(isMobile && filteredEvents != null){
+      setHoverEvent((('location' in filteredEvents[cardIndex] && 'location' in filteredEvents[cardIndex]['location'] && 'latitude' in filteredEvents[cardIndex]['location']['location']) ? "" + filteredEvents[cardIndex]['location']['location']['latitude'] + "&" + filteredEvents[cardIndex]['location']['location']['longitude'] : null));
     }
   }, [cardIndex]);
 
@@ -125,7 +125,7 @@ function App() {
           <h3 id="searchCTA">Enter your zipcode to find events near you!</h3>
         </div>
       }
-      {events !== null && isMobile &&
+      {filteredEvents !== null && isMobile &&
         <MobileList events={filteredEvents} updatedHover={(newHover) => setHoverEvent(newHover)} locFilt={locFilt} cardIndex={cardIndex} updateCardIndex={(update) => setCardIndex(update)}/>
       }
       <Map currZip={currZip} events={filteredEvents} hoverMarker={hoverEvent} selectLoc={(newLoc) => setLocFilt(newLoc)} locFilt={locFilt}/>

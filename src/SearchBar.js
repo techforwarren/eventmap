@@ -6,6 +6,7 @@ import locateImage from './img/icon_512x512.png';
 
 
 export function SearchBar(props){
+
   const [input, setInput] = useState(props.currZip || '');
   const[rangeInput, setRangeInput] = useState(props.currRange);
 
