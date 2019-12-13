@@ -14,7 +14,7 @@ ReactGA.pageview(window.location.pathname + window.location.search);
 const queryString = require('query-string');
 
 /*
- * frm: Overview of this app
+ * frm: Overview of the entire app
  *
  * Global state is maintained in this file, App.js.  Other components
  * can update that state (via functions passed to those components), but 
@@ -24,8 +24,8 @@ const queryString = require('query-string');
  * zip code) using routines passed in by App.js - in this case, setCurrZip().
  * The actual persistent global state is maintained in App.js.
  *
- * App.js does the API call to Mobilize to get events that match the search
- * criteria - at the time of this writing (Dec. 2019), the criteria are 
+ * App.js does the API call to Mobilize to get events that match the current
+ * search criteria - at the time of this writing (Dec. 2019), the criteria are 
  * zip code and distance away from that zip code in miles.
  *
  * Client side filtering of that list of events is also done in this 
@@ -93,7 +93,7 @@ function App() {
     }
   }, [currZip, currRange]);
 
-  // frm: Filters the events when 1) new events from the API or new filtering actions by user
+  // frm: Filters the events when there are new events from the API or when user changes filtering criteria
   useEffect(() => {
     let newFilteredEvents = events;
     if (events !== null) {
@@ -111,7 +111,10 @@ function App() {
     }
   }, [cardIndex]);
 
-  console.log("FRM: App.js: Re-Render: current Event Kind is: " + currEventKind);  // ??? frm: debugging - delete!!!
+  // frm: Note that the code now passes {filteredEvents} to other components rather than {events}.
+  //      This shields the rest of the code from having to know and worry about client-side filtering - that
+  //      code just operates on the list of events passed to it.
+  // frm: Note also that we new pass in the {currEventKind} as well as a function to set the value of that variable.
 
   return (
     <div className="app">

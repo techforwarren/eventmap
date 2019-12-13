@@ -13,7 +13,7 @@ export function SearchBar(props){
   const [eventKindInput, setEventKindInput] = useState(props.currEventKind || 'ALLEVENTS');      
    
   // frm: filters what events are displayed according to the date ranges for the events
-  // frm: NYI
+  // frm: NYI - I will implement this once folks are happy with filtering on kind of event
   const [dateRange, setDateRange] = useState({start: "now", end: "now+14"});
 
   function onlySetNumbers(event){
@@ -48,20 +48,6 @@ export function SearchBar(props){
     props.updateRange(rangeInput);  // frm: calls setCurrRange() in App.js triggering a Mobilize API call and  a re-render
     setZip(input);
     // ??? frm: Should I add a call to setEventKind() here?
-    /*
-     * ??? frm: There is a general question here: is React smart 
-     *          enough to avoid making a separate Mobilize API
-     *          call for each of these update...() calls?
-     *
-     *          The other question is when we want the app
-     *          to immediately respond and re-render vs. waiting
-     *          for the user to "submit" their changes.  If the
-     *          API is blindingly fast, and we don't need to
-     *          worry about hitting it too much, then there is
-     *          no harm in hitting for every user change, but
-     *          maybe we should not make an API call for every
-     *          user change...
-     */
   }
 
   function setRange(input){
@@ -80,10 +66,18 @@ export function SearchBar(props){
     History.push(window.location.pathname+'?zip='+input);
   }
 
-      // ??? frm: BUG: For some reason the label for the kindOfEvent select below is not appearing.
-      //               Probably something to do with how much space there is and what has to give
-      //               but I don't grok CSS well enough to know off the top of my head what is 
-      //               going on...
+  /* ??? frm: TODO:
+   *
+   * Someone should help me think about what the right options are below for 
+   * the kinds of events a user can filter on.  I have already removed some
+   * of the kinds of events.  
+   *
+   * Note that the events are not always categorized properly - for instance,
+   * I found a couple of user generated events that were categorized as TRAINING
+   * when they were actually for CANVASS, but I suppose there is nothing to be
+   * done about that.
+   *
+   */
 
   return(
     <div className={(props.events != null ? "searchBar activeList" : "searchBar") + (isMobile ? " mobileSearch" : "")}>

@@ -1,8 +1,8 @@
 .app{
   #map{
     height: 100%;
-    width: 68%;         // frm: I added this line
-    float: right;       // frm: I added this line
+    width: 68%;         // frm: I added this line to make entire map be to the right of the SearchBar
+    float: right;       // frm: I added this line to make entire map be to the right of the SearchBar
     z-index: 9;
   }
 
@@ -71,15 +71,15 @@ html, body, #root, .app {
 }
 
 .searchBar{
-  // padding-top: 2%;           // frm: I commented this out
-  // padding-bottom: 2%;                // frm: I commented this out
+  // padding-top: 2%;           // frm: I commented this out - because map is no longer behind SearchBar
+  // padding-bottom: 2%;        // frm: I commented this out - because map is no longer behind SearchBar
   background-color: #232444;
   //width: 300px;
   width: 32%;
-  height: 100%;         // frm: I added this
+  height: 100%;         // frm: I added this - to make SearchBar use entire height of window
   position: fixed;
-  // left: 2%;          // frm: I commented this out
-  // top: 2%;           // frm: I commented this out
+  // left: 2%;          // frm: I commented this out - because map is no longer behind SearchBar
+  // top: 2%;           // frm: I commented this out - because map is no longer behind SearchBar
   z-index:11;
   // box-shadow: 10px 10px 5px rgba(0, 0, 0, .3);
 

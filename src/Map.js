@@ -160,6 +160,11 @@ export function Map(props){
 
       // zoom to marker bounds, plus padding (percentage)
       map.current.fitBounds(markers.current.getBounds().pad(0.1));  // frm: the original pad amount was 0.5
+                                                                    //      Given my change to make the map
+                                                                    //      not be beneath the SearchBar
+                                                                    //      there was no longer a need for
+                                                                    //      a large pad => better use of 
+                                                                    //      map screen real estate...
     }
   }, [locations, props.hoverMarker, props.locFilt]);
 
@@ -179,7 +184,7 @@ export function Map(props){
          *               But if all of the events are private, then there is no "location" on any of them
          *               and hence dereferencing "location" on any of them will blow up.
          *               
-         *               There is another bug too - namely that the code to set a value for the "first"
+         *               There was another bug too - namely that the code to set a value for the "first"
          *               event with a valid location is an if statment rather than a loop over all of the
          *               events.  I have replaced the if-stmt with a for loop.
          *               

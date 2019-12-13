@@ -75,18 +75,6 @@ export function EventList(props) {
       }
     }
 
-    /*
-     * ??? frm: This code should not be needed anymore now that we filter events in App.js
-     *
-    // frm: Event Kind filter
-    if (props.eventKind !== 'ALLEVENTS') {       // ??? frm: nasty global constant - think about how to avoid this...
-      if ('event_type' in event && event['event_type'] !== props.eventKind) {
-        return null;    // frm: get rid of all events that do not match current event type
-      }
-    }
-     *
-     */
-
     // ??? frm: React is complaining about there not being a unique key.  Here is the warning:
     //              Each child in a list should have a unique "key" prop
     //          I am assuming that it is the <li> list below that should have a key...
@@ -134,7 +122,22 @@ export function EventList(props) {
    *
    */
 
-  // ??? frm: This is a modified version that attempts to put the kicker in as one of the list elements
+  /* ??? frm: HACK - requires work:
+   *
+   * The code below is a modified version that attempts to put the kicker in as one of the list elements
+   * This needs work - the UX goal is to have a kicker at the end of the list of events
+   * that allows the user to either browse online events or to create an event of their own.
+   * When I tweaked the UI so that the map would not be behind the SearchBar (because sometimes
+   * a marker on the map would be hidden by the SearchBar), the kicker did not appear.  I think
+   * the real problem is in CSS - I think for some reason the app thinks that the SearchBar is
+   * taller than the window, but in any event I changed the code to what is below and it now
+   * works - although I have to admit that I do not grok why.
+   *
+   * In short, someone (maybe me) needs to figure out what a good fix is - both from the POV
+   * of the code's robustness and from a UX perspective.
+   *
+   */
+  
   return (
     <ul className="eventList">
       {listEvents}
