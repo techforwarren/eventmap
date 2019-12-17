@@ -6,7 +6,7 @@ import sMark from './img/marker-shadow.png';
 
 export function Map(props){
 
-  const [center, setCenter] = useState([39.8283, -98.5795]);  // frm: center of the USA
+  const [center, setCenter] = useState([39.8283, -98.5795]);  // center of the USA
   const [locations, setLocations] = useState({});
   const [newCenter, setNewCenter] = useState(false);
   const map = useRef();
@@ -159,7 +159,7 @@ export function Map(props){
   		}
 
       // zoom to marker bounds, plus padding (percentage)
-      map.current.fitBounds(markers.current.getBounds().pad(0.5));  
+      map.current.fitBounds(markers.current.getBounds().pad(0.5));
     }
   }, [locations, props.hoverMarker, props.locFilt]);
 
@@ -171,28 +171,6 @@ export function Map(props){
       if(props.events.length > 0){
 
         //Initiates map's focus at the first event (typically the closest to the provided zipcode) with a valid lat & long position
-        /*
-         * frm: BUG FIX: The original code (December 12, 2019) did not account for the possibility that 
-         *               all of the events might be private (and hence none of them would have a location).
-         *               The original code assumed that there was at least one event with a location, and
-         *               so there was no protection around the line that assigned a value to "lat".
-         *               But if all of the events are private, then there is no "location" on any of them
-         *               and hence dereferencing "location" on any of them will blow up.
-         *               
-         *               There was another bug too - namely that the code to set a value for the "first"
-         *               event with a valid location is an if statment rather than a loop over all of the
-         *               events.  I have replaced the if-stmt with a for loop.
-         *               
-         */
-        /*
-         * frm: original code:
-         *
-        let first = 0;
-        if (!('location' in props.events[first]) || !('location' in props.events[first]['location']) || !('latitude' in props.events[first]['location']['location'])) {
-          first++;
-        }
-         *
-         */
 
         // Find out whether there are any events in the list that are not private
         let first = -1;  

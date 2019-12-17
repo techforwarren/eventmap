@@ -79,6 +79,10 @@ export function EventList(props) {
     //              Each child in a list should have a unique "key" prop
     //          I am assuming that it is the <li> list below that should have a key...
     //          However, the issue seems benign - not seeing any crashes or other odd behavior because of it...
+    //          I added a key to the <li> element, but that did not solve the problem.
+    //          Note that you get the warning (in the console) for zip: 02144, but not for zip: 44106 which
+    //          makes me believe the lists are somehow different.  Note also that the event-id keys appear
+    //          to be unique...
 
     return (
       <a href={event['browser_url']}
@@ -89,7 +93,7 @@ export function EventList(props) {
         coord={('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) ? "" + event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'] : ""}
         onMouseEnter={(event) => { props.updatedHover(event['currentTarget'].getAttribute('coord')) }}
         onMouseLeave={(event) => { props.updatedHover(null) }}>
-        <li>
+        <li key={event['id'].toString()}>
           <div>
             <h3>{event['title']}</h3>
             <p> FRM: Kind of Event: {event['event_type']} </p>
@@ -108,9 +112,6 @@ export function EventList(props) {
 
   // frm: At this point listEvents is either null or the HTML for a list of each of the events
 
-  /*
-   * ??? frm: This is the original code that tacked the kicker on as a separate div outside the list of events
-   *
   return (
     <ul className="eventList">{listEvents}
     <div className="kicker">
@@ -119,44 +120,7 @@ export function EventList(props) {
     </div>
     </ul>
   );
-   *
-   */
 
-  /* ??? frm: HACK - requires work:
-   *
-   * The code below is a modified version that attempts to put the kicker in as one of the list elements
-   * This needs work - the UX goal is to have a kicker at the end of the list of events
-   * that allows the user to either browse online events or to create an event of their own.
-   * When I tweaked the UI so that the map would not be behind the SearchBar (because sometimes
-   * a marker on the map would be hidden by the SearchBar), the kicker did not appear.  I think
-   * the real problem is in CSS - I think for some reason the app thinks that the SearchBar is
-   * taller than the window, but in any event I changed the code to what is below and it now
-   * works - although I have to admit that I do not grok why.
-   *
-   * In short, someone (maybe me) needs to figure out what a good fix is - both from the POV
-   * of the code's robustness and from a UX perspective.
-   *
-   */
-  
-  return (
-    <ul className="eventList">
-      {listEvents}
-      <a href="https://events.elizabethwarren.com/?is_virtual=true" className="eventCard">
-        <li>
-          <div>
-            <p><b>Join a virtual event</b> (click here)</p>
-          </div>
-        </li>
-      </a> 
-      <a href="https://events.elizabethwarren.com/event/create/" className="eventCard">
-        <li>
-          <div>
-            <p><b>Or host your own event</b> (click here)</p>
-          </div>
-        </li>
-      </a> 
-    </ul>
-  );
 }
 
 export default EventList;

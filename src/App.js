@@ -14,7 +14,7 @@ ReactGA.pageview(window.location.pathname + window.location.search);
 const queryString = require('query-string');
 
 /*
- * frm: Overview of the entire app
+ * Overview of the entire app
  *
  * Global state is maintained in this file, App.js.  Other components
  * can update that state (via functions passed to those components), but 
@@ -40,15 +40,15 @@ function App() {
   //List of events returned from the Mobilize API
   const [events, setEvents] = useState(null);
 
-  // frm: List of events after client-side filtering
+  // List of events after client-side filtering of the list of events returned from the Mobilize API
   const [filteredEvents, setFilteredEvents] = useState(null);  // frm: globals to keep track of filtered events
 
   // Current range - distance in miles from the target zip code
   const [currRange, setCurrRange] = useState(75);
 
-  // frm: Current kinds of events to display
+  // Current kinds of events to display
   const [currEventKind, setCurrEventKind] = useState('ALLEVENTS');
-  // ??? frm: I don't like using an evil global string literal - but maybe I can keep it inside just this file...
+
 
   //Current zip code search
   const [currZip, setCurrZip] = useState(() => {
@@ -61,8 +61,8 @@ function App() {
   const [hoverEvent, setHoverEvent] = useState(null);
 
   //Current selected location location filter
-  // frm: When set, only events at the single location will be shown
-  // frm: Set by a user clicking on a marker in the map, unset by a user clicking elsewhere on the map
+  //  When set, only events at the single location will be shown
+  //  Set by a user clicking on a marker in the map, unset by a user clicking elsewhere on the map
   const [locFilt, setLocFilt] = useState(null);
 
   //For mobile, the current card
@@ -80,8 +80,6 @@ function App() {
       setLocFilt(null);
       setCardIndex(0);
 
-      console.log("Hitting the Mobilize API again: zipcode: " + currZip + ", and distance: " + currRange);
-
       //Tracks zip input
 
       ReactGA.event({
@@ -93,7 +91,7 @@ function App() {
     }
   }, [currZip, currRange]);
 
-  // frm: Filters the events when there are new events from the API or when user changes filtering criteria
+  // Filters the events when there are new events from the API or when user changes filtering criteria
   useEffect(() => {
     let newFilteredEvents = events;
     if (events !== null) {
@@ -111,10 +109,9 @@ function App() {
     }
   }, [cardIndex]);
 
-  // frm: Note that the code now passes {filteredEvents} to other components rather than {events}.
+  // Note that the code passes {filteredEvents} to other components rather than {events}.
   //      This shields the rest of the code from having to know and worry about client-side filtering - that
   //      code just operates on the list of events passed to it.
-  // frm: Note also that we new pass in the {currEventKind} as well as a function to set the value of that variable.
 
   return (
     <div className="app">

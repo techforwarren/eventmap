@@ -12,10 +12,6 @@ export function SearchBar(props){
 
   // frm: filters what events are displayed according to the kind of event
   const [eventKindInput, setEventKindInput] = useState(props.currEventKind || 'ALLEVENTS');      
-   
-  // frm: filters what events are displayed according to the date ranges for the events
-  // frm: NYI - I will implement this once folks are happy with filtering on kind of event
-  const [dateRange, setDateRange] = useState({start: "now", end: "now+14"});
 
   function onlySetNumbers(event){
     let baseValue = event.target.value;
@@ -46,24 +42,24 @@ export function SearchBar(props){
 
   function onSubmit(event){
     event.preventDefault();
-    props.updateRange(rangeInput);  // frm: calls setCurrRange() in App.js triggering a Mobilize API call and  a re-render
+    props.updateRange(rangeInput);  // calls setCurrRange() in App.js triggering a Mobilize API call and  a re-render
     setZip(input);
     // ??? frm: Should I add a call to setEventKind() here?
   }
 
   function setRange(input){
-    setRangeInput(input);       // frm: updates local global state
-    props.updateRange(input);   // frm: calls setCurrRange() in App.js triggering a Mobilize API call and a re-render
+    setRangeInput(input);       // updates local global state
+    props.updateRange(input);   // calls setCurrRange() in App.js triggering a Mobilize API call and a re-render
   }
 
   function setEventKind(input) {
-    setEventKindInput(input);       // frm: update local global
-    props.updateEventKind(input);   // frm: update App.js global - triggering re-render of list of events
+    setEventKindInput(input);       // update local global
+    props.updateEventKind(input);   // update App.js global - triggering re-render of list of events
   }
 
   function setZip(input) {
-    setInput(input);            // frm: updates local state
-    props.updateZip(input);     // frm: calls setCurrZip() in App.js - triggering a Mobilize API call and a re-render
+    setInput(input);            // updates local state
+    props.updateZip(input);     // calls setCurrZip() in App.js - triggering a Mobilize API call and a re-render
     History.push(window.location.pathname+'?zip='+input);
   }
 
@@ -84,7 +80,7 @@ export function SearchBar(props){
     <div className={(props.events != null ? "searchBar activeList" : "searchBar") + (isMobile ? " mobileSearch" : "")}>
       <div className="userInput">
         <form onSubmit={onSubmit} id="zipForm" data-has-input={!!input.length}>
-          <label for="zipInput">ZIP</label>
+          <label htmlFor="zipInput">ZIP</label>
           <input type="text" id="zipInput" value={input} onInput={onlySetNumbers} required minLength="5" maxLength="5"></input>
           <button id="submitZip" onClick={onSubmit}>GO</button>
         </form>
@@ -126,9 +122,7 @@ export function SearchBar(props){
             </p>
         </div>
 
-
       }
-           `
 
      
       {props.events !== null && !isMobile &&
