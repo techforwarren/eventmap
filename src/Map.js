@@ -223,7 +223,7 @@ export function Map(props){
         }
         else {
             /* 
-             * frm: TODO: After everyone is OK with the changes to account for 
+             * TODO: After everyone is OK with the changes to account for 
              *            a list of events that are all private, this code
              *            should be refactored so that it first checks to 
              *            see if there are any visible events (which involves 

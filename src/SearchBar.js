@@ -63,11 +63,39 @@ export function SearchBar(props){
     History.push(window.location.pathname+'?zip='+input);
   }
 
-  /* ??? frm: TODO:
+  /* TODO: Decide on what kinds of events we should allow users to filter on.
    *
-   * Someone should help me think about what the right options are below for 
-   * the kinds of events a user can filter on.  I have already removed some
-   * of the kinds of events.  
+   * The list below is probably adequate, but it would make sense for some
+   * product minded folks to think about what the right set of events 
+   * should be.
+   *
+   * Here is the list of events from the Mobilize API documentation:
+   *
+   * https://github.com/mobilizeamerica/api#event-object
+   *
+   *    The type of the event, one of: 
+   *        CANVASS, PHONE_BANK, TEXT_BANK, MEETING, COMMUNITY, FUNDRAISER,
+   *        MEET_GREET, HOUSE_PARTY, VOTER_REG, TRAINING, FRIEND_TO_FRIEND_OUTREACH,
+   *        DEBATE_WATCH_PARTY, ADVOCACY_CALL, RALLY, TOWN_HALL, OFFICE_OPENING,
+   *        BARNSTORM, SOLIDARITY_EVENT, COMMUNITY_CANVASS, SIGNATURE_GATHERING, 
+   *        CARPOOL, OTHER. 
+   *    This list may expand.
+   *
+   * The subset of these events that I (Fred Mueller) chose to put in the code are:
+   *
+   *              CANVASS
+   *              PHONE_BANK
+   *              TEXT_BANK
+   *              FUNDRAISER
+   *              MEET_GREET
+   *              HOUSE_PARTY
+   *              TRAINING
+   *              FRIEND_TO_FRIEND_OUTREACH
+   *              DEBATE_WATCH_PARTY
+   *              RALLY
+   *              TOWN_HALL
+   *              COMMUNITY_CANVASS
+   *              CARPOOL
    *
    * Note that the events are not always categorized properly - for instance,
    * I found a couple of user generated events that were categorized as TRAINING

@@ -71,10 +71,10 @@ export function MobileList(props){
   }, [props.locFilt])
 
 
-  // ??? frm: BUG: Although the code in App.js that invokes this component has a guard in it for
-  //               (events !== null), there should be some defensive code here to make sure that
-  //               in fact (props.events !== null).  Not sure what the right thing to do is if
-  //               that happens, but I tripped over it once, so ...
+  if (!props.events) { // MobileList should only be invoked if there are events, but just to be safe...
+    console.warn("MobileList: props.events is null");
+    return;
+  }
 
   let listEvents = {};
   if(props.events.length > 0){
