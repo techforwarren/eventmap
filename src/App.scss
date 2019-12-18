@@ -203,7 +203,9 @@ html, body, #root, .app {
   height:30px;
   line-height:30px;
   text-align: center;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 6px solid #232444;    /* frm: Add 6px at bottom of filtering options w/ same background as zip input area */
+  border-left: 6px solid #232444;      /* frm: Add 6px at left of filtering options w/ same background as zip input area */
+  border-right: 6px solid #232444;     /* frm: Add 6px at right of filtering options w/ same background as zip input area */
 }
 
 .searchRange select{
@@ -228,7 +230,17 @@ html, body, #root, .app {
   height:30px;
   line-height:30px;
   text-align: center;
-  border-bottom: 1px solid #ccc;
+  border-top: 6px solid #232444;        /* frm: add 6px at top of filtering options w/ same background as zip input area */
+  border-left: 6px solid #232444;      /* frm: Add 6px at left of filtering options w/ same background as zip input area */
+  border-right: 6px solid #232444;     /* frm: Add 6px at right of filtering options w/ same background as zip input area */
+}
+
+.kindOfEvent > p {
+    margin: 0;          /* inhibit normal margins - so we can pack stuff together */
+}
+
+.searchRange > p {
+    margin: 0;          /* inhibit normal margins - so we can pack stuff together */
 }
 
 .kindOfEvent select{

@@ -115,6 +115,7 @@ export function SearchBar(props){
         <button id="locateMe" onClick={geolocate}><img src={locateImage} alt="Use my location"></img></button>
       </div>
       
+      { props.events !== null &&
          <div className="kindOfEvent">
            <p> Kind of Event:
              <select value={eventKindInput} onChange={(e) => setEventKind(e.target.value)}>
@@ -135,6 +136,7 @@ export function SearchBar(props){
              </select>
            </p>
          </div>
+      }
 
       { props.events !== null &&
             <div className="searchRange">
@@ -145,7 +147,8 @@ export function SearchBar(props){
                 <option value='20'>20 mi</option>
                 <option value='50'>50 mi</option>
                 <option value='75'>75 mi</option>
-                <option value='120'>120 mi</option>
+                <option value='120'>120 mi&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
+                {/* HACK: padding with spaces so that the visual width of searchRange matches that of kindOfEvent */}
               </select>
             </p>
         </div>
