@@ -9,7 +9,6 @@ export function eventHasValidLocation(event) {
      * has a valid location - meaning that it has a value for latitude.  We assume
      * that if it has a value for latitude, then it also has one for longitude.
      */
-    console.log("eventHasValidLocation called");
     return ('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']);
 }
 
