@@ -3,6 +3,7 @@ import L from 'leaflet';
 import gMark from './img/w-marker-icon-2x.png';
 import hMark from './img/w-marker-icon-2x-highlighted.png';
 import sMark from './img/marker-shadow.png';
+import { eventHasValidLocation } from './Util';
 
 export function Map(props){
 
@@ -42,13 +43,13 @@ export function Map(props){
             
     		  wheelDeltaList.push(Math.abs(delta));
     		  var average = 0;
-    		  for(let i = 0; i< wheelDeltaList.length; i++){  // frm: changed var to let to avoid duplicate def warning
+    		  for(let i = 0; i< wheelDeltaList.length; i++){  
     			  average += wheelDeltaList[i];
     		  }
     		  average = average / wheelDeltaList.length;
 
     		  var diffSquaredTotal= 0;
-    		  for(let i = 0; i < wheelDeltaList.length; i++){  // frm: changed var to let to avoid duplicate def warning
+    		  for(let i = 0; i < wheelDeltaList.length; i++){  
     			  var diff = wheelDeltaList[i] - average;
     			  diffSquaredTotal += Math.pow(diff,2);
     		  }
@@ -175,10 +176,14 @@ export function Map(props){
         // Find out whether there are any events in the list that are not private
         let first = -1;  
         for (let i=0; i<props.events.length; i++) {
-            if (
+            if (eventHasValidLocation(props.events[i])
+              /*
+               *
               ('location' in props.events[i]) && 
               ('location' in props.events[i]['location']) && 
               ('latitude' in props.events[i]['location']['location'])
+               *
+               */
             ) 
             {
               first = i;
@@ -188,8 +193,8 @@ export function Map(props){
 
         if (first !== -1) {  // There is at least one event that is not private (hence visible on map)
 
-            var lat = props.events[first]['location']['location']['latitude'];
-            var long = props.events[first]['location']['location']['longitude'];
+            const lat = props.events[first]['location']['location']['latitude'];
+            const long = props.events[first]['location']['location']['longitude'];
 
             if(center[0] !== lat || center[0] !== long){
               setCenter([lat, long]);
@@ -201,7 +206,7 @@ export function Map(props){
             props.events.forEach(function(event, index) {
 
               //If has longitude and latitute
-              if ('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) {
+              if (eventHasValidLocation(event)) {
 
                 //Creates string key for {places} dictionary
                 let str = event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'];

@@ -41,7 +41,7 @@ function App() {
   const [events, setEvents] = useState(null);
 
   // List of events after client-side filtering of the list of events returned from the Mobilize API
-  const [filteredEvents, setFilteredEvents] = useState(null);  // frm: globals to keep track of filtered events
+  const [filteredEvents, setFilteredEvents] = useState(null);  
 
   // Current range - distance in miles from the target zip code
   const [currRange, setCurrRange] = useState(75);
@@ -93,14 +93,15 @@ function App() {
 
   // Filters the events when there are new events from the API or when user changes filtering criteria
   useEffect(() => {
-    let newFilteredEvents = events;
-    if (events !== null) {
-        newFilteredEvents = events.filter((event) => {
-          return ((currEventKind === 'ALLEVENTS') || (currEventKind === event['event_type']));
-        });
-    }
-    setFilteredEvents(newFilteredEvents);
-  }, [events, currEventKind]);
+     if (!events){
+         return setFilteredEvents(null);
+     }
+
+     setFilteredEvents(events.filter((event) => {
+         return ((currEventKind === 'ALLEVENTS') || (currEventKind === event['event_type']));
+     }));
+   }, [events, currEventKind]);
+   
 
   //Card index utilizes the hoverEvent to highlight the card's respective marker
   useEffect(() => {

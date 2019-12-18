@@ -2,7 +2,9 @@ import React from 'react';
 import moment from 'moment';
 import groupBy from 'lodash.groupby';
 import sortBy from 'lodash.sortby';
+import { eventHasValidLocation } from './Util';
 require('twix');
+
 
 const MAX_DAYS_IN_LIST = 4;
 
@@ -48,6 +50,17 @@ function EventTimes(props) {
   }
 }
 
+/*
+ *
+ * ??? frm: DELETE this once I have verified that Util().eventHasValidLocation() works
+ *
+function eventHasValidLocation(event) {
+  // Utility function to avoid repeating this logic...
+  return ('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']);
+}
+ *
+ */
+
 export function EventList(props) {
   let listEvents;
   if(props.events.length > 0){
@@ -66,7 +79,7 @@ export function EventList(props) {
 
     //Location filter
     if(props.locFilt != null){
-      if('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']){
+      if(eventHasValidLocation(event)) {
         if(event['location']['location']['latitude'] !== props.locFilt['lat'] || event['location']['location']['longitude'] !== props.locFilt['lng']){
           return(null);
         }
@@ -90,7 +103,10 @@ export function EventList(props) {
         target="_blank"
         rel="noopener"
         key={event['id']}
-        coord={('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) ? "" + event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'] : ""}
+        coord={
+          eventHasValidLocation(event) ?
+          "" + event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'] : 
+          ""}
         onMouseEnter={(event) => { props.updatedHover(event['currentTarget'].getAttribute('coord')) }}
         onMouseLeave={(event) => { props.updatedHover(null) }}>
         <li key={event['id'].toString()}>

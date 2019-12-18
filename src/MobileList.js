@@ -123,7 +123,6 @@ export function MobileList(props){
         </div>
       </div>
     </div>
-      
   }
 
   //Conditional rendering for buttons, depending on position in list
