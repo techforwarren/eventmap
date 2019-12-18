@@ -58,6 +58,7 @@ export function MobileList(props){
 
       for(let x = 0; x < props.events.length; x++) {
         let event = props.events[x];
+        // ??? frm: use eventHasValidLocation here...
         if(!('location' in props.events[props.cardIndex]) || !('location' in event['location']) || props.events[props.cardIndex]['location']['location']['latitude'] !== props.locFilt['lat'] || props.events[props.cardIndex]['location']['location']['longitude'] !== props.locFilt['lng']){
           if('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']){
             if(event['location']['location']['latitude'] === props.locFilt['lat'] && event['location']['location']['longitude'] === props.locFilt['lng']){

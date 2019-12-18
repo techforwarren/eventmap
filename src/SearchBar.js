@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import {isMobile} from 'react-device-detect';
+// frm: testing getting deviceIsMobile passed in via props:            import {isMobile} from 'react-device-detect';
 import EventList from './EventList';
 import History from './History';
 import locateImage from './img/icon_512x512.png';
@@ -105,7 +105,7 @@ export function SearchBar(props){
    */
 
   return(
-    <div className={(props.events != null ? "searchBar activeList" : "searchBar") + (isMobile ? " mobileSearch" : "")}>
+    <div className={(props.events != null ? "searchBar activeList" : "searchBar") + (props.deviceIsMobile ? " mobileSearch" : "")}>
       <div className="userInput">
         <form onSubmit={onSubmit} id="zipForm" data-has-input={!!input.length}>
           <label htmlFor="zipInput">ZIP</label>
@@ -156,7 +156,7 @@ export function SearchBar(props){
       }
 
      
-      {props.events !== null && !isMobile &&
+      {props.events !== null && !props.deviceIsMobile &&
         <EventList events={props.events} locFilt={props.locFilt} eventKind={eventKindInput} updatedHover={(item) => props.updatedHover(item)}/>
       }
     </div>

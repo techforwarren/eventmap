@@ -35,6 +35,8 @@ const queryString = require('query-string');
  * 
  */
 
+const deviceIsMobile = isMobile;        // HACK to allow easy mocking of isMobile for testing/debugging
+
 function App() {
 
   //List of events returned from the Mobilize API
@@ -105,7 +107,7 @@ function App() {
 
   //Card index utilizes the hoverEvent to highlight the card's respective marker
   useEffect(() => {
-    if(isMobile && filteredEvents != null){
+    if(deviceIsMobile && filteredEvents != null){
       setHoverEvent((('location' in filteredEvents[cardIndex] && 'location' in filteredEvents[cardIndex]['location'] && 'latitude' in filteredEvents[cardIndex]['location']['location']) ? "" + filteredEvents[cardIndex]['location']['location']['latitude'] + "&" + filteredEvents[cardIndex]['location']['location']['longitude'] : null));
     }
   }, [cardIndex]);
@@ -116,14 +118,14 @@ function App() {
 
   return (
     <div className="app">
-      <SearchBar currZip={currZip} currRange={currRange} currEventKind={currEventKind} updateZip={(newZip) => setCurrZip(newZip)} updateRange={(newRange) => setCurrRange(newRange)} updateEventKind={(newEventKind) => setCurrEventKind(newEventKind)} events={filteredEvents} updatedHover={(newHover) => setHoverEvent(newHover)} locFilt={locFilt}/>
+      <SearchBar currZip={currZip} currRange={currRange} currEventKind={currEventKind} updateZip={(newZip) => setCurrZip(newZip)} updateRange={(newRange) => setCurrRange(newRange)} updateEventKind={(newEventKind) => setCurrEventKind(newEventKind)} events={filteredEvents} updatedHover={(newHover) => setHoverEvent(newHover)} locFilt={locFilt} deviceIsMobile={deviceIsMobile}/>
       {events === null && currZip == null &&
         <div id="startLoad">
           <h1 id="firstLine">SHE HAS</h1><h1 id="secondLine">EVENTS</h1><h1 id="thirdLine">FOR THAT <img src={gMark} alt=""></img></h1>
           <h3 id="searchCTA">Enter your zipcode to find events near you!</h3>
         </div>
       }
-      {filteredEvents !== null && isMobile &&
+      {filteredEvents !== null && deviceIsMobile &&
         <MobileList events={filteredEvents} updatedHover={(newHover) => setHoverEvent(newHover)} locFilt={locFilt} cardIndex={cardIndex} updateCardIndex={(update) => setCardIndex(update)}/>
       }
       <Map currZip={currZip} events={filteredEvents} hoverMarker={hoverEvent} selectLoc={(newLoc) => setLocFilt(newLoc)} locFilt={locFilt}/>
