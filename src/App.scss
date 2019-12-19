@@ -69,8 +69,6 @@ html, body, #root, .app {
 }
 
 .searchBar{
-  padding-top: 2%;
-  padding-bottom: 2%;
   background-color: #232444;
   //width: 300px;
   width: 32%;
@@ -87,8 +85,6 @@ html, body, #root, .app {
   top: 0;
   left: 0;
   box-shadow: 0px 5px 5px rgba(0, 0, 0, .3);
-  padding-top: 4%;
-  padding-bottom: 4%;
   touch-action: manipulation;
 
   #zipForm{
@@ -104,8 +100,14 @@ html, body, #root, .app {
     width: 80%;
   }
   #locateMe {
-    width: 40px !important;
+    width: 25% !important;
   }
+
+  .kindOfEvent, .searchRange{
+    padding-top: 1%;
+    padding-bottom: 1%;
+  }
+
 }
 
 .activeList{
@@ -119,6 +121,8 @@ html, body, #root, .app {
   justify-content: center;
   padding-left: 5%;
   padding-right: 7%;
+  padding-top: 5%;
+  padding-bottom: 5%;
 
   #zipForm{
     display: flex;
@@ -152,7 +156,7 @@ html, body, #root, .app {
     border-bottom: 1px solid white;
     z-index:10;
   }
-  
+
   #rangeInput{
     height: 30%;
     min-width:105px;
@@ -197,6 +201,12 @@ html, body, #root, .app {
 
 }
 
+.userOptions{
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #f5f5f5;
+}
+
 .searchRange{
   font-size: 16px;
   background-color: #f5f5f5;
@@ -204,9 +214,6 @@ html, body, #root, .app {
   line-height:30px;
   text-align: left;
   padding-left: 5px;
-  border-bottom: 6px solid #232444;    /* frm: Add 6px at bottom of filtering options w/ same background as zip input area */
-  border-left: 6px solid #232444;      /* frm: Add 6px at left of filtering options w/ same background as zip input area */
-  border-right: 6px solid #232444;     /* frm: Add 6px at right of filtering options w/ same background as zip input area */
 }
 
 .searchRange select{
@@ -222,7 +229,7 @@ html, body, #root, .app {
   background-position: calc(100% - 8px) 85%;
   background-size: 12px 12px;
   background-repeat: no-repeat;
-    
+
 }
 
 .kindOfEvent {
@@ -232,9 +239,6 @@ html, body, #root, .app {
   line-height:30px;
   text-align: left;
   padding-left: 5px;
-  border-top: 6px solid #232444;        /* frm: add 6px at top of filtering options w/ same background as zip input area */
-  border-left: 6px solid #232444;      /* frm: Add 6px at left of filtering options w/ same background as zip input area */
-  border-right: 6px solid #232444;     /* frm: Add 6px at right of filtering options w/ same background as zip input area */
 }
 
 .kindOfEvent > p {
@@ -258,7 +262,7 @@ html, body, #root, .app {
   background-position: calc(100% - 8px) 85%;
   background-size: 12px 12px;
   background-repeat: no-repeat;
-    
+
 }
 
 
@@ -344,7 +348,8 @@ html, body, #root, .app {
     border: 1px solid #232444;
 
     h3{
-      margin: 10px;  /* frm: smaller for mobile to conserve whitespace */
+      margin-top: 10px;  /* frm: smaller for mobile to conserve whitespace */
+      margin-bottom: 10px;
       text-transform: uppercase;
     }
 

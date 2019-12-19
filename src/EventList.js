@@ -105,14 +105,13 @@ export function EventList(props) {
         key={event['id']}
         coord={
           eventHasValidLocation(event) ?
-          "" + event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'] : 
+          "" + event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'] :
           ""}
         onMouseEnter={(event) => { props.updatedHover(event['currentTarget'].getAttribute('coord')) }}
         onMouseLeave={(event) => { props.updatedHover(null) }}>
         <li key={event['id'].toString()}>
           <div>
             <h3>{event['title']}</h3>
-            <p> FRM: Kind of Event: {event['event_type']} </p>
             <p><strong>{event['location']['venue']}</strong> in <strong>{event['location']['locality']}</strong></p>
             <EventTimes rawTimes={rawTimes} />
             <p className="eventRSVP">Click to RSVP</p>
