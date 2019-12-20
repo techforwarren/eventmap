@@ -6,6 +6,7 @@ import Map from './Map';
 import MobileList from './MobileList';
 import './App.scss';
 import gMark from './img/w-marker-icon-2x.png';
+import { eventHasValidLocation } from './Util';
 
 import ReactGA from 'react-ga';
 ReactGA.initialize('UA-149839620-1');
@@ -35,7 +36,8 @@ const queryString = require('query-string');
  * 
  */
 
-const deviceIsMobile = isMobile;        // HACK to allow easy mocking of isMobile for testing/debugging
+// const deviceIsMobile = isMobile;        // HACK to allow easy mocking of isMobile for testing/debugging
+const deviceIsMobile = true;        // HACK to allow easy mocking of isMobile for testing/debugging
 
 function App() {
 
@@ -105,10 +107,14 @@ function App() {
    }, [events, currEventKind]);
    
 
-  //Card index utilizes the hoverEvent to highlight the card's respective marker
+  // If the cardIndex changes, reset the event whose marker is highlighted, by calling setHoverEvent()
   useEffect(() => {
-    if(deviceIsMobile && filteredEvents != null){
-      setHoverEvent((('location' in filteredEvents[cardIndex] && 'location' in filteredEvents[cardIndex]['location'] && 'latitude' in filteredEvents[cardIndex]['location']['location']) ? "" + filteredEvents[cardIndex]['location']['location']['latitude'] + "&" + filteredEvents[cardIndex]['location']['location']['longitude'] : null));
+    if (deviceIsMobile && filteredEvents != null) {
+      setHoverEvent(
+        eventHasValidLocation(filteredEvents[cardIndex]) 
+        ?  "" + filteredEvents[cardIndex]['location']['location']['latitude'] 
+              + "&" + filteredEvents[cardIndex]['location']['location']['longitude'] 
+        : null);
     }
   }, [cardIndex]);
 
