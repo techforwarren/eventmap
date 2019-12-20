@@ -36,8 +36,8 @@ const queryString = require('query-string');
  * 
  */
 
-// const deviceIsMobile = isMobile;        // HACK to allow easy mocking of isMobile for testing/debugging
-const deviceIsMobile = true;        // HACK to allow easy mocking of isMobile for testing/debugging
+const deviceIsMobile = isMobile;        // HACK to allow easy mocking of isMobile for testing/debugging
+// const deviceIsMobile = true;        // uncomment this line to force app to render as if on a mobile device
 
 function App() {
 
