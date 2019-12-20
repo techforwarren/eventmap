@@ -13,6 +13,9 @@ ReactGA.pageview(window.location.pathname + window.location.search);
 
 const queryString = require('query-string');
 
+const deviceIsMobile = isMobile;        // HACK to allow easy mocking of isMobile for testing/debugging
+// const deviceIsMobile = true;        // uncomment this line to force app to render as if on a mobile device
+
 function App() {
   //List of events
   const [events, setEvents] = useState(null);
@@ -56,15 +59,12 @@ function App() {
     }
   }, [currZip, currRange]);
 
-  //Card index utilizes the hoverEvent to highlight the card's respective marker
+  // If the cardIndex changes, reset the event whose marker is highlighted, by calling setHoverEvent()
   useEffect(() => {
-    if(isMobile && events != null){
+    if(deviceIsMobile && events != null){
       setHoverEvent((('location' in events[cardIndex] && 'location' in events[cardIndex]['location'] && 'latitude' in events[cardIndex]['location']['location']) ? "" + events[cardIndex]['location']['location']['latitude'] + "&" + events[cardIndex]['location']['location']['longitude'] : null));
     }
   }, [cardIndex]);
-
-
-
 
   return (
     <div className="app">

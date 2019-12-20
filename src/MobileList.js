@@ -50,6 +50,16 @@ function EventTimes(props) {
 
 export function MobileList(props){
 
+
+/*
+ * ORIGINAL CODE - I am leaving this in because the logic is tangled enough that I want to 
+ *                 make sure that I am not inadvertently leaving something important out.
+ *
+ *                 When I have tested the new code, this should be deleted.
+ *
+ * 
+
+   //Mobile's location filter doesn't filter but moves the currentIndex to the location's first event
   //Mobile's location filter doesn't filter but moves the currentIndex to the location's first event
   useEffect(() => {
 
@@ -65,6 +75,116 @@ export function MobileList(props){
               x = props.events.length;
             }
           }
+        }
+      }
+    }
+  }, [props.locFilt])
+ 
+ *
+ *
+ *
+ * END OF ORIGINAL CODE
+ *
+ */
+
+  //Mobile's location filter doesn't filter but moves the currentIndex to the location's first event
+  useEffect(() => {
+
+    /*
+     * If the location filter (locFilt) has changed then reset the cardIndex global.
+     *
+     * The location filter changes when the user clicks on a marker on the map.  In this case we
+     * set the cardIndex to the first event in the list of events that has the same lat/long
+     * as the event the user clicked on (the click stores that event's lat/long in locFilt).
+     *
+     */
+
+    /*
+     * Implementation note (12/19/2019): I changed the logic - hopefully I improved it... (Fred Mueller)
+     *
+     * The logic before the changes I made today (pretty-printed and with comments) follows.
+
+        if
+          (   !('location' in props.events[props.cardIndex])                                                    // does nothing (1)
+           || !('location' in event['location'])                                                                // does nothing (2)
+           || props.events[props.cardIndex]['location']['location']['latitude'] !== props.locFilt['lat']        // lat/long differs
+           || props.events[props.cardIndex]['location']['location']['longitude'] !== props.locFilt['lng']
+          )
+        {
+          if('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location'])
+          {
+            if
+              (   event['location']['location']['latitude']  === props.locFilt['lat'] 
+               && event['location']['location']['longitude'] === props.locFilt['lng'])
+            {
+              props.updateCardIndex(x);         // set cardIndex to first event that matches lat/long
+              x = props.events.length;
+            }
+          }
+        }
+
+     * 
+     * The line labeled "does nothing (1)" prevents this code from doing anything if the event identifiied by 
+     * the current cardIndex does not have a valid location.  This seems clearly wrong - we WANT the event 
+     * identified by the current cardIndex to have a valid location - it would be a bug if it did not have
+     * a valid location.  I have checked the code and it seems to me that the code ensures that the cardIndex
+     * always points to an event with a valid location, so this is benign, but also needless.  
+     *
+     * What "does nothing (1)" appears to be doing is acting as a guard for the following lines that extract
+     * the lat/long from the event identified by the cardIndex.
+     *
+     * The line labeled "does nothing (2)" prevents the code from doing anything if the next event in the 
+     * loop does not have a valid location.  However, this same condition is checked in the if-stmt below,
+     * so the check for "does nothing (2)" is at best not necessary (but it is also not a complete check
+     * because it does not check that there is a valid lat/long).  It also does not act as a guard for
+     * anything later in the if-stmt condition.  Note that the lack of a full check for a lat/long ended
+     * up being a crash bug - see the note at the end of this long comment below.
+     * 
+     * The line labeled "lat/long differs" (and the next line) prevent the code from doing anything if
+     * the event currently identified by cardIndex has the same lat/long as the new location filter.
+     * This could only happen if the user clicked on the map on the same marker.  This would be an odd
+     * thing for the user to do, but it is possible - the question is what the code should do in this
+     * case.  The original/existing code did not reset the cardIndex in this case, which means that 
+     * the card displayed to the user would not change (and the effect of next/previous buttons would
+     * also not change).  Stated differently, the original/existing code would make the user's click
+     * be a no-op.  I intend to simplify the logic by removing this criteria with the change in 
+     * behavior being that if a user clicks on the same marker, the cardIndex will be reset to the
+     * first event at that location.  I don't think any users will notice the difference, but I would
+     * argue that the new behavior is better - the click actually does something and it always does
+     * the same thing, namely resetting to the first event at that marker.
+     *
+     * All of this boils down to me removing this entire condition.  The new code will just validate
+     * that the new locFilt has valid lat/long and then reset the cardIndex to the first event in
+     * the list that matches that lat/long.
+     * 
+     * Lastly, there was a bug in the code that caused a crash when the event identified by the current
+     * cardIndex was private.  This can happen when you use the next and previous buttons to go through
+     * the list of events (including both those that are private and those that are not).  If you 
+     * happen to be looking at a private event (cardIndex identifying a private event) then if you
+     * click on another marker, the code will try to access the lat/long of the existing event
+     * and blow up when it realizes there isn't a lat/long.  The changes to the code above fix
+     * that because the new code doesn't care what the existing cardIndex points at - it always
+     * just resets the cardIndex to the newly clicked on event (which must have a lat/long because
+     * in order to be clickable it is on the map, and it cannot be on the map without a lat/long).
+     *
+     */
+
+    if (props.locFilt !== null) {
+
+      let cardIndexEvent = props.events[props.cardIndex];  // the event that the cardIndex currently points to
+
+      // Reset the cardIndex to the first event that matches the location of the locFilt location
+      for(let x = 0; x < props.events.length; x++) {
+        let event = props.events[x];
+
+        if (
+          ('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) && 
+            (event['location']['location']['latitude'] === props.locFilt['lat'] || 
+             event['location']['location']['longitude'] === props.locFilt['lng']))
+        {
+          // We have found the first event in the list that has the sae lat/long as the new location filter
+          props.updateCardIndex(x);         // set the cardIndex to the index of the matching event
+          x = props.events.length;          // fast forward to exit the loop
         }
       }
     }
