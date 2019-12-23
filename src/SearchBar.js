@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// import {isMobile} from 'react-device-detect';  // commented out because this is now passed in via props.deviceIsMobile
 import EventList from './EventList';
 import History from './History';
 import locateImage from './img/icon_512x512.png';
