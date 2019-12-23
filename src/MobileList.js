@@ -64,8 +64,6 @@ export function MobileList(props){
 
     if (props.locFilt !== null) {
 
-      let cardIndexEvent = props.events[props.cardIndex];  // the event that the cardIndex currently points to
-
       // Reset the cardIndex to the first event that matches the location of the locFilt location
       for(let x = 0; x < props.events.length; x++) {
         let event = props.events[x];
