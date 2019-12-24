@@ -11,7 +11,7 @@ export function SearchBar(props){
   const[rangeInput, setRangeInput] = useState(props.currRange);
 
   // frm: filters what events are displayed according to the kind of event
-  const [eventKindInput, setEventKindInput] = useState(props.currEventKind || 'ALLEVENTS');      
+  const [eventKindInput, setEventKindInput] = useState(props.currEventKind || 'ALLEVENTS');
 
   function onlySetNumbers(event){
     let baseValue = event.target.value;
@@ -66,19 +66,19 @@ export function SearchBar(props){
   /* TODO: Decide on what kinds of events we should allow users to filter on.
    *
    * The list below is probably adequate, but it would make sense for some
-   * product minded folks to think about what the right set of events 
+   * product minded folks to think about what the right set of events
    * should be.
    *
    * Here is the list of events from the Mobilize API documentation:
    *
    * https://github.com/mobilizeamerica/api#event-object
    *
-   *    The type of the event, one of: 
+   *    The type of the event, one of:
    *        CANVASS, PHONE_BANK, TEXT_BANK, MEETING, COMMUNITY, FUNDRAISER,
    *        MEET_GREET, HOUSE_PARTY, VOTER_REG, TRAINING, FRIEND_TO_FRIEND_OUTREACH,
    *        DEBATE_WATCH_PARTY, ADVOCACY_CALL, RALLY, TOWN_HALL, OFFICE_OPENING,
-   *        BARNSTORM, SOLIDARITY_EVENT, COMMUNITY_CANVASS, SIGNATURE_GATHERING, 
-   *        CARPOOL, OTHER. 
+   *        BARNSTORM, SOLIDARITY_EVENT, COMMUNITY_CANVASS, SIGNATURE_GATHERING,
+   *        CARPOOL, OTHER.
    *    This list may expand.
    *
    * The subset of these events that I (Fred Mueller) chose to put in the code are:
@@ -114,10 +114,13 @@ export function SearchBar(props){
         </form>
         <button id="locateMe" onClick={geolocate}><img src={locateImage} alt="Use my location"></img></button>
       </div>
-      
+
+
+
       { props.events !== null &&
-         <div className="kindOfEvent">
-           <p> Kind of Event:
+
+         <div className="userOptions">
+           <div className="kindOfEvent">
              <select value={eventKindInput} onChange={(e) => setEventKind(e.target.value)}>
                <option value='ALLEVENTS'>All Events</option>
                <option value='CANVASS'>Canvass</option>
@@ -134,28 +137,23 @@ export function SearchBar(props){
                <option value='COMMUNITY_CANVASS'>Community Canvass</option>
                <option value='CARPOOL'>Car Pool</option>
              </select>
-           </p>
+           </div>
+           <div className="searchRange">
+             <select value={rangeInput} onChange={(event) => setRange(event.target.value)}>
+               <option value='5'>5 miles</option>
+               <option value='10'>10 miles</option>
+               <option value='20'>20 miles</option>
+               <option value='50'>50 miles</option>
+               <option value='75'>75 miles</option>
+               <option value='120'>120 miles&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
+               {/* HACK: padding with spaces so that the visual width of searchRange matches that of kindOfEvent */}
+             </select>
+           </div>
          </div>
       }
 
-      { props.events !== null &&
-            <div className="searchRange">
-            <p>Showing events within
-              <select value={rangeInput} onChange={(event) => setRange(event.target.value)}>
-                <option value='5'>5 mi</option>
-                <option value='10'>10 mi</option>
-                <option value='20'>20 mi</option>
-                <option value='50'>50 mi</option>
-                <option value='75'>75 mi</option>
-                <option value='120'>120 mi&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</option>
-                {/* HACK: padding with spaces so that the visual width of searchRange matches that of kindOfEvent */}
-              </select>
-            </p>
-        </div>
 
-      }
 
-     
       {props.events !== null && !props.deviceIsMobile &&
         <EventList events={props.events} locFilt={props.locFilt} eventKind={eventKindInput} updatedHover={(item) => props.updatedHover(item)}/>
       }
