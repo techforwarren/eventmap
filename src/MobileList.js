@@ -53,23 +53,33 @@ export function MobileList(props){
   //Mobile's location filter doesn't filter but moves the currentIndex to the location's first event
   useEffect(() => {
 
-    //Location filter
-    if(props.locFilt != null){
+    /*
+     * If the location filter (locFilt) has changed then reset the cardIndex global.
+     *
+     * The location filter changes when the user clicks on a marker on the map.  In this case we
+     * set the cardIndex to the first event in the list of events that has the same lat/long
+     * as the event the user clicked on (the click stores that event's lat/long in locFilt).
+     *
+     */
 
+    if (props.locFilt !== null) {
+
+      // Reset the cardIndex to the first event that matches the location of the locFilt location
       for(let x = 0; x < props.events.length; x++) {
         let event = props.events[x];
-        if(!('location' in props.events[props.cardIndex]) || !('location' in event['location']) || props.events[props.cardIndex]['location']['location']['latitude'] !== props.locFilt['lat'] || props.events[props.cardIndex]['location']['location']['longitude'] !== props.locFilt['lng']){
-          if('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']){
-            if(event['location']['location']['latitude'] === props.locFilt['lat'] && event['location']['location']['longitude'] === props.locFilt['lng']){
-              props.updateCardIndex(x);
-              x = props.events.length;
-            }
-          }
+
+        if (
+          ('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) && 
+            (event['location']['location']['latitude'] === props.locFilt['lat'] || 
+             event['location']['location']['longitude'] === props.locFilt['lng']))
+        {
+          // We have found the first event in the list that has the sae lat/long as the new location filter
+          props.updateCardIndex(x);         // set the cardIndex to the index of the matching event
+          x = props.events.length;          // fast forward to exit the loop
         }
       }
     }
   }, [props.locFilt])
-
 
   let listEvents = {};
   if(props.events.length > 0){
