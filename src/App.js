@@ -37,7 +37,6 @@ const queryString = require('query-string');
  */
 
 const deviceIsMobile = isMobile;        // HACK to allow easy mocking of isMobile for testing/debugging
-// const deviceIsMobile = true;        // uncomment this line to force app to render as if on a mobile device
 
 function App() {
 
@@ -112,8 +111,8 @@ function App() {
     if (deviceIsMobile && filteredEvents != null) {
       setHoverEvent(
         eventHasValidLocation(filteredEvents[cardIndex]) 
-        ?  "" + filteredEvents[cardIndex]['location']['location']['latitude'] 
-              + "&" + filteredEvents[cardIndex]['location']['location']['longitude'] 
+        ? "" + filteredEvents[cardIndex]['location']['location']['latitude'] 
+             + "&" + filteredEvents[cardIndex]['location']['location']['longitude'] 
         : null);
     }
   }, [cardIndex]);

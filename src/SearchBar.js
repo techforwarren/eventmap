@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// frm: testing getting deviceIsMobile passed in via props:            import {isMobile} from 'react-device-detect';
 import EventList from './EventList';
 import History from './History';
 import locateImage from './img/icon_512x512.png';
@@ -10,7 +9,7 @@ export function SearchBar(props){
   const [input, setInput] = useState(props.currZip || '');
   const[rangeInput, setRangeInput] = useState(props.currRange);
 
-  // frm: filters what events are displayed according to the kind of event
+  // filters what events are displayed according to the kind of event
   const [eventKindInput, setEventKindInput] = useState(props.currEventKind || 'ALLEVENTS');      
 
   function onlySetNumbers(event){
