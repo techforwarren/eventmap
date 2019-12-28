@@ -150,9 +150,6 @@ export function SearchBar(props){
            </div>
          </div>
       }
-
-
-
       {props.events !== null && !props.deviceIsMobile &&
         <EventList events={props.events} locFilt={props.locFilt} eventKind={eventKindInput} updatedHover={(item) => props.updatedHover(item)}/>
       }
