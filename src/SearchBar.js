@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-// frm: testing getting deviceIsMobile passed in via props:            import {isMobile} from 'react-device-detect';
 import EventList from './EventList';
 import History from './History';
 import locateImage from './img/icon_512x512.png';
@@ -152,10 +151,9 @@ export function SearchBar(props){
          </div>
       }
 
-
-
+     
       {props.events !== null && !props.deviceIsMobile &&
-        <EventList events={props.events} locFilt={props.locFilt} eventKind={eventKindInput} updatedHover={(item) => props.updatedHover(item)}/>
+        <EventList events={props.events} locFilt={props.locFilt} updatedHover={(item) => props.updatedHover(item)}/>
       }
     </div>
   );
