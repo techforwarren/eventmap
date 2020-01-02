@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import moment from 'moment';
 import groupBy from 'lodash.groupby';
 import sortBy from 'lodash.sortby';
+import { eventHasValidLocation } from './Util';
 require('twix');
 
 const MAX_DAYS_IN_LIST = 1;
@@ -68,8 +69,7 @@ export function MobileList(props){
       for(let x = 0; x < props.events.length; x++) {
         let event = props.events[x];
 
-        if (
-          ('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) && 
+        if (eventHasValidLocation(event) && 
             (event['location']['location']['latitude'] === props.locFilt['lat'] || 
              event['location']['location']['longitude'] === props.locFilt['lng']))
         {
@@ -80,6 +80,11 @@ export function MobileList(props){
       }
     }
   }, [props.locFilt])
+
+  if (!props.events) { // MobileList should only be invoked if there are events, but just to be safe...
+    console.warn("MobileList: props.events is null");
+    return;
+  }
 
   let listEvents = {};
   if(props.events.length > 0){
@@ -128,7 +133,6 @@ export function MobileList(props){
         </div>
       </div>
     </div>
-      
   }
 
   //Conditional rendering for buttons, depending on position in list

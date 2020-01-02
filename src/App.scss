@@ -69,8 +69,6 @@ html, body, #root, .app {
 }
 
 .searchBar{
-  padding-top: 2%;
-  padding-bottom: 2%;
   background-color: #232444;
   //width: 300px;
   width: 32%;
@@ -87,8 +85,6 @@ html, body, #root, .app {
   top: 0;
   left: 0;
   box-shadow: 0px 5px 5px rgba(0, 0, 0, .3);
-  padding-top: 4%;
-  padding-bottom: 4%;
   touch-action: manipulation;
 
   #zipForm{
@@ -104,8 +100,14 @@ html, body, #root, .app {
     width: 80%;
   }
   #locateMe {
-    width: 40px !important;
+    width: 25% !important;
   }
+
+  .kindOfEvent, .searchRange{
+    padding-top: 1%;
+    padding-bottom: 1%;
+  }
+
 }
 
 .activeList{
@@ -119,6 +121,8 @@ html, body, #root, .app {
   justify-content: center;
   padding-left: 5%;
   padding-right: 7%;
+  padding-top: 5%;
+  padding-bottom: 5%;
 
   #zipForm{
     display: flex;
@@ -152,7 +156,7 @@ html, body, #root, .app {
     border-bottom: 1px solid white;
     z-index:10;
   }
-  
+
   #rangeInput{
     height: 30%;
     min-width:105px;
@@ -197,13 +201,19 @@ html, body, #root, .app {
 
 }
 
+.userOptions{
+  display: flex;
+  flex-wrap: wrap;
+  background-color: #f5f5f5;
+}
+
 .searchRange{
   font-size: 16px;
   background-color: #f5f5f5;
   height:30px;
   line-height:30px;
-  text-align: center;
-  border-bottom: 1px solid #ccc;
+  text-align: left;
+  padding-left: 5px;
 }
 
 .searchRange select{
@@ -219,8 +229,43 @@ html, body, #root, .app {
   background-position: calc(100% - 8px) 85%;
   background-size: 12px 12px;
   background-repeat: no-repeat;
-    
+
 }
+
+.kindOfEvent {
+  font-size: 16px;
+  background-color: #f5f5f5;
+  height:30px;
+  line-height:30px;
+  text-align: left;
+  padding-left: 5px;
+}
+
+.kindOfEvent > p {
+    margin: 0;          /* inhibit normal margins - so we can pack stuff together */
+}
+
+.searchRange > p {
+    margin: 0;          /* inhibit normal margins - so we can pack stuff together */
+}
+
+.kindOfEvent select{
+  background: none;
+  font-size: 16px;
+  background-color: #f5f5f5;
+  border: none;
+  padding: 0px 20px 0px 5px;
+  appearance: none;
+  -moz-appearance: none;
+  -webkit-appearance: none;
+  background-image: url(./downArrow.svg);
+  background-position: calc(100% - 8px) 85%;
+  background-size: 12px 12px;
+  background-repeat: no-repeat;
+
+}
+
+
 
 .eventList{
   background-color: white;
@@ -285,7 +330,7 @@ html, body, #root, .app {
 
 .mobileList{
   margin: none;
-  font-size:calc(12px + 1vw);
+  font-size:calc(10px + 1vw);   /* frm: changed from 12px to 10px to conserve whitespace */
   touch-action: manipulation;
   .eventCard{
 
@@ -293,26 +338,33 @@ html, body, #root, .app {
     color: #232444;
     position: fixed;
     z-index: 10;
-    bottom: 13%;
+    bottom: 10%;        /* changed from 13% to 10% */
     background-color: white;
     width: 90%;
     left: 5%;
     max-height: 30vh;
-    min-height: 20vh;
+    min-height: 10vh;  /* changed from 20vh to 10vh to conserve whitespace */
     box-shadow: 1px 2px 5px rgba(0, 0, 0, .3);
     border: 1px solid #232444;
 
     h3{
+      margin-top: 10px;  /* frm: smaller for mobile to conserve whitespace */
+      margin-bottom: 10px;
       text-transform: uppercase;
+    }
+
+    p {
+      margin: 2px;
     }
 
     .mobileInfo{
 
       padding-left: 5%;
       padding-right: 5%;
+      padding-bottom: 2%;  /* frm: added this to make sure we had some whitespace at bottom (after reducing min-height of .eventCard */
 
       .eventRSVP{
-        visibility: hidden;
+        display: none;  /* frm: changed from visibility: hidden to display: none to conserve whitespace */
         text-align: right;
       }
 
@@ -321,13 +373,13 @@ html, body, #root, .app {
 
   button{
     position: fixed;
-    bottom: 5%;
+    bottom: 3%;         /* frm: changed from 5% to 3% */
     z-index: 10;
     background-color: #232444;
     border: none;
     color: white;
     font-size: 24px;
-    height: 40px;
+    height: 30px;       /* frm: changed from 40px to 30px */
     box-shadow: 1px 2px 5px rgba(0, 0, 0, .3);
 
   }
