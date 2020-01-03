@@ -1,4 +1,9 @@
 .app{
+
+  height: 100vh;                /* frm: added for new UI */
+  diaplay: grid;                /* frm: added for new UI */
+  grid-template-columns: 200px auto;            /* frm: added for new UI */
+
   #map{
     height: 100%;
     z-index: 9;
@@ -39,7 +44,7 @@
           height: 10vw;
         }
       }
-    }
+    } 
     #secondLine{
       font-size: 20vh;
       color: white;
@@ -69,17 +74,21 @@ html, body, #root, .app {
 }
 
 .searchBar{
-  padding-top: 2%;
-  padding-bottom: 2%;
+  /* padding-top: 2%; */         /* frm: commented out for new UI */
+  /* padding-bottom: 2%; */      /* frm: commented out for new UI */
   background-color: #232444;
   //width: 300px;
   width: 32%;
-  position: fixed;
-  left: 2%;
-  top: 2%;
+  /* position: fixed; */        /* frm: commented oiut for new UI */
+  /* left: 2%; */               /* frm: commented out for new UI */
+  /* top: 2%; */               /* frm: commented out for new UI */
   z-index:11;
-  box-shadow: 10px 10px 5px rgba(0, 0, 0, .3);
+  /* box-shadow: 10px 10px 5px rgba(0, 0, 0, .3); */  /* frm: commented out for new UI */
 
+  height: 100vh;                /* frm: added for new UI */
+  display: grid;                /* frm: added for new UI */
+  grid-template-rows: auto auto;                /* frm: added for new UI */
+  grid-gap: 0;          /* frm: added for new UI */
 }
 
 .mobileSearch {
