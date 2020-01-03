@@ -2,7 +2,9 @@ import React from 'react';
 import moment from 'moment';
 import groupBy from 'lodash.groupby';
 import sortBy from 'lodash.sortby';
+import { eventHasValidLocation } from './Util';
 require('twix');
+
 
 const MAX_DAYS_IN_LIST = 4;
 
@@ -48,6 +50,17 @@ function EventTimes(props) {
   }
 }
 
+/*
+ *
+ * ??? frm: DELETE this once I have verified that Util().eventHasValidLocation() works
+ *
+function eventHasValidLocation(event) {
+  // Utility function to avoid repeating this logic...
+  return ('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']);
+}
+ *
+ */
+
 export function EventList(props) {
   let listEvents;
   if(props.events.length > 0){
@@ -66,7 +79,7 @@ export function EventList(props) {
 
     //Location filter
     if(props.locFilt != null){
-      if('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']){
+      if(eventHasValidLocation(event)) {
         if(event['location']['location']['latitude'] !== props.locFilt['lat'] || event['location']['location']['longitude'] !== props.locFilt['lng']){
           return(null);
         }
@@ -75,16 +88,28 @@ export function EventList(props) {
       }
     }
 
+    // ??? frm: React is complaining about there not being a unique key.  Here is the warning:
+    //              Each child in a list should have a unique "key" prop
+    //          I am assuming that it is the <li> list below that should have a key...
+    //          However, the issue seems benign - not seeing any crashes or other odd behavior because of it...
+    //          I added a key to the <li> element, but that did not solve the problem.
+    //          Note that you get the warning (in the console) for zip: 02144, but not for zip: 44106 which
+    //          makes me believe the lists are somehow different.  Note also that the event-id keys appear
+    //          to be unique...
+
     return (
       <a href={event['browser_url']}
         className="eventCard"
         target="_blank"
         rel="noopener"
         key={event['id']}
-        coord={('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) ? "" + event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'] : ""}
+        coord={
+          eventHasValidLocation(event) ?
+          "" + event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'] :
+          ""}
         onMouseEnter={(event) => { props.updatedHover(event['currentTarget'].getAttribute('coord')) }}
         onMouseLeave={(event) => { props.updatedHover(null) }}>
-        <li>
+        <li key={event['id'].toString()}>
           <div>
             <h3>{event['title']}</h3>
             <p><strong>{event['location']['venue']}</strong> in <strong>{event['location']['locality']}</strong></p>
@@ -100,6 +125,8 @@ export function EventList(props) {
   listEvents = null;
 }
 
+  // frm: At this point listEvents is either null or the HTML for a list of each of the events
+
   return (
     <ul className="eventList">{listEvents}
     <div className="kicker">
@@ -108,6 +135,7 @@ export function EventList(props) {
     </div>
     </ul>
   );
+
 }
 
 export default EventList;
