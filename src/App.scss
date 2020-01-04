@@ -2,7 +2,7 @@
 
   height: 100vh;                /* frm: added for new UI */
   display: grid;                /* frm: added for new UI */
-  grid-template-columns: minmax(30%, 300px) minmax(70%, 100%);            /* frm: added for new UI */
+  grid-template-columns: minmax(180px,30%) auto;
 
   #map{
     height: 100vh;    /* frm: changed from % to vh */
