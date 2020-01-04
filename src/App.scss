@@ -2,7 +2,7 @@
 
   height: 100vh;                /* frm: added for new UI */
   display: grid;                /* frm: added for new UI */
-  grid-template-columns: minmax(30%, 300px) minmax(70%,100%);            /* frm: added for new UI */
+  grid-template-columns: minmax(30%, 300px) minmax(70%, 100%);            /* frm: added for new UI */
 
   #map{
     height: 100vh;    /* frm: changed from % to vh */
@@ -77,7 +77,7 @@ html, body, #root, .app {
   /* padding-top: 2%; */         /* frm: commented out for new UI */
   /* padding-bottom: 2%; */      /* frm: commented out for new UI */
   background-color: #232444;
-  max-width: 300px;
+  /* max-width: 300px; */       /* frm: commented out for new UI */
   /* width: 32%; */             /* frm: commented out for new UI */
   /* position: fixed; */        /* frm: commented out for new UI */
   /* left: 2%; */               /* frm: commented out for new UI */
