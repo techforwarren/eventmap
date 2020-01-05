@@ -145,6 +145,17 @@ export function Map(props){
 
         if(key === props.hoverMarker || (props.locFilt !== null && key === props.locFilt['lat'] + "&" + props.locFilt['lng'])){
           console.log("matching");
+          // frm: Start of Debugging
+              if(key === props.hoverMarker) {
+                  console.log("matched hover: " + props.hoverMarker);
+              }
+              
+              if(props.locFilt !== null && key === props.locFilt['lat'] + "&" + props.locFilt['lng']){
+                  let thisLat = props.locFilt['lat'];
+                  let thisLng = props.locFilt['lng'];
+                  console.log("matched locFilt: lat = " + thisLat + ", long = " + thisLng);
+              }
+          // frm: End of Debugging
           highlighted = true;
         }
 

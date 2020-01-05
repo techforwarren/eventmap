@@ -36,7 +36,8 @@ const queryString = require('query-string');
  * 
  */
 
-const deviceIsMobile = isMobile;        // HACK to allow easy mocking of isMobile for testing/debugging
+// const deviceIsMobile = isMobile;        // HACK to allow easy mocking of isMobile for testing/debugging
+const deviceIsMobile = true;        // HACK to allow easy mocking of isMobile for testing/debugging
 
 function App() {
 
@@ -122,7 +123,8 @@ function App() {
   //      code just operates on the list of events passed to it.
 
   return (
-    <div className="app">
+    /* <div className="app"> */ /* frm: original code */
+    <div className={deviceIsMobile ? "app appIsMobile" : "app appIsDesktop"}>
       <SearchBar currZip={currZip} currRange={currRange} currEventKind={currEventKind} updateZip={(newZip) => setCurrZip(newZip)} updateRange={(newRange) => setCurrRange(newRange)} updateEventKind={(newEventKind) => setCurrEventKind(newEventKind)} events={filteredEvents} updatedHover={(newHover) => setHoverEvent(newHover)} locFilt={locFilt} deviceIsMobile={deviceIsMobile}/>
       {events === null && currZip == null &&
         <div id="startLoad">
@@ -130,10 +132,10 @@ function App() {
           <h3 id="searchCTA">Enter your zipcode to find events near you!</h3>
         </div>
       }
+      <Map currZip={currZip} events={filteredEvents} hoverMarker={hoverEvent} selectLoc={(newLoc) => setLocFilt(newLoc)} locFilt={locFilt}/>
       {filteredEvents !== null && deviceIsMobile &&
         <MobileList events={filteredEvents} updatedHover={(newHover) => setHoverEvent(newHover)} locFilt={locFilt} cardIndex={cardIndex} updateCardIndex={(update) => setCardIndex(update)}/>
       }
-      <Map currZip={currZip} events={filteredEvents} hoverMarker={hoverEvent} selectLoc={(newLoc) => setLocFilt(newLoc)} locFilt={locFilt}/>
     </div>
   );
 }

@@ -104,7 +104,8 @@ export function SearchBar(props){
    */
 
   return(
-    <div className={(props.events != null ? "searchBar activeList" : "searchBar") + (props.deviceIsMobile ? " mobileSearch" : "")}>
+    /* <div className={(props.events != null ? "searchBar activeList" : "searchBar") + (props.deviceIsMobile ? " mobileSearch" : "")}> */  /* frm: original code */
+    <div className={(props.events != null ? "searchBar activeList" : "searchBar") + (props.deviceIsMobile ? " mobileSearch" : " desktopSearch")}>
       <div className="userInput">
         <form onSubmit={onSubmit} id="zipForm" data-has-input={!!input.length}>
           <label htmlFor="zipInput">ZIP</label>

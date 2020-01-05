@@ -77,7 +77,7 @@ export function EventList(props) {
       }
     })
 
-    //Location filter
+    //Location filter: if user has clicked on a marker, then only show that one event
     if(props.locFilt != null){
       if(eventHasValidLocation(event)) {
         if(event['location']['location']['latitude'] !== props.locFilt['lat'] || event['location']['location']['longitude'] !== props.locFilt['lng']){

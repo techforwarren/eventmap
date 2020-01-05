@@ -140,6 +140,7 @@ export function MobileList(props){
     return (
       <div className="mobileList">
         {listEvents[props.cardIndex]}
+        <div className="mobileNavWrapper">
         {
           props.cardIndex > 0 &&
           <button id="leftIndex" onClick={() => props.updateCardIndex(props.cardIndex-1)}>← </button>
@@ -149,6 +150,7 @@ export function MobileList(props){
           props.cardIndex < listEvents.length-1 &&
           <button id="rightIndex" onClick={() => props.updateCardIndex(props.cardIndex+1)}> →</button>
         }
+        </div>
 
       </div>
     );

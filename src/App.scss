@@ -1,13 +1,51 @@
-.app{
+/* frm: I added classes to distinguish between desktop and 
+ *      mobile cases - appIsDesktop and appIsMobile.  This
+ *      allowed me to set up the grid differently for the
+ *      two cases.  For desktop, the app has a left panel
+ *      containing the search bar with the map on the
+ *      right.  For mobile, there is just a single column
+ *      withy three rows (search, map, mobile-list-of-events).
+ */
 
-  height: 100vh;                /* frm: added for new UI */
-  display: grid;                /* frm: added for new UI */
+.appIsDesktop {
+  display: grid;                /* frm: added for new map layout UI */
   grid-template-columns: minmax(180px,30%) auto;
 
   #map{
     height: 100vh;    /* frm: changed from % to vh */
     z-index: 9;
   }
+
+}
+
+.appIsMobile {
+  display: grid;                /* frm: added for new map layout UI */
+  grid-template-rows: min-content auto min-content;
+
+  #map{
+    /* height: 100vh; */   /* frm: don't need height for mobile */
+    z-index: 9;                 /* frm: not sure z-index does anything for mobile */
+  }
+
+}
+
+/* frm: I added a <div class="mobileNavWrapper> around the mobile 
+ *      previous, rsvp, next buttons in order to get the positioning 
+ *      of the buttons to work out.  There is probably a way to do it 
+ *      without resorting to creating their own container, but I 
+ *      didn't know how to do it.  In any event, the only reason for
+ *      this <div> is to get the positioning of the buttons
+ *      to be left, center, right.
+ */
+
+.mobileNavWrapper {
+  position: relative;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.app{
+  height: 100vh;                /* frm: added for new map layout UI */
 
   #startLoad{
     position: fixed;
@@ -74,22 +112,31 @@ html, body, #root, .app {
 }
 
 .searchBar{
-  /* padding-top: 2%; */         /* frm: commented out for new UI */
-  /* padding-bottom: 2%; */      /* frm: commented out for new UI */
+  /* padding-top: 2%; */        /* frm: commented out for new map layout UI */
+  /* padding-bottom: 2%; */     /* frm: commented out for new map layout UI */
   background-color: #232444;
-  /* max-width: 300px; */       /* frm: commented out for new UI */
-  /* width: 32%; */             /* frm: commented out for new UI */
-  /* position: fixed; */        /* frm: commented out for new UI */
-  /* left: 2%; */               /* frm: commented out for new UI */
-  /* top: 2%; */               /* frm: commented out for new UI */
-  z-index:11;
-  /* box-shadow: 10px 10px 5px rgba(0, 0, 0, .3); */  /* frm: commented out for new UI */
-  box-shadow: 10px 0px 5px rgba(0, 0, 0, .3);   /* frm: experiment to separate searchbar from map */
+  /* max-width: 300px; */       /* frm: commented out for new map layout UI */
+  /* width: 32%; */             /* frm: commented out for new map layout UI */
+  /* position: fixed; */        /* frm: commented out for new map layout UI */
+  /* left: 2%; */               /* frm: commented out for new map layout UI */
+  /* top: 2%; */                /* frm: commented out for new map layout UI */
+  z-index:11;                   /* frm: not sure we need z-index anymore */
+  box-shadow: 10px 0px 5px rgba(0, 0, 0, .3);   /* frm: don't need bottom shadow for new map layout UI */
 
-  height: 100vh;                /* frm: added for new UI */
-  display: grid;                /* frm: added for new UI */
-  grid-template-rows: auto auto;                /* frm: added for new UI */
-  grid-gap: 0;          /* frm: added for new UI */
+}
+
+/* frm: Added class, desktopSearch, as an analog for the preexisting mobileSearch
+ *      so that I could have a different layout (using grid) for the deesktop
+ *      use case.  In this case the search bar has two rows that take up all 
+ *      of the vertical space.
+ */
+
+.desktopSearch {
+  /* For desktop, we want two rows */
+  height: 100vh;                        /* frm: added for new map layout UI */
+  display: grid;                        /* frm: added for new map layout UI */
+  grid-template-rows: auto auto;        /* frm: added for new map layout UI */
+  grid-gap: 0;                          /* frm: added for new map layout UI */
 }
 
 .mobileSearch {
@@ -281,7 +328,7 @@ html, body, #root, .app {
 
 .eventList{
   background-color: white;
-  /* height: 500px; */          /* frm: commented out for new UI */
+  /* height: 500px; */          /* frm: commented out for new map layout UI */
   overflow:hidden;
   overflow-y:scroll;
   margin-bottom: 0px;
@@ -344,11 +391,12 @@ html, body, #root, .app {
   margin: none;
   font-size:calc(10px + 1vw);   /* frm: changed from 12px to 10px to conserve whitespace */
   touch-action: manipulation;
+  position: relative;           /* frm: added so children can be positioned absolutely */
   .eventCard{
 
     text-decoration: none;
     color: #232444;
-    position: fixed;
+    /* position: fixed; */      /* frm: commented out for new map layout UI */
     z-index: 10;
     bottom: 10%;        /* changed from 13% to 10% */
     background-color: white;
@@ -384,7 +432,7 @@ html, body, #root, .app {
   }
 
   button{
-    position: fixed;
+    position: absolute;         /* frm: changed for new map layout UI */
     bottom: 3%;         /* frm: changed from 5% to 3% */
     z-index: 10;
     background-color: #232444;
