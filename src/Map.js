@@ -160,7 +160,7 @@ export function Map(props){
   		}
 
       // zoom to marker bounds, plus padding (percentage)
-      map.current.fitBounds(markers.current.getBounds().pad(0.01));  /* frm: messing with pad */
+      map.current.fitBounds(markers.current.getBounds().pad(0.1));  /* frm: messing with pad */
     }
   }, [locations, props.hoverMarker, props.locFilt]);
 
