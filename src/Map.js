@@ -159,8 +159,8 @@ export function Map(props){
 
   		}
 
-      // zoom to marker bounds, plus padding (percentage)
-      map.current.fitBounds(markers.current.getBounds().pad(0.1));  /* frm: messing with pad */
+      // zoom to marker bounds, plus padding to make sure entire marker is visible
+      map.current.fitBounds(markers.current.getBounds().pad(0.1));
     }
   }, [locations, props.hoverMarker, props.locFilt]);
 
