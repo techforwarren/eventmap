@@ -43,7 +43,7 @@ function EventTimes(props) {
     let nextStart = sortedTimesByDate[nextDay][0].start;
     let lastStart = sortedTimesByDate[lastDay][0].start;
     return sortedDates.slice(0,MAX_DAYS_IN_LIST - 1).map(dateRowFactory).concat(
-      <p>
+      <p key="More">
         More Times from {nextStart.twix(lastStart, { allDay : true }).format()}
       </p>
     )
@@ -88,15 +88,6 @@ export function EventList(props) {
       }
     }
 
-    // ??? frm: React is complaining about there not being a unique key.  Here is the warning:
-    //              Each child in a list should have a unique "key" prop
-    //          I am assuming that it is the <li> list below that should have a key...
-    //          However, the issue seems benign - not seeing any crashes or other odd behavior because of it...
-    //          I added a key to the <li> element, but that did not solve the problem.
-    //          Note that you get the warning (in the console) for zip: 02144, but not for zip: 44106 which
-    //          makes me believe the lists are somehow different.  Note also that the event-id keys appear
-    //          to be unique...
-
     return (
       <a href={event['browser_url']}
         className="eventCard"
@@ -112,7 +103,7 @@ export function EventList(props) {
         <li key={event['id'].toString()}>
           <div>
             <h3>{event['title']}</h3>
-            <p><strong>{event['location']['venue']}</strong> in <strong>{event['location']['locality']}</strong></p>
+            <p><strong>{event['location']['venue']}</strong> {event['location']['locality'] ? "in" : ""} <strong>{event['location']['locality']}</strong></p>
             <EventTimes rawTimes={rawTimes} />
             <p className="eventRSVP">Click to RSVP</p>
           </div>
