@@ -39,7 +39,7 @@ export function Map(props){
               	zoom = map.getZoom(),
               	delta = this._delta,
               	normalizedDelta = 0,
-              	snap = this._map.options.zoomSnap || 0;
+              	snap = this._map.options.zoomSnap || 0;  // ??? frm: why use this._map instead of just map
             
     		  wheelDeltaList.push(Math.abs(delta));
     		  var average = 0;
@@ -59,7 +59,7 @@ export function Map(props){
             
     		  var deltaTime = currentScrollTime - lastScroll;
             
-    		  var d2 = this._delta / (this._map.options.wheelPxPerZoomLevel * 4),
+    		  var d2 = this._delta / (this._map.options.wheelPxPerZoomLevel * 4),  // ??? frm: why use this._map instead of just map
     		  d3 = 4 * Math.log(2 / (1 + Math.exp(-Math.abs(d2)))) / Math.LN2,
     		  d4 = snap ? Math.ceil(d3 / snap) * snap : d3,
                     normalizedDelta = map._limitZoom(zoom + (this._delta > 0 ? d4 : -d4)) - zoom;
@@ -196,7 +196,14 @@ export function Map(props){
             const lat = props.events[first]['location']['location']['latitude'];
             const long = props.events[first]['location']['location']['longitude'];
 
-            if(center[0] !== lat || center[0] !== long){
+            /* 
+             * If "first" non-private location is different from previous "center"
+             * then update the "center".  This will center the map view on the 
+             * "first" non-private location which we assume is the one closest to
+             * the given zip code (the Mobilize API should return events in the 
+             * order of closest first)
+             */
+            if(center[0] !== lat || center[1] !== long){  
               setCenter([lat, long]);
               setNewCenter(true);
             }

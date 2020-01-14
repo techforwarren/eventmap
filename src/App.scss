@@ -9,7 +9,7 @@
 
 .appIsDesktop {
   display: grid;                /* frm: added for new map layout UI */
-  grid-template-columns: minmax(180px,30%) auto;
+  grid-template-columns: minmax(180px,300px) auto;
 
   #map{
     height: 100vh;    /* frm: changed from % to vh */
@@ -24,6 +24,10 @@
 
   #map{
     /* height: 100vh; */   /* frm: don't need height for mobile */
+    /* ??? frm: 
+     *      Actually I might need the height for mobile.  The documentation
+     *      for leaflet says that there needs to be a defined height.
+     */
     z-index: 9;                 /* frm: not sure z-index does anything for mobile */
   }
 
@@ -38,10 +42,20 @@
  *      to be left, center, right.
  */
 
+/* frm: commented this out for now - replaced with code immediately below
+ *
 .mobileNavWrapper {
-  position: relative;
+  ** position: relative; **   ** frm: using flex below means I don't need relative position **
   margin-top: 5px;
   margin-bottom: 5px;
+}
+ *
+ */
+
+.mobileNavWrapper {     /* frm: new code based on flex */
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
 }
 
 .app{
@@ -405,7 +419,7 @@ html, body, #root, .app {
     max-height: 30vh;
     min-height: 10vh;  /* changed from 20vh to 10vh to conserve whitespace */
     box-shadow: 1px 2px 5px rgba(0, 0, 0, .3);
-    border: 1px solid #232444;
+    /* border: 1px solid #232444; */ /* frm: removed as part of new layout UI */
 
     h3{
       margin-top: 10px;  /* frm: smaller for mobile to conserve whitespace */
@@ -421,7 +435,7 @@ html, body, #root, .app {
 
       padding-left: 5%;
       padding-right: 5%;
-      padding-bottom: 2%;  /* frm: added this to make sure we had some whitespace at bottom (after reducing min-height of .eventCard */
+      padding-bottom: 1%;
 
       .eventRSVP{
         display: none;  /* frm: changed from visibility: hidden to display: none to conserve whitespace */
@@ -432,7 +446,7 @@ html, body, #root, .app {
   }
 
   button{
-    position: absolute;         /* frm: changed for new map layout UI */
+    /* position: absolute; */         /* frm: changed for new map layout UI */
     bottom: 3%;         /* frm: changed from 5% to 3% */
     z-index: 10;
     background-color: #232444;
@@ -444,18 +458,19 @@ html, body, #root, .app {
 
   }
   #mobileRSVP{
-    left: 35%;
-    width: 30vw;
+    /* left: 35%; */ /* frm: commented out trying to get flex to work */
+    /* width: 30vw; */ /* frm: commented out because I now have it flex its width */
+    flex: 1;
     a{
       text-decoration: none;
       color:white;
     }
   }
   #leftIndex{
-    left: 25px;
+    /* left: 25px; */ /* frm: commented out trying to get flex to work */
   }
   #rightIndex{
-    right: 25px;
+    /* right: 25px; */ /* frm: commented out trying to get flex to work */
   }
 }
 
