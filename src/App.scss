@@ -1,65 +1,51 @@
-/* frm: I added classes to distinguish between desktop and 
- *      mobile cases - appIsDesktop and appIsMobile.  This
- *      allowed me to set up the grid differently for the
- *      two cases.  For desktop, the app has a left panel
- *      containing the search bar with the map on the
- *      right.  For mobile, there is just a single column
- *      withy three rows (search, map, mobile-list-of-events).
+/* 
+ *
+ * The app uses a tiled layout that is different for desktop
+ * vs. mobile.  
+ *
+ * On desktop, there are two columns: the left
+ * column contains the search criteria <div> above a 
+ * scrolling list of events that match the search criteria.
+ * The width of the first column is constrained.  The right 
+ * column contains the map and it grows/shrinks to use up
+ * all of the remaining available space.
+ *
+ * On mobile, there is a single column that contains (in 
+ * order from top to bottom): the search criteria then
+ * the map and then an area where the event details are 
+ * provided along with buttons (previous, Info/RSVP, next).
+ *
+ * As you will see, we use CSS grid to implement this layout.
+ *
+ * To distinguish between the desktop and mobile cases, there
+ * is a class defined for each case: "appIsDesktop" and 
+ * "appIsMobile".
+ *
  */
 
 .appIsDesktop {
-  display: grid;                /* frm: added for new map layout UI */
+  display: grid;    /* on desktop use a two column grid layout - right column grows/shrinks */
   grid-template-columns: minmax(180px,300px) auto;
 
   #map{
-    height: 100vh;    /* frm: changed from % to vh */
+    height: 100vh;
     z-index: 9;
   }
 
 }
 
 .appIsMobile {
-  display: grid;                /* frm: added for new map layout UI */
+  display: grid;    /* on mobile use a row grid with three rows: search, map, card & nav */
   grid-template-rows: min-content auto min-content;
 
   #map{
-    /* height: 100vh; */   /* frm: don't need height for mobile */
-    /* ??? frm: 
-     *      Actually I might need the height for mobile.  The documentation
-     *      for leaflet says that there needs to be a defined height.
-     */
     z-index: 9;                 /* frm: not sure z-index does anything for mobile */
   }
 
 }
 
-/* frm: I added a <div class="mobileNavWrapper> around the mobile 
- *      previous, rsvp, next buttons in order to get the positioning 
- *      of the buttons to work out.  There is probably a way to do it 
- *      without resorting to creating their own container, but I 
- *      didn't know how to do it.  In any event, the only reason for
- *      this <div> is to get the positioning of the buttons
- *      to be left, center, right.
- */
-
-/* frm: commented this out for now - replaced with code immediately below
- *
-.mobileNavWrapper {
-  ** position: relative; **   ** frm: using flex below means I don't need relative position **
-  margin-top: 5px;
-  margin-bottom: 5px;
-}
- *
- */
-
-.mobileNavWrapper {     /* frm: new code based on flex */
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-}
-
 .app{
-  height: 100vh;                /* frm: added for new map layout UI */
+  height: 100vh;                
 
   #startLoad{
     position: fixed;
@@ -126,31 +112,17 @@ html, body, #root, .app {
 }
 
 .searchBar{
-  /* padding-top: 2%; */        /* frm: commented out for new map layout UI */
-  /* padding-bottom: 2%; */     /* frm: commented out for new map layout UI */
   background-color: #232444;
-  /* max-width: 300px; */       /* frm: commented out for new map layout UI */
-  /* width: 32%; */             /* frm: commented out for new map layout UI */
-  /* position: fixed; */        /* frm: commented out for new map layout UI */
-  /* left: 2%; */               /* frm: commented out for new map layout UI */
-  /* top: 2%; */                /* frm: commented out for new map layout UI */
   z-index:11;                   /* frm: not sure we need z-index anymore */
-  box-shadow: 10px 0px 5px rgba(0, 0, 0, .3);   /* frm: don't need bottom shadow for new map layout UI */
-
+  box-shadow: 10px 0px 5px rgba(0, 0, 0, .3);   
 }
 
-/* frm: Added class, desktopSearch, as an analog for the preexisting mobileSearch
- *      so that I could have a different layout (using grid) for the deesktop
- *      use case.  In this case the search bar has two rows that take up all 
- *      of the vertical space.
- */
-
 .desktopSearch {
-  /* For desktop, we want two rows */
-  height: 100vh;                        /* frm: added for new map layout UI */
-  display: grid;                        /* frm: added for new map layout UI */
-  grid-template-rows: auto auto;        /* frm: added for new map layout UI */
-  grid-gap: 0;                          /* frm: added for new map layout UI */
+  /* For desktop, we want two rows: 1) search criteria and 2) the scrolling list of events */
+  height: 100vh;                        
+  display: grid;                        
+  grid-template-rows: auto auto;        
+  grid-gap: 0;                          
 }
 
 .mobileSearch {
@@ -193,7 +165,7 @@ html, body, #root, .app {
   align-items: flex-end;
   justify-content: center;
   padding-left: 5%;
-  padding-right: 5%;    /* frm: changed from 7% to 5% */
+  padding-right: 5%;    
   padding-top: 5%;
   padding-bottom: 5%;
 
@@ -294,7 +266,7 @@ html, body, #root, .app {
   font-size: 16px;
   background-color: #f5f5f5;
   border: none;
-  padding: 0px 5px 0px 5px;    /* frm: changed right-pad from 20px to 5px */
+  padding: 0px 5px 0px 5px;    
   appearance: none;
   -moz-appearance: none;
   -webkit-appearance: none;
@@ -342,7 +314,6 @@ html, body, #root, .app {
 
 .eventList{
   background-color: white;
-  /* height: 500px; */          /* frm: commented out for new map layout UI */
   overflow:hidden;
   overflow-y:scroll;
   margin-bottom: 0px;
@@ -403,26 +374,22 @@ html, body, #root, .app {
 
 .mobileList{
   margin: none;
-  font-size:calc(10px + 1vw);   /* frm: changed from 12px to 10px to conserve whitespace */
+  font-size:calc(10px + 1vw);   
   touch-action: manipulation;
-  position: relative;           /* frm: added so children can be positioned absolutely */
+
   .eventCard{
 
     text-decoration: none;
     color: #232444;
-    /* position: fixed; */      /* frm: commented out for new map layout UI */
     z-index: 10;
-    bottom: 10%;        /* changed from 13% to 10% */
+    bottom: 10%;        
     background-color: white;
-    width: 90%;
     left: 5%;
     max-height: 30vh;
-    min-height: 10vh;  /* changed from 20vh to 10vh to conserve whitespace */
-    box-shadow: 1px 2px 5px rgba(0, 0, 0, .3);
-    /* border: 1px solid #232444; */ /* frm: removed as part of new layout UI */
+    min-height: 10vh;  
 
     h3{
-      margin-top: 10px;  /* frm: smaller for mobile to conserve whitespace */
+      margin-top: 10px;  
       margin-bottom: 10px;
       text-transform: uppercase;
     }
@@ -432,45 +399,47 @@ html, body, #root, .app {
     }
 
     .mobileInfo{
-
       padding-left: 5%;
       padding-right: 5%;
       padding-bottom: 1%;
 
       .eventRSVP{
-        display: none;  /* frm: changed from visibility: hidden to display: none to conserve whitespace */
-        text-align: right;
+        display: none;  
       }
 
     }
   }
 
+  .mobileNavWrapper {     /* contains navigation buttons (next/prev) and Info/RSVP button */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
   button{
-    /* position: absolute; */         /* frm: changed for new map layout UI */
-    bottom: 3%;         /* frm: changed from 5% to 3% */
+    bottom: 3%;         
     z-index: 10;
     background-color: #232444;
     border: none;
     color: white;
-    font-size: 16px;    /* frm: changed from 24px */
-    height: 30px;       /* frm: changed from 40px to 30px */
-    box-shadow: 1px 2px 5px rgba(0, 0, 0, .3);
+    font-size: 16px;    
+    height: 30px;       
 
   }
   #mobileRSVP{
-    /* left: 35%; */ /* frm: commented out trying to get flex to work */
-    /* width: 30vw; */ /* frm: commented out because I now have it flex its width */
-    flex: 1;
+    flex: 1;            /* Info/RSVP button stretches to use up all available space */
     a{
       text-decoration: none;
       color:white;
     }
   }
   #leftIndex{
-    /* left: 25px; */ /* frm: commented out trying to get flex to work */
+    width: 50px;
+    border-right: 3px solid white;      /* separate nav button from RSVP/Info button */
   }
   #rightIndex{
-    /* right: 25px; */ /* frm: commented out trying to get flex to work */
+    width: 50px;
+    border-left: 3px solid white;       /* separate nav button from RSVP/Info button */
   }
 }
 

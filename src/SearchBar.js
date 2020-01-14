@@ -43,7 +43,9 @@ export function SearchBar(props){
     event.preventDefault();
     props.updateRange(rangeInput);  // calls setCurrRange() in App.js triggering a Mobilize API call and  a re-render
     setZip(input);
-    // ??? frm: Should I add a call to setEventKind() here?
+    /* ??? frm: Should I add a call to setEventKind() here?
+     *          I don't think it necessary until I put the event kind in the URL...
+     */         
   }
 
   function setRange(input){
@@ -104,7 +106,6 @@ export function SearchBar(props){
    */
 
   return(
-    /* <div className={(props.events != null ? "searchBar activeList" : "searchBar") + (props.deviceIsMobile ? " mobileSearch" : "")}> */  /* frm: original code */
     <div className={(props.events != null ? "searchBar activeList" : "searchBar") + (props.deviceIsMobile ? " mobileSearch" : " desktopSearch")}>
       <div className="userInput">
         <form onSubmit={onSubmit} id="zipForm" data-has-input={!!input.length}>

@@ -159,7 +159,30 @@ export function Map(props){
 
   		}
 
+      /* ??? frm: The current code immediately below does not correctly resize and
+       *          rezoom on mobile.  The problem is that the amount of space used
+       *          for each card varies, and hence the amount of space available
+       *          for the map can change every time the cardIndex changes.
+       *          
+       *          The code below tells the map to resize (by calling invlidatesize() )
+       *          everytime the hoverMarker changes which is almost correct.  Instead
+       *          it should resize every time the cardIndex changes.  
+       *    
+       *          Unfortuately, the Map currently does not know about the cardIndex
+       *          It would be easy to pass it in the way the hoverMarker is currently
+       *          passed in, but I want to wait and make that change in a separate
+       *          pull request (there is another related issue/bug concerning hoverMarker
+       *          on mobile that I will change at the same time).
+       *
+       *          I am also not going to create an issue for this on github yet
+       *          because this is not a problem in the old UI - so it doesn't make
+       *          sense to create an issue that is not yet a problem in production.
+       *          I will create an issue once the new tiled layout is merged...
+       */
+
       // zoom to marker bounds, plus padding to make sure entire marker is visible
+      // ??? frm: probably only have to invalidateSize() on mobile... (but it is a cheap op)
+      map.current.invalidateSize();  // make sure the map fits its allocated space (mobile issue)
       map.current.fitBounds(markers.current.getBounds().pad(0.1));
     }
   }, [locations, props.hoverMarker, props.locFilt]);
