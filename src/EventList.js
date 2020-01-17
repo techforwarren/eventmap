@@ -50,17 +50,6 @@ function EventTimes(props) {
   }
 }
 
-/*
- *
- * ??? frm: DELETE this once I have verified that Util().eventHasValidLocation() works
- *
-function eventHasValidLocation(event) {
-  // Utility function to avoid repeating this logic...
-  return ('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']);
-}
- *
- */
-
 export function EventList(props) {
   let listEvents;
   if(props.events.length > 0){
@@ -77,7 +66,7 @@ export function EventList(props) {
       }
     })
 
-    //Location filter
+    //Location filter: if user has clicked on a marker, then only show that one event
     if(props.locFilt != null){
       if(eventHasValidLocation(event)) {
         if(event['location']['location']['latitude'] !== props.locFilt['lat'] || event['location']['location']['longitude'] !== props.locFilt['lng']){
@@ -116,7 +105,7 @@ export function EventList(props) {
   listEvents = null;
 }
 
-  // frm: At this point listEvents is either null or the HTML for a list of each of the events
+  // At this point listEvents is either null or the HTML for a list of each of the events
 
   return (
     <ul className="eventList">{listEvents}
