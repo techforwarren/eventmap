@@ -39,7 +39,7 @@ export function Map(props){
               	zoom = map.getZoom(),
               	delta = this._delta,
               	normalizedDelta = 0,
-              	snap = this._map.options.zoomSnap || 0;
+              	snap = this._map.options.zoomSnap || 0;  // ??? frm: why use this._map instead of just map
             
     		  wheelDeltaList.push(Math.abs(delta));
     		  var average = 0;
@@ -59,7 +59,7 @@ export function Map(props){
             
     		  var deltaTime = currentScrollTime - lastScroll;
             
-    		  var d2 = this._delta / (this._map.options.wheelPxPerZoomLevel * 4),
+    		  var d2 = this._delta / (this._map.options.wheelPxPerZoomLevel * 4),  // ??? frm: why use this._map instead of just map
     		  d3 = 4 * Math.log(2 / (1 + Math.exp(-Math.abs(d2)))) / Math.LN2,
     		  d4 = snap ? Math.ceil(d3 / snap) * snap : d3,
                     normalizedDelta = map._limitZoom(zoom + (this._delta > 0 ? d4 : -d4)) - zoom;
@@ -159,8 +159,31 @@ export function Map(props){
 
   		}
 
-      // zoom to marker bounds, plus padding (percentage)
-      map.current.fitBounds(markers.current.getBounds().pad(0.5));
+      /* ??? frm: The current code immediately below does not correctly resize and
+       *          rezoom on mobile.  The problem is that the amount of space used
+       *          for each card varies, and hence the amount of space available
+       *          for the map can change every time the cardIndex changes.
+       *          
+       *          The code below tells the map to resize (by calling invlidatesize() )
+       *          everytime the hoverMarker changes which is almost correct.  Instead
+       *          it should resize every time the cardIndex changes.  
+       *    
+       *          Unfortuately, the Map currently does not know about the cardIndex
+       *          It would be easy to pass it in the way the hoverMarker is currently
+       *          passed in, but I want to wait and make that change in a separate
+       *          pull request (there is another related issue/bug concerning hoverMarker
+       *          on mobile that I will change at the same time).
+       *
+       *          I am also not going to create an issue for this on github yet
+       *          because this is not a problem in the old UI - so it doesn't make
+       *          sense to create an issue that is not yet a problem in production.
+       *          I will create an issue once the new tiled layout is merged...
+       */
+
+      // zoom to marker bounds, plus padding to make sure entire marker is visible
+      // ??? frm: probably only have to invalidateSize() on mobile... (but it is a cheap op)
+      map.current.invalidateSize();  // make sure the map fits its allocated space (mobile issue)
+      map.current.fitBounds(markers.current.getBounds().pad(0.1));
     }
   }, [locations, props.hoverMarker, props.locFilt]);
 
@@ -196,7 +219,14 @@ export function Map(props){
             const lat = props.events[first]['location']['location']['latitude'];
             const long = props.events[first]['location']['location']['longitude'];
 
-            if(center[0] !== lat || center[0] !== long){
+            /* 
+             * If "first" non-private location is different from previous "center"
+             * then update the "center".  This will center the map view on the 
+             * "first" non-private location which we assume is the one closest to
+             * the given zip code (the Mobilize API should return events in the 
+             * order of closest first)
+             */
+            if(center[0] !== lat || center[1] !== long){  
               setCenter([lat, long]);
               setNewCenter(true);
             }

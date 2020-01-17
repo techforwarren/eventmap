@@ -1,8 +1,51 @@
-.app{
+/* 
+ *
+ * The app uses a tiled layout that is different for desktop
+ * vs. mobile.  
+ *
+ * On desktop, there are two columns: the left
+ * column contains the search criteria <div> above a 
+ * scrolling list of events that match the search criteria.
+ * The width of the first column is constrained.  The right 
+ * column contains the map and it grows/shrinks to use up
+ * all of the remaining available space.
+ *
+ * On mobile, there is a single column that contains (in 
+ * order from top to bottom): the search criteria then
+ * the map and then an area where the event details are 
+ * provided along with buttons (previous, Info/RSVP, next).
+ *
+ * As you will see, we use CSS grid to implement this layout.
+ *
+ * To distinguish between the desktop and mobile cases, there
+ * is a class defined for each case: "appIsDesktop" and 
+ * "appIsMobile".
+ *
+ */
+
+.appIsDesktop {
+  display: grid;    /* on desktop use a two column grid layout - right column grows/shrinks */
+  grid-template-columns: minmax(180px,300px) auto;
+
   #map{
-    height: 100%;
+    height: 100vh;
     z-index: 9;
   }
+
+}
+
+.appIsMobile {
+  display: grid;    /* on mobile use a row grid with three rows: search, map, card & nav */
+  grid-template-rows: min-content auto min-content;
+
+  #map{
+    z-index: 9;                 /* frm: not sure z-index does anything for mobile */
+  }
+
+}
+
+.app{
+  height: 100vh;                
 
   #startLoad{
     position: fixed;
@@ -39,7 +82,7 @@
           height: 10vw;
         }
       }
-    }
+    } 
     #secondLine{
       font-size: 20vh;
       color: white;
@@ -70,14 +113,16 @@ html, body, #root, .app {
 
 .searchBar{
   background-color: #232444;
-  //width: 300px;
-  width: 32%;
-  position: fixed;
-  left: 2%;
-  top: 2%;
-  z-index:11;
-  box-shadow: 10px 10px 5px rgba(0, 0, 0, .3);
+  z-index:11;                   /* frm: not sure we need z-index anymore */
+  box-shadow: 10px 0px 5px rgba(0, 0, 0, .3);   
+}
 
+.desktopSearch {
+  /* For desktop, we want two rows: 1) search criteria and 2) the scrolling list of events */
+  height: 100vh;                        
+  display: grid;                        
+  grid-template-rows: auto auto;        
+  grid-gap: 0;                          
 }
 
 .mobileSearch {
@@ -120,7 +165,7 @@ html, body, #root, .app {
   align-items: flex-end;
   justify-content: center;
   padding-left: 5%;
-  padding-right: 7%;
+  padding-right: 5%;    
   padding-top: 5%;
   padding-bottom: 5%;
 
@@ -221,7 +266,7 @@ html, body, #root, .app {
   font-size: 16px;
   background-color: #f5f5f5;
   border: none;
-  padding: 0px 20px 0px 5px;
+  padding: 0px 5px 0px 5px;    
   appearance: none;
   -moz-appearance: none;
   -webkit-appearance: none;
@@ -269,7 +314,6 @@ html, body, #root, .app {
 
 .eventList{
   background-color: white;
-  height: 500px;
   overflow:hidden;
   overflow-y:scroll;
   margin-bottom: 0px;
@@ -330,25 +374,22 @@ html, body, #root, .app {
 
 .mobileList{
   margin: none;
-  font-size:calc(10px + 1vw);   /* frm: changed from 12px to 10px to conserve whitespace */
+  font-size:calc(10px + 1vw);   
   touch-action: manipulation;
+
   .eventCard{
 
     text-decoration: none;
     color: #232444;
-    position: fixed;
     z-index: 10;
-    bottom: 10%;        /* changed from 13% to 10% */
+    bottom: 10%;        
     background-color: white;
-    width: 90%;
     left: 5%;
     max-height: 30vh;
-    min-height: 10vh;  /* changed from 20vh to 10vh to conserve whitespace */
-    box-shadow: 1px 2px 5px rgba(0, 0, 0, .3);
-    border: 1px solid #232444;
+    min-height: 10vh;  
 
     h3{
-      margin-top: 10px;  /* frm: smaller for mobile to conserve whitespace */
+      margin-top: 10px;  
       margin-bottom: 10px;
       text-transform: uppercase;
     }
@@ -358,44 +399,47 @@ html, body, #root, .app {
     }
 
     .mobileInfo{
-
       padding-left: 5%;
       padding-right: 5%;
-      padding-bottom: 2%;  /* frm: added this to make sure we had some whitespace at bottom (after reducing min-height of .eventCard */
+      padding-bottom: 1%;
 
       .eventRSVP{
-        display: none;  /* frm: changed from visibility: hidden to display: none to conserve whitespace */
-        text-align: right;
+        display: none;  
       }
 
     }
   }
 
+  .mobileNavWrapper {     /* contains navigation buttons (next/prev) and Info/RSVP button */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+  }
+
   button{
-    position: fixed;
-    bottom: 3%;         /* frm: changed from 5% to 3% */
+    bottom: 3%;         
     z-index: 10;
     background-color: #232444;
     border: none;
     color: white;
-    font-size: 24px;
-    height: 30px;       /* frm: changed from 40px to 30px */
-    box-shadow: 1px 2px 5px rgba(0, 0, 0, .3);
+    font-size: 16px;    
+    height: 30px;       
 
   }
   #mobileRSVP{
-    left: 35%;
-    width: 30vw;
+    flex: 1;            /* Info/RSVP button stretches to use up all available space */
     a{
       text-decoration: none;
       color:white;
     }
   }
   #leftIndex{
-    left: 25px;
+    width: 50px;
+    border-right: 3px solid white;      /* separate nav button from RSVP/Info button */
   }
   #rightIndex{
-    right: 25px;
+    width: 50px;
+    border-left: 3px solid white;       /* separate nav button from RSVP/Info button */
   }
 }
 

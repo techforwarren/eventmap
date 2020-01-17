@@ -94,19 +94,31 @@ function App() {
     }
   }, [currZip, currRange]);
 
-  // Filters the events when there are new events from the API or when user changes filtering criteria
+  /* 
+   * Filters the events when there are new events from the API or 
+   * when the user changes filtering criteria
+   */
   useEffect(() => {
+
      if (!events){
-         return setFilteredEvents(null);
+         setCardIndex(null);             // no events, hence no valid cardIndex
+         setFilteredEvents(null);        // no events, hence no filtered events
+         return;
      }
 
+     setCardIndex(0);   // reset to the first event in the list
+
+     // if ALLEVENTS then return everything, otherwise filter on the current kind of event
      setFilteredEvents(events.filter((event) => {
          return ((currEventKind === 'ALLEVENTS') || (currEventKind === event['event_type']));
      }));
    }, [events, currEventKind]);
    
 
-  // If the cardIndex changes, reset the event whose marker is highlighted, by calling setHoverEvent()
+  /* 
+   * If the cardIndex changes, then reset the event whose 
+   * marker is highlighted, by calling setHoverEvent()
+   */
   useEffect(() => {
     if (deviceIsMobile && filteredEvents != null) {
       setHoverEvent(
@@ -122,7 +134,7 @@ function App() {
   //      code just operates on the list of events passed to it.
 
   return (
-    <div className="app">
+    <div className={deviceIsMobile ? "app appIsMobile" : "app appIsDesktop"}>
       <SearchBar currZip={currZip} currRange={currRange} currEventKind={currEventKind} updateZip={(newZip) => setCurrZip(newZip)} updateRange={(newRange) => setCurrRange(newRange)} updateEventKind={(newEventKind) => setCurrEventKind(newEventKind)} events={filteredEvents} updatedHover={(newHover) => setHoverEvent(newHover)} locFilt={locFilt} deviceIsMobile={deviceIsMobile}/>
       {events === null && currZip == null &&
         <div id="startLoad">
@@ -130,10 +142,10 @@ function App() {
           <h3 id="searchCTA">Enter your zipcode to find events near you!</h3>
         </div>
       }
+      <Map currZip={currZip} events={filteredEvents} hoverMarker={hoverEvent} selectLoc={(newLoc) => setLocFilt(newLoc)} locFilt={locFilt}/>
       {filteredEvents !== null && deviceIsMobile &&
         <MobileList events={filteredEvents} updatedHover={(newHover) => setHoverEvent(newHover)} locFilt={locFilt} cardIndex={cardIndex} updateCardIndex={(update) => setCardIndex(update)}/>
       }
-      <Map currZip={currZip} events={filteredEvents} hoverMarker={hoverEvent} selectLoc={(newLoc) => setLocFilt(newLoc)} locFilt={locFilt}/>
     </div>
   );
 }

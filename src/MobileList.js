@@ -102,6 +102,13 @@ export function MobileList(props){
       })
 
       return (
+        /*
+         * frm: Original code that made the event text be an anchor tag.
+         *
+         *      I changed this because with the new layout, the next and previous buttons
+         *      are right next to the event text, making it too easy to mistakenly 
+         *      activate the anchor instead of just going to next/previous event.
+         *
         <a href={event['browser_url']}
           className="eventCard"
           target="_blank"
@@ -116,8 +123,24 @@ export function MobileList(props){
             <EventTimes rawTimes={rawTimes} />
             <p className="eventRSVP">Click to RSVP</p>
           </div>
-
         </a>
+         *
+         */
+
+        <div 
+          className="eventCard"
+          key={event['id']}
+          coord={('location' in event && 'location' in event['location'] && 'latitude' in event['location']['location']) ? "" + event['location']['location']['latitude'] + "&" + event['location']['location']['longitude'] : ""}
+          onMouseEnter={(event) => { props.updatedHover(event['currentTarget'].getAttribute('coord')) }}
+          onMouseLeave={(event) => { props.updatedHover(null) }}>
+          <div className="mobileInfo">
+            <h3>{event['title']}</h3>
+            <p><strong>{event['location']['venue']}</strong> in <strong>{event['location']['locality']}</strong></p>
+            <EventTimes rawTimes={rawTimes} />
+            <p className="eventRSVP">Click to RSVP</p>
+          </div>
+
+        </div>
 
       )
     }).filter((arrItem) => {
@@ -140,15 +163,17 @@ export function MobileList(props){
     return (
       <div className="mobileList">
         {listEvents[props.cardIndex]}
+        <div className="mobileNavWrapper">
         {
           props.cardIndex > 0 &&
           <button id="leftIndex" onClick={() => props.updateCardIndex(props.cardIndex-1)}>← </button>
         }
-        <button id="mobileRSVP"><a href={props.events[props.cardIndex]['browser_url']} target="_blank" rel="noopener">RSVP</a></button>
+        <button id="mobileRSVP"><a href={props.events[props.cardIndex]['browser_url']} target="_blank" rel="noopener">Details</a></button>
         {
           props.cardIndex < listEvents.length-1 &&
           <button id="rightIndex" onClick={() => props.updateCardIndex(props.cardIndex+1)}> →</button>
         }
+        </div>
 
       </div>
     );
