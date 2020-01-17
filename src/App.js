@@ -36,7 +36,8 @@ const queryString = require('query-string');
  * 
  */
 
-const deviceIsMobile = isMobile;        // HACK to allow easy mocking of isMobile for testing/debugging
+// const deviceIsMobile = isMobile;        // HACK to allow easy mocking of isMobile for testing/debugging
+const deviceIsMobile = true;
 
 function App() {
 
@@ -144,7 +145,14 @@ function App() {
       }
       <Map currZip={currZip} events={filteredEvents} hoverMarker={hoverEvent} selectLoc={(newLoc) => setLocFilt(newLoc)} locFilt={locFilt}/>
       {filteredEvents !== null && deviceIsMobile &&
-        <MobileList events={filteredEvents} updatedHover={(newHover) => setHoverEvent(newHover)} locFilt={locFilt} cardIndex={cardIndex} updateCardIndex={(update) => setCardIndex(update)}/>
+        <MobileList 
+          events={filteredEvents} 
+          updatedHover={(newHover) => setHoverEvent(newHover)} 
+          locFilt={locFilt} 
+          selectLoc={(newLoc) => setLocFilt(newLoc)} 
+          cardIndex={cardIndex} 
+          updateCardIndex={(update) => setCardIndex(update)} 
+          />
       }
     </div>
   );
