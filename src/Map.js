@@ -8,7 +8,7 @@ import { eventHasValidLocation } from './Util';
 export function Map(props){
 
   const [center, setCenter] = useState([39.8283, -98.5795]);  // center of the USA
-  const [locations, setLocations] = useState({});
+  const [locations, setLocations] = useState({});       // set of unique lat/longs for events
   const [newCenter, setNewCenter] = useState(false);
   const map = useRef();
   const markers = useRef();
@@ -147,6 +147,8 @@ export function Map(props){
           console.log("matching");
           highlighted = true;
         }
+        
+
 
   			let cord = key.split("&");
 
@@ -199,16 +201,7 @@ export function Map(props){
         // Find out whether there are any events in the list that are not private
         let first = -1;  
         for (let i=0; i<props.events.length; i++) {
-            if (eventHasValidLocation(props.events[i])
-              /*
-               *
-              ('location' in props.events[i]) && 
-              ('location' in props.events[i]['location']) && 
-              ('latitude' in props.events[i]['location']['location'])
-               *
-               */
-            ) 
-            {
+            if (eventHasValidLocation(props.events[i])) {
               first = i;
               break;
             }

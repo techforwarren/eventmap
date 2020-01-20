@@ -144,7 +144,14 @@ function App() {
       }
       <Map currZip={currZip} events={filteredEvents} hoverMarker={hoverEvent} selectLoc={(newLoc) => setLocFilt(newLoc)} locFilt={locFilt}/>
       {filteredEvents !== null && deviceIsMobile &&
-        <MobileList events={filteredEvents} updatedHover={(newHover) => setHoverEvent(newHover)} locFilt={locFilt} cardIndex={cardIndex} updateCardIndex={(update) => setCardIndex(update)}/>
+        <MobileList 
+          events={filteredEvents} 
+          updatedHover={(newHover) => setHoverEvent(newHover)} 
+          locFilt={locFilt} 
+          selectLoc={(newLoc) => setLocFilt(newLoc)} 
+          cardIndex={cardIndex} 
+          updateCardIndex={(update) => setCardIndex(update)} 
+          />
       }
     </div>
   );
