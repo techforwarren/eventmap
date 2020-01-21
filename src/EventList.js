@@ -66,14 +66,14 @@ export function EventList(props) {
       }
     })
 
-    //Location filter: if user has clicked on a marker, then only show that one event
+    //Location filter: if user has clicked on a marker, then only show events at that location
     if(props.locFilt != null){
       if(eventHasValidLocation(event)) {
         if(event['location']['location']['latitude'] !== props.locFilt['lat'] || event['location']['location']['longitude'] !== props.locFilt['lng']){
-          return(null);
+          return(null); // event is not at the location filter's coordinates
         }
       } else {
-        return(null);
+        return(null);   // event is private - no location, hence no marker
       }
     }
 

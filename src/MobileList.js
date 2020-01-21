@@ -49,6 +49,35 @@ function EventTimes(props) {
   }
 }
 
+
+/*
+ * Utility functions for the actions for the "previous" and "next" buttons.
+ * In each case we want to decrement/increment the cardIndex so that the 
+ * app will show the previoius/next event.  But we also want to make sure
+ * that the location filter (locFilt in App.js) is reset to null since
+ * if we change the current event, we may move to a new location (lat/long)
+ * and we do not want the map to continue to highlight the old locFilt
+ * location (lat/long).
+ */
+
+function clickPrevious(props) {
+    if (!(props.cardIndex > 0)) { // verify that there is indeed a previous event
+        console.warn("clickPrevious: cardIndex is not > 0");
+        return;
+    }
+    props.updateCardIndex(props.cardIndex-1);
+    props.selectLoc(null);
+}
+
+function clickNext(props, listEvents) {
+    if (!(props.cardIndex < listEvents.length-1)) {  // verify that there is a next event
+        console.warn("clickNext: cardIndex is too large");
+        return;
+    }
+    props.updateCardIndex(props.cardIndex+1);
+    props.selectLoc(null);
+}
+
 export function MobileList(props){
 
   //Mobile's location filter doesn't filter but moves the currentIndex to the location's first event
@@ -166,12 +195,12 @@ export function MobileList(props){
         <div className="mobileNavWrapper">
         {
           props.cardIndex > 0 &&
-          <button id="leftIndex" onClick={() => props.updateCardIndex(props.cardIndex-1)}>← </button>
+          <button id="leftIndex" onClick={() => clickPrevious(props)}>← </button>
         }
         <button id="mobileRSVP"><a href={props.events[props.cardIndex]['browser_url']} target="_blank" rel="noopener">Details</a></button>
         {
           props.cardIndex < listEvents.length-1 &&
-          <button id="rightIndex" onClick={() => props.updateCardIndex(props.cardIndex+1)}> →</button>
+          <button id="rightIndex" onClick={() => clickNext(props, listEvents)}> →</button>
         }
         </div>
 
