@@ -46,19 +46,101 @@ function App() {
   // List of events after client-side filtering of the list of events returned from the Mobilize API
   const [filteredEvents, setFilteredEvents] = useState(null);  
 
+  /*
+   * URL parameters:
+   *
+   * At present, January 2020, there are three URL parameters:
+   *    zip : the current zip code (default is null)
+   *    eventkind : the current kind of event (default is ALLEVENTS)
+   *    distance : the current distance/radius from current zip code (default is 75 miles)
+   *
+   * We initialize state variables from the URL, and we update the URL every time
+   * the user changes one of the filter parameters.  Note that all of this logic
+   * is contained in the App.js source.  Note also that we wrap the setXXX() useState
+   * functions in updateXXX functions - so do NOT use the setXXX functions directly.
+   */
+
+  function updateURL(whichParam, newValue) {
+
+    // Get the existing values
+    const qs = queryString.parse(History.location.search);
+    let zip = qs.zip;
+    let eventKind = qs.eventkind;
+    let distance = qs.distance;
+
+    // Change the appropriate value
+    switch(whichParam) {
+      case 'zip':
+        zip = newValue;
+        break;
+      case 'eventkind':
+        eventKind = newValue;
+        break;
+      case 'distance':
+        distance = newValue;
+        break;
+      default:
+        // code block
+        console.log("Warning: updateURL in App.js - bad value for whichParam: " + whichParam);
+    }
+
+    // Update the URL
+    History.push(
+      window.location.pathname 
+      + "?zip=" + (zip ? zip : "") 
+      + "&eventkind=" + (eventKind ? eventKind : "") 
+      + "&distance=" + (distance ? distance : "")
+      ); 
+  }
+
+
   // Current range - distance in miles from the target zip code
-  const [currRange, setCurrRange] = useState(75);
+  const [currRange, setCurrRange] = useState(() => {
+    // check URL parameter on initialization
+    const qs = queryString.parse(History.location.search);
+    let distance = qs.distance;
+    if (!distance) {
+      distance = 75;  // default distance is 75 miles
+      updateURL('distance', distance);
+    }
+    return distance;
+  });
+
+  function updateCurrRange(newDistance) {
+    setCurrRange(newDistance);  // update useState global
+
+    // Update URL
+    updateURL('distance', newDistance);
+  }
 
   // Current kinds of events to display
-  const [currEventKind, setCurrEventKind] = useState('ALLEVENTS');
+  const [currEventKind, setCurrEventKind] = useState(() => {
+    // check URL parameter on initialization
+    const qs = queryString.parse(History.location.search);
+    let eventKind = qs.eventkind;
+    if (!eventKind) {
+      eventKind = 'ALLEVENTS';  // default is ALLEVENTS
+      updateURL('eventkind', eventKind);
+    }
+    return eventKind;
+  });
 
+  function updateCurrEventKind(newEventKind) {
+    setCurrEventKind(newEventKind); 
+    updateURL('eventkind', newEventKind);
+  }
 
   //Current zip code search
   const [currZip, setCurrZip] = useState(() => {
     // check URL parameter on initialization
     const qs = queryString.parse(History.location.search);
-    return qs.zip;
+    return (qs.zip ? qs.zip : "");
   });
+
+  function updateCurrZip(newZip) {
+    setCurrZip(newZip); 
+    updateURL('zip', newZip);
+  }
 
   //Current event being hovered over (in the event list)
   const [hoverEvent, setHoverEvent] = useState(null);
@@ -135,7 +217,18 @@ function App() {
 
   return (
     <div className={deviceIsMobile ? "app appIsMobile" : "app appIsDesktop"}>
-      <SearchBar currZip={currZip} currRange={currRange} currEventKind={currEventKind} updateZip={(newZip) => setCurrZip(newZip)} updateRange={(newRange) => setCurrRange(newRange)} updateEventKind={(newEventKind) => setCurrEventKind(newEventKind)} events={filteredEvents} updatedHover={(newHover) => setHoverEvent(newHover)} locFilt={locFilt} deviceIsMobile={deviceIsMobile}/>
+      <SearchBar 
+        currZip={currZip} 
+        currRange={currRange} 
+        currEventKind={currEventKind} 
+        updateZip={(newZip) => updateCurrZip(newZip)} 
+        updateRange={(newRange) => updateCurrRange(newRange)} 
+        updateEventKind={(newEventKind) => updateCurrEventKind(newEventKind)} 
+        events={filteredEvents} 
+        updatedHover={(newHover) => setHoverEvent(newHover)} 
+        locFilt={locFilt} 
+        deviceIsMobile={deviceIsMobile}
+      />
       {events === null && currZip == null &&
         <div id="startLoad">
           <h1 id="firstLine">SHE HAS</h1><h1 id="secondLine">EVENTS</h1><h1 id="thirdLine">FOR THAT <img src={gMark} alt=""></img></h1>
