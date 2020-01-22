@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import EventList from './EventList';
-import History from './History';
 import locateImage from './img/icon_512x512.png';
 
 
@@ -61,7 +60,6 @@ export function SearchBar(props){
   function setZip(input) {
     setInput(input);            // updates local state
     props.updateZip(input);     // calls setCurrZip() in App.js - triggering a Mobilize API call and a re-render
-    History.push(window.location.pathname+'?zip='+input);
   }
 
   /* TODO: Decide on what kinds of events we should allow users to filter on.
@@ -110,7 +108,7 @@ export function SearchBar(props){
       <div className="userInput">
         <form onSubmit={onSubmit} id="zipForm" data-has-input={!!input.length}>
           <label htmlFor="zipInput">ZIP</label>
-          <input type="text" id="zipInput" value={input} onInput={onlySetNumbers} required minLength="5" maxLength="5"></input>
+          <input type="text" id="zipInput" defaultValue={input} onInput={onlySetNumbers} required minLength="5" maxLength="5"></input>
           <button id="submitZip" onClick={onSubmit}>GO</button>
         </form>
         <button id="locateMe" onClick={geolocate}><img src={locateImage} alt="Use my location"></img></button>
