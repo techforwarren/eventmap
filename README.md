@@ -12,6 +12,8 @@ The event map is now live at [https://hope-and-code-labs.github.io/eventmap/](ht
 
 You can clone the GitHub repo or download it from the repo page. After it is on your local machine, be sure to run `npm install` to install all dependencies.
 
+Change the `mobilizeOrgId` variable in src/App.js to reflect your organization's id in Mobilize. The default is the organization id for the Warren for President campaign.
+
 ## Running App - `npm start`
 
 Runs the app in the development mode.<br>
