@@ -1,10 +1,12 @@
-# Warren Event Map
+# Event Map
 
-The goal of this project is to build an Event Map that Warren supporters & volunteers can use to find events near their area!  It loads the events via the Mobilize API ([docs for /events endpoint](https://github.com/mobilizeamerica/api#request-2)).
+This project provides a map of all of the events specific to an organization's account in Mobilize America. It loads the events via the Mobilize API ([docs for /events endpoint](https://github.com/mobilizeamerica/api#request-2)).
+
+The project originated with the [Tech for Warren group](https://github.com/techforwarren/eventmap) in 2019.
 
 ## Working version
 
-The event map is now live at [https://techforwarren.github.io/eventmap/](https://techforwarren.github.io/eventmap/)! Future merges to the `gh-pages` branch will update this site.
+The event map is now live at [https://hope-and-code-labs.github.io/eventmap/](https://hope-and-code-labs.github.io/eventmap/)! Future merges to the `gh-pages` branch will update this site.
 
 ## Getting Started - Cloning & Installation
 

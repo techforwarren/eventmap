@@ -110,8 +110,7 @@ export function EventList(props) {
   return (
     <ul className="eventList">{listEvents}
     <div className="kicker">
-        <h4>Don't see an event near you?</h4>
-        <p><a href="https://events.elizabethwarren.com/?is_virtual=true">Join a virtual event</a> or <a href="https://events.elizabethwarren.com/event/create/">Host your own</a></p>
+        <h4>Sorry! No events near you.</h4>
     </div>
     </ul>
   );
