@@ -12,8 +12,8 @@ import ReactGA from 'react-ga';
 ReactGA.initialize('UA-149839620-1');
 ReactGA.pageview(window.location.pathname + window.location.search);
 
-const mobilizeOrgId = 1316;
 const queryString = require('query-string');
+const mobilizeOrgId = 1316;
 
 /*
  * Overview of the entire app
@@ -157,7 +157,9 @@ function App() {
   //Makes API call when zipcode entered or the range is updated
   useEffect(() => {
     if(currZip != null){
-      fetch("https://api.mobilize.us/v1/organizations/" + mobilizeOrgId + "/events?timeslot_start=gte_now&per_page=200&zipcode=" + currZip + "&max_dist=" + currRange)
+      var url = "https://api.mobilize.us/v1/organizations/" + mobilizeOrgId + "/events?timeslot_start=gte_now&per_page=200&zipcode=" + currZip + "&max_dist=" + currRange;
+
+      fetch(url)
       .then((res)=>res.json())
       .then((data)=>setEvents(data['data']));
 

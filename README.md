@@ -14,7 +14,7 @@ You can clone the GitHub repo or download it from the repo page. After it is on 
 
 Change the `mobilizeOrgId` variable in src/App.js to reflect your organization's id in Mobilize. The default is the organization id for the Warren for President campaign.
 
-## Running App - `npm start`
+## Running App Locally - `npm start`
 
 Runs the app in the development mode.<br>
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
@@ -22,7 +22,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br>
 You will also see any lint errors in the console.
 
-## Exporting For Github Pages - `npm run build`
+## Deploying / Exporting For Github Pages - `npm run build`
 
 Builds the app for production to the `build` folder.<br>
 It correctly bundles React in production mode and optimizes the build for the best performance.
