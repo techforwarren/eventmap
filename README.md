@@ -25,6 +25,6 @@ You will also see any lint errors in the console.
 
 ## Deploying For Github Pages - `npm run deploy`
 
-Should ideally be done from the `master` branch.
+Should ideally be done from the `main` branch.
 
 Follows the create-react-app [Github Pages deployment steps](https://facebook.github.io/create-react-app/docs/deployment).
