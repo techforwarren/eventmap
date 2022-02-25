@@ -179,9 +179,7 @@ export function MobileList(props){
       return <div className="mobileList">
       <div className="eventCard">
         <div className="mobileInfo">
-          <h3>Don't see an event near you?</h3>
-          <p><a href="https://events.elizabethwarren.com/?is_virtual=true">Join a virtual event</a></p> 
-          <p><a href="https://events.elizabethwarren.com/event/create/">Host your own event</a></p>
+          <h3>Sorry! No events near you.</h3>
         </div>
       </div>
     </div>
