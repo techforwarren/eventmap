@@ -13,7 +13,6 @@ ReactGA.initialize('UA-149839620-1');
 ReactGA.pageview(window.location.pathname + window.location.search);
 
 const queryString = require('query-string');
-const mobilizeOrgId = 7096;
 
 /*
  * Overview of the entire app
@@ -65,6 +64,7 @@ function App() {
 
     // Get the existing values
     const qs = queryString.parse(History.location.search);
+    let mobilizeOrgId = getOrgId();
     let zip = qs.zip;
     let eventKind = qs.eventkind;
     let distance = qs.distance;
@@ -88,12 +88,18 @@ function App() {
     // Update the URL
     History.push(
       window.location.pathname 
-      + "?zip=" + (zip ? zip : "") 
+      + "?orgid" + mobilizeOrgId
+      + "zip=" + (zip ? zip : "") 
       + "&eventkind=" + (eventKind ? eventKind : "") 
       + "&distance=" + (distance ? distance : "")
       ); 
   }
 
+  function getOrgId() {
+    const qs = queryString.parse(History.location.search);
+    let mobilizeOrgId = qs.orgid;
+    return mobilizeOrgId;
+  }
 
   // Current range - distance in miles from the target zip code
   const [currRange, setCurrRange] = useState(() => {
@@ -157,7 +163,7 @@ function App() {
   //Makes API call when zipcode entered or the range is updated
   useEffect(() => {
     if(currZip != null){
-      var url = "https://api.mobilize.us/v1/organizations/" + mobilizeOrgId + "/events?timeslot_start=gte_now&per_page=200&zipcode=" + currZip + "&max_dist=" + currRange;
+      var url = "https://api.mobilize.us/v1/organizations/" + getOrgId() + "/events?timeslot_start=gte_now&per_page=200&zipcode=" + currZip + "&max_dist=" + currRange;
 
       fetch(url)
       .then((res)=>res.json())
