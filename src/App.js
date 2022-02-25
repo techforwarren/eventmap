@@ -88,8 +88,8 @@ function App() {
     // Update the URL
     History.push(
       window.location.pathname 
-      + "?orgid" + mobilizeOrgId
-      + "zip=" + (zip ? zip : "") 
+      + "?orgid=" + mobilizeOrgId
+      + "&zip=" + (zip ? zip : "") 
       + "&eventkind=" + (eventKind ? eventKind : "") 
       + "&distance=" + (distance ? distance : "")
       ); 
