@@ -8,7 +8,7 @@
     "leaflet": "^1.5.1",
     "lodash.groupby": "^4.6.0",
     "lodash.sortby": "^4.7.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.4",
     "node-sass": "^7.0.0",
     "query-string": "^6.8.3",
     "react": "^16.9.0",
